@@ -1,7 +1,7 @@
 ﻿.titleSection {
     position: fixed;
-    left:    1vh;
-    bottom:  1vh;
+    left:    10px;
+    bottom:  7px;
     opacity: 0.3;
     font-weight: bold;
     transition: opacity ease-in .2s;
@@ -17,4 +17,13 @@
     width: 21px;
     height: 48px;
     display: inline-block;
+}
+
+#arena {
+    border: 1px solid black;
+    position: fixed;
+    top:    5px;
+    right:  5px;
+    bottom: 5px;
+    left:   5px;
 }
