@@ -11,7 +11,7 @@ namespace PaCode.Raim
     {
         public HomeModule()
         {
-            Get["/"] = parameters => "Welcome to Raim!";
+            Get["/"] = parameters => View["Index.html"];
         }
     }
 }
