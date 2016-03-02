@@ -1,13 +1,13 @@
-﻿.floating-title {
+﻿.titleSection {
     position: fixed;
-    left: 1vh;
-    top: 1vh;
-    opacity: 0.2;
+    left:    1vh;
+    bottom:  1vh;
+    opacity: 0.3;
     font-weight: bold;
-    transition: all ease-in 0.2s;
+    transition: opacity ease-in .2s;
 }
 
-.floating-title:hover {
+.titleSection:hover {
     opacity: 0.9;
 }
 
