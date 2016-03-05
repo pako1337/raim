@@ -6,7 +6,7 @@ namespace PaCode.Raim.Home
     {
         public void Register(string name)
         {
-            Clients.Caller.Registered(name);
+            Clients.All.Registered(name);
         }
     }
 }

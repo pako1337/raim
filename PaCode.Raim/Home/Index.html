@@ -17,7 +17,13 @@
     <script type="text/javascript" src="../Scripts/jquery.signalR-2.2.0.min.js"></script>
     <script type="text/javascript" src="../signalr/hubs"></script>
     <script type="text/javascript">
-        console.log($);
+        var raim = $.connection.raimHub;
+        raim.client.registered = function (who) {
+            console.log(who);
+        };
+        $.connection.hub.start().done(function () {
+            raim.server.register("Pako");
+        });
     </script>
 </body>
 </html>
