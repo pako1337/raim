@@ -6,9 +6,7 @@ namespace PaCode.Raim
     {
         public void Configuration(IAppBuilder builder)
         {
-            builder.UseNancy()
-                   .MapSignalR()
-                ;
+            builder.MapSignalR();
         }
     }
 }
