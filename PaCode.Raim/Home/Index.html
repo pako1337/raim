@@ -11,19 +11,13 @@
         <a href="http://dajsiepoznac.pl/" class="dsp2016"></a>
     </div>
 
+    <div id="playersList"></div>
+
     <div id="arena"></div>
 
     <script type="text/javascript" src="../Scripts/jquery-2.2.1.min.js"></script>
     <script type="text/javascript" src="../Scripts/jquery.signalR-2.2.0.min.js"></script>
     <script type="text/javascript" src="../signalr/hubs"></script>
-    <script type="text/javascript">
-        var raim = $.connection.raimHub;
-        raim.client.registered = function (who) {
-            console.log(who);
-        };
-        $.connection.hub.start().done(function () {
-            raim.server.register("Pako");
-        });
-    </script>
+    <script type="text/javascript" src="../Content/raim.js"></script>
 </body>
 </html>
