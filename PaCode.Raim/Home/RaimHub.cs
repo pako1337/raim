@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNet.SignalR;
+using Nancy.Helpers;
 
 namespace PaCode.Raim.Home
 {
@@ -9,6 +10,7 @@ namespace PaCode.Raim.Home
 
         public void Register(string name)
         {
+            name = HttpUtility.HtmlEncode(name);
             players.Add(Context.ConnectionId, name);
             Clients.All.Registered(name);
         }
