@@ -1,10 +1,9 @@
 ﻿(function () {
     var raim = $.connection.raimHub;
+    var playersList = new PlayersList();
+
     raim.client.registered = function (who) {
-        var players = document.getElementById('playersList');
-        var playerNameElement = document.createElement('span');
-        playerNameElement.textContent = who;
-        players.appendChild(playerNameElement);
+        playersList.addNewPlayer(who);
     };
 
     $.connection.hub.start().done(function () {
