@@ -8,6 +8,7 @@ namespace PaCode.Raim
         protected override void ConfigureConventions(NancyConventions nancyConventions)
         {
             base.ConfigureConventions(nancyConventions);
+            nancyConventions.StaticContentsConventions.AddDirectory("Bundles");
             nancyConventions.StaticContentsConventions.AddDirectory("Scripts");
         }
     }
