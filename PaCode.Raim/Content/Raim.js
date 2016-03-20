@@ -1,10 +1,8 @@
 ﻿(function () {
     var raim = $.connection.raimHub;
-    var playersList = new PlayersList();
+    var arena = new Arena();
 
-    raim.client.registered = function (who) {
-        playersList.addNewPlayer(who);
-    };
+    raim.client.registered = arena.addNewPlayer;
 
     $.connection.hub.start().done(function () {
         raim.server.register("Pako");

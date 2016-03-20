@@ -8,7 +8,13 @@ var del = require('del');
 var bundlesOutputDir = "Bundles";
 
 var bundles = [
-    { scripts: ["Content/raim.js", "Content/PlayersList.js"], output: "raim_main.js"}
+    {
+        scripts: [
+          "Content/PlayersList.js",
+          "Content/Arena.js",
+          "Content/raim.js",],
+        output: "raim_main.js"
+    }
 ];
 
 gulp.task('clean', function () {
