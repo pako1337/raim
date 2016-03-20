@@ -16,7 +16,7 @@
         players.addNewPlayer(who);
         drawingContext.strokeStyle = "#F00";
         drawingContext.fillStyle = "#F00";
-        drawingContext.arc(who.X + 10, who.Y + 10, 10, 0, 2 * Math.PI);
+        drawingContext.arc(who.Position.X + 10, who.Position.Y + 10, 10, 0, 2 * Math.PI);
         drawingContext.stroke();
         drawingContext.fill();
     }
