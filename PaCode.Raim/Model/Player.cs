@@ -8,6 +8,7 @@ namespace PaCode.Raim.Model
     {
         public string Name { get; set; }
         public Vector2d Position { get; set; }
+        public int Size { get; set; }
 
         private Player() { }
 
@@ -16,7 +17,8 @@ namespace PaCode.Raim.Model
             return new Player
             {
                 Name = name,
-                Position = new Vector2d(x, y)
+                Position = new Vector2d(x, y),
+                Size = 20,
             };
         }
     }

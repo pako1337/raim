@@ -12,7 +12,7 @@ namespace PaCode.Raim.Home
         public void Register(string name)
         {
             name = HttpUtility.HtmlEncode(name);
-            var player = Player.Create(name, 0, 0);
+            var player = Player.Create(name, 50, 50);
             players.Add(Context.ConnectionId, player);
             Clients.All.Registered(player);
         }
