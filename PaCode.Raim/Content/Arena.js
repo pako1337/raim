@@ -20,11 +20,13 @@
 
     (function init() {
         players = args.playersList || new PlayersList(args.playersListOptions);
+
         var canvas = document.createElement("canvas");
-        canvas.setAttribute("tabindex", 1);
-        canvas.addEventListener("keydown", keyDown);
         arena.appendChild(canvas);
+
         drawingContext = canvas.getContext("2d");
+
+        document.addEventListener("keydown", keyDown);
     })();
 
     return {
