@@ -1,11 +1,12 @@
 ﻿function Arena(args) {
     args = args || {};
-    var players = args.playersList || new PlayersList(args.playersListOptions);
+    var players;
     var arenaHandler = args.arena || "arena";
     var arena = document.getElementById(arenaHandler);
     var drawingContext;
 
     (function init() {
+        players = args.playersList || new PlayersList(args.playersListOptions);
         var canvas = document.createElement("canvas");
         arena.appendChild(canvas);
 
