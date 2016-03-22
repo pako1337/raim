@@ -5,8 +5,38 @@
     var arena = document.getElementById(arenaHandler);
     var drawingContext;
 
+    var inputCodes = {
+        Up: 1,
+        Down: 2,
+        Left: 4,
+        Right: 8
+    };
+
     var keyDown = function (e) {
-        console.log(e.keyCode);
+        switch (e.which) {
+            case 87:
+            case 119:
+            case 38:
+                console.log("up");
+                break;
+            case 83:
+            case 115:
+            case 40:
+                console.log('down');
+                break;
+            case 65:
+            case 97:
+            case 37:
+                console.log("left");
+                break;
+            case 68:
+            case 100:
+            case 39:
+                console.log('right');
+                break;
+            default:
+                console.log("unwanted key");
+        }
     };
 
     var addNewPlayer = function (who) {
