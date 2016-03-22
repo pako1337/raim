@@ -11,11 +11,19 @@
 
     var addNewPlayer = function (who) {
         players.addNewPlayer(who);
-        drawingContext.strokeStyle = "#F00";
-        drawingContext.fillStyle = "#F00";
-        drawingContext.arc(who.Position.X, who.Position.Y, who.Size, 0, 2 * Math.PI);
-        drawingContext.stroke();
-        drawingContext.fill();
+        drawArena();
+    };
+
+    var drawArena = function () {
+        for (var i = 0; i < players.count() ; i++) {
+            var player = players.get(i);
+
+            drawingContext.strokeStyle = "#F00";
+            drawingContext.fillStyle = "#F00";
+            drawingContext.arc(player.Position.X, player.Position.Y, player.Size, 0, 2 * Math.PI);
+            drawingContext.stroke();
+            drawingContext.fill();
+        }
     };
 
     (function init() {
