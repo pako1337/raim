@@ -4,6 +4,7 @@
     var arenaHandler;
     var drawingContext;
     var playerMoving;
+    var view;
 
     var keyDown = function (e) {
         var key = 0;
@@ -28,7 +29,16 @@
         drawArena();
     };
 
+    var playerMoved = function (who) {
+        var player = players.get(who.Name);
+        player.Position = who.Position;
+        drawArena();
+    };
+
     var drawArena = function () {
+        drawingContext.clearRect(0, 0, view.width, view.height);
+        drawingContext.beginPath();
+
         for (var i = 0; i < players.count() ; i++) {
             var player = players.get(i);
 
@@ -38,6 +48,8 @@
             drawingContext.stroke();
             drawingContext.fill();
         }
+
+        drawingContext.closePath();
     };
 
     (function init() {
@@ -45,7 +57,12 @@
         players = args.playersList || new PlayersList(args.playersListOptions);
         playerMoving = args.playerMoving || function () { };
 
+        var arenaElement = document.getElementById(arenaHandler);
+        view = { width: arenaElement.offsetWidth, height: arenaElement.offsetHeight };
+
         var canvas = document.createElement("canvas");
+        canvas.width = view.width;
+        canvas.height = view.height;
         document.getElementById(arenaHandler).appendChild(canvas);
 
         drawingContext = canvas.getContext("2d");
@@ -55,6 +72,6 @@
 
     return {
         addNewPlayer: addNewPlayer,
-        playerMoving: playerMoving,
+        playerMoved: playerMoved,
     };
 };
