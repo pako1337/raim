@@ -1,10 +1,9 @@
 ﻿function Arena(args) {
     args = args || {};
     var players;
-    var arenaHandler = args.arena || "arena";
-    var arena = document.getElementById(arenaHandler);
+    var arenaHandler;
     var drawingContext;
-    var playerMoving = args.playerMoving || function () { };
+    var playerMoving;
 
     var keyDown = function (e) {
         var key = 0;
@@ -42,10 +41,12 @@
     };
 
     (function init() {
+        arenaHandler = args.arena || "arena";
         players = args.playersList || new PlayersList(args.playersListOptions);
+        playerMoving = args.playerMoving || function () { };
 
         var canvas = document.createElement("canvas");
-        arena.appendChild(canvas);
+        document.getElementById(arenaHandler).appendChild(canvas);
 
         drawingContext = canvas.getContext("2d");
 
