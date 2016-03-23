@@ -4,39 +4,24 @@
     var arenaHandler = args.arena || "arena";
     var arena = document.getElementById(arenaHandler);
     var drawingContext;
-
-    var inputCodes = {
-        Up: 1,
-        Down: 2,
-        Left: 4,
-        Right: 8
-    };
+    var playerMoving = args.playerMoving || function () { };
 
     var keyDown = function (e) {
-        switch (e.which) {
-            case 87:
-            case 119:
-            case 38:
-                console.log("up");
-                break;
-            case 83:
-            case 115:
-            case 40:
-                console.log('down');
-                break;
-            case 65:
-            case 97:
-            case 37:
-                console.log("left");
-                break;
-            case 68:
-            case 100:
-            case 39:
-                console.log('right');
-                break;
-            default:
-                console.log("unwanted key");
-        }
+        var key = 0;
+        if (e.which === 87 || e.which === 119 || e.which === 38)
+            key |= moveDirections.Up;
+
+        if (e.which === 83 || e.which === 115 || e.which === 40)
+            key |= moveDirections.Down;
+
+        if (e.which === 65 || e.which === 97 || e.which === 37)
+            key |= moveDirections.Left;
+
+        if (e.which === 68 || e.which === 100 || e.which === 39)
+            key |= moveDirections.Right;
+
+        if (key > 0)
+            playerMoving({ direction: key });
     };
 
     var addNewPlayer = function (who) {
@@ -69,5 +54,6 @@
 
     return {
         addNewPlayer: addNewPlayer,
+        playerMoving: playerMoving,
     };
 };

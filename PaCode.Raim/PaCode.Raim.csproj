@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Arena.js" />
+    <Content Include="Content\moveDirections.js" />
     <Content Include="gulpfile.js" />
     <Content Include="package.json" />
     <None Include="packages.config" />
