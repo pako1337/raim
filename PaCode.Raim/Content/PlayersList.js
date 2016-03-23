@@ -17,7 +17,10 @@
     };
 
     var get = function (i) {
-        return _players[i];
+        if (typeof i == 'number')
+            return _players[i];
+
+        return _players.filter(function (p) { return p.Name === i; })[0];
     };
 
     return {
