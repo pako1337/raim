@@ -11,8 +11,9 @@ var bundles = [
     {
         scripts: [
           "Content/moveDirections.js",
+          "Content/keyboardInput.js",
           "Content/PlayersList.js",
-          "Content/Arena.js",
+          "Content/arena.js",
           "Content/raim.js",],
         output: "raim_main.js"
     }

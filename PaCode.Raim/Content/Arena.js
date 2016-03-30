@@ -1,4 +1,4 @@
-﻿function Arena(args) {
+﻿function arena(args) {
     args = args || {};
     var players;
     var arenaHandler;
@@ -53,7 +53,7 @@
 
     (function init() {
         arenaHandler = args.arena || "arena";
-        players = args.playersList || new PlayersList(args.playersListOptions);
+        players = args.playersList || new playersList(args.playersListOptions);
         playerMoving = args.playerMoving || function () { };
 
         var arenaElement = document.getElementById(arenaHandler);

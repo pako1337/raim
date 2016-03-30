@@ -1,4 +1,4 @@
-﻿function PlayersList(args) {
+﻿function playersList(args) {
     args = args || {};
     var playersListElementId = args.playersList || 'playersList';
     var _players = [];
