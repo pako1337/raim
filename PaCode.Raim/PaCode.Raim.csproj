@@ -103,13 +103,15 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\Arena.js" />
+    <Content Include="Content\arena.js" />
+    <Content Include="Content\keyboardInput.js" />
     <Content Include="Content\moveDirections.js" />
     <Content Include="gulpfile.js" />
     <Content Include="package.json" />
+    <Content Include="Bundles.json" />
     <None Include="packages.config" />
     <Content Include="Content\DSP2016.png" />
-    <Content Include="Content\PlayersList.js" />
+    <Content Include="Content\playersList.js" />
     <Content Include="Content\raim.css" />
     <Content Include="Content\raim.js" />
     <Content Include="Home\Index.html" />

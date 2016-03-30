@@ -4,20 +4,9 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var concatCss = require('gulp-concat-css');
 var del = require('del');
+var bundles = require('./Bundles.json');
 
 var bundlesOutputDir = "Bundles";
-
-var bundles = [
-    {
-        scripts: [
-          "Content/moveDirections.js",
-          "Content/keyboardInput.js",
-          "Content/PlayersList.js",
-          "Content/arena.js",
-          "Content/raim.js",],
-        output: "raim_main.js"
-    }
-];
 
 gulp.task('clean', function () {
     del(bundlesOutputDir + '/*');
