@@ -17,10 +17,10 @@ namespace PaCode.Raim.Home
             Clients.All.Registered(player);
         }
 
-        public void PlayerMoving(int direction)
+        public void PlayerMoving(MoveDirection direction)
         {
             var player = players[Context.ConnectionId];
-            player.Position.X += 10;
+            player.Move(direction);
             Clients.All.PlayerMoved(player);
         }
     }

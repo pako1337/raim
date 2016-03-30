@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PaCode.Raim.Home;
 
 namespace PaCode.Raim.Model
 {
     public class Player
     {
+        private const int speed = 1;
         public string Name { get; set; }
         public Vector2d Position { get; set; }
         public int Size { get; set; }
@@ -20,6 +22,18 @@ namespace PaCode.Raim.Model
                 Position = new Vector2d(x, y),
                 Size = 20,
             };
+        }
+
+        public void Move(MoveDirection direction)
+        {
+            if ((direction & MoveDirection.Up) == MoveDirection.Up)
+                Position.Y += -speed;
+            if ((direction & MoveDirection.Down) == MoveDirection.Down)
+                Position.Y += speed;
+            if ((direction & MoveDirection.Right) == MoveDirection.Right)
+                Position.X += speed;
+            if ((direction & MoveDirection.Left) == MoveDirection.Left)
+                Position.X += -speed;
         }
     }
 }

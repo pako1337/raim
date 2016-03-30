@@ -37,19 +37,18 @@
 
     var drawArena = function () {
         drawingContext.clearRect(0, 0, view.width, view.height);
-        drawingContext.beginPath();
 
         for (var i = 0; i < players.count() ; i++) {
             var player = players.get(i);
 
+            drawingContext.beginPath();
             drawingContext.strokeStyle = "#F00";
             drawingContext.fillStyle = "#F00";
             drawingContext.arc(player.Position.X, player.Position.Y, player.Size, 0, 2 * Math.PI);
             drawingContext.stroke();
             drawingContext.fill();
+            drawingContext.closePath();
         }
-
-        drawingContext.closePath();
     };
 
     (function init() {

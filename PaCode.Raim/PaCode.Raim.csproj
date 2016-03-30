@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Home\HomeModule.cs" />
+    <Compile Include="Home\MoveDirection.cs" />
     <Compile Include="Home\RaimHub.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Vector2d.cs" />
