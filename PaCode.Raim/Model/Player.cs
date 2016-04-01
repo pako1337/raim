@@ -28,13 +28,13 @@ namespace PaCode.Raim.Model
 
         public void ChangeSpeed(MoveDirection direction)
         {
-            if ((direction & MoveDirection.Up) == MoveDirection.Up)
+            if (direction.HasFlag(MoveDirection.Up))
                 Speed.Y = -MaxSpeed;
-            if ((direction & MoveDirection.Down) == MoveDirection.Down)
+            if (direction.HasFlag(MoveDirection.Down))
                 Speed.Y = MaxSpeed;
-            if ((direction & MoveDirection.Right) == MoveDirection.Right)
+            if (direction.HasFlag(MoveDirection.Right))
                 Speed.X = MaxSpeed;
-            if ((direction & MoveDirection.Left) == MoveDirection.Left)
+            if (direction.HasFlag(MoveDirection.Left))
                 Speed.X = -MaxSpeed;
         }
     }
