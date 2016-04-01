@@ -20,6 +20,7 @@
 
 
     var keyUp = function (e) {
+        var key = keyPressed;
         if (e.which === 87 || e.which === 119 || e.which === 38)
             keyPressed ^= moveDirections.Up;
 
@@ -32,7 +33,7 @@
         if (e.which === 68 || e.which === 100 || e.which === 39)
             keyPressed ^= moveDirections.Right;
 
-        if (keyPressed > 0)
+        if (keyPressed !== key)
             args.inputChanged({ direction: keyPressed });
     };
 
