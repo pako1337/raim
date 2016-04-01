@@ -26,16 +26,16 @@ namespace PaCode.Raim.Model
             };
         }
 
-        public void Move(MoveDirection direction)
+        public void ChangeSpeed(MoveDirection direction)
         {
             if ((direction & MoveDirection.Up) == MoveDirection.Up)
-                Position.Y += -MaxSpeed;
+                Speed.Y = -MaxSpeed;
             if ((direction & MoveDirection.Down) == MoveDirection.Down)
-                Position.Y += MaxSpeed;
+                Speed.Y = MaxSpeed;
             if ((direction & MoveDirection.Right) == MoveDirection.Right)
-                Position.X += MaxSpeed;
+                Speed.X = MaxSpeed;
             if ((direction & MoveDirection.Left) == MoveDirection.Left)
-                Position.X += -MaxSpeed;
+                Speed.X = -MaxSpeed;
         }
     }
 }

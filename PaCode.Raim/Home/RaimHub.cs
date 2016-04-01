@@ -20,7 +20,7 @@ namespace PaCode.Raim.Home
         public void PlayerMoving(MoveDirection direction)
         {
             var player = players[Context.ConnectionId];
-            player.Move(direction);
+            player.ChangeSpeed(direction);
             Clients.All.PlayerMoved(player);
         }
     }
