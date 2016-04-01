@@ -7,7 +7,7 @@ namespace PaCode.Raim.Model
 {
     public class Player
     {
-        private const int speed = 1;
+        private const int Speed = 10;
         public string Name { get; set; }
         public Vector2d Position { get; set; }
         public int Size { get; set; }
@@ -27,13 +27,13 @@ namespace PaCode.Raim.Model
         public void Move(MoveDirection direction)
         {
             if ((direction & MoveDirection.Up) == MoveDirection.Up)
-                Position.Y += -speed;
+                Position.Y += -Speed;
             if ((direction & MoveDirection.Down) == MoveDirection.Down)
-                Position.Y += speed;
+                Position.Y += Speed;
             if ((direction & MoveDirection.Right) == MoveDirection.Right)
-                Position.X += speed;
+                Position.X += Speed;
             if ((direction & MoveDirection.Left) == MoveDirection.Left)
-                Position.X += -speed;
+                Position.X += -Speed;
         }
     }
 }
