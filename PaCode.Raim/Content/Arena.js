@@ -14,6 +14,7 @@
     var playerMoved = function (who) {
         var player = players.get(who.Name);
         player.Position = who.Position;
+        player.Speed = who.Speed;
     };
 
     (function init() {

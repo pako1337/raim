@@ -14,6 +14,9 @@
         for (var i = 0; i < objects.count() ; i++) {
             var gameObject = objects.get(i);
 
+            gameObject.Position.X += gameObject.Speed.X;
+            gameObject.Position.Y += gameObject.Speed.Y;
+
             drawingContext.beginPath();
             drawingContext.strokeStyle = "#F00";
             drawingContext.fillStyle = "#F00";
