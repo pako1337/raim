@@ -9,13 +9,11 @@
     
     var addNewPlayer = function (who) {
         players.addNewPlayer(who);
-        gfx.drawArena(players);
     };
 
     var playerMoved = function (who) {
         var player = players.get(who.Name);
         player.Position = who.Position;
-        gfx.drawArena(players);
     };
 
     (function init() {
@@ -31,7 +29,12 @@
         canvas.height = view.height;
         document.getElementById(arenaHandler).appendChild(canvas);
 
-        gfx = new raimGraphics({ canvas: canvas });
+        gfx = new raimGraphics({
+            canvas: canvas,
+            objects: players
+        });
+
+        gfx.startRendering();
 
         keyboard = new keyboardInput({
             inputChanged: playerMoving
