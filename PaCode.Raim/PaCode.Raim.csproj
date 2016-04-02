@@ -106,6 +106,7 @@
     <Content Include="Content\arena.js" />
     <Content Include="Content\keyboardInput.js" />
     <Content Include="Content\moveDirections.js" />
+    <Content Include="Content\raimGraphics.js" />
     <Content Include="gulpfile.js" />
     <Content Include="package.json" />
     <Content Include="Bundles.json" />

@@ -2,36 +2,20 @@
     args = args || {};
     var players;
     var arenaHandler;
-    var drawingContext;
     var playerMoving;
     var view;
     var keyboard;
+    var gfx;
     
     var addNewPlayer = function (who) {
         players.addNewPlayer(who);
-        drawArena();
+        gfx.drawArena(players);
     };
 
     var playerMoved = function (who) {
         var player = players.get(who.Name);
         player.Position = who.Position;
-        drawArena();
-    };
-
-    var drawArena = function () {
-        drawingContext.clearRect(0, 0, view.width, view.height);
-
-        for (var i = 0; i < players.count() ; i++) {
-            var player = players.get(i);
-
-            drawingContext.beginPath();
-            drawingContext.strokeStyle = "#F00";
-            drawingContext.fillStyle = "#F00";
-            drawingContext.arc(player.Position.X, player.Position.Y, player.Size, 0, 2 * Math.PI);
-            drawingContext.stroke();
-            drawingContext.fill();
-            drawingContext.closePath();
-        }
+        gfx.drawArena(players);
     };
 
     (function init() {
@@ -47,7 +31,7 @@
         canvas.height = view.height;
         document.getElementById(arenaHandler).appendChild(canvas);
 
-        drawingContext = canvas.getContext("2d");
+        gfx = new raimGraphics({ canvas: canvas });
 
         keyboard = new keyboardInput({
             inputChanged: playerMoving
