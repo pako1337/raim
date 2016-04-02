@@ -28,6 +28,8 @@ namespace PaCode.Raim.Model
 
         public void ChangeSpeed(MoveDirection direction)
         {
+            Speed.X = 0;
+            Speed.Y = 0;
             if (direction.HasFlag(MoveDirection.Up))
                 Speed.Y = -MaxSpeed;
             if (direction.HasFlag(MoveDirection.Down))
