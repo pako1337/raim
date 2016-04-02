@@ -2,8 +2,13 @@
     var canvas = args.canvas;
     var objects = args.objects;
     var drawingContext = canvas.getContext("2d");
+
+    var lastFrameTime;
     
-    var drawArena = function () {
+    var drawArena = function (timestamp) {
+        if (!lastFrameTime)
+            lastFrameTime = timestamp;
+
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
 
         for (var i = 0; i < objects.count() ; i++) {
@@ -18,10 +23,15 @@
             drawingContext.closePath();
         }
 
+        lastFrameTime = timestamp;
+        requestAnimationFrame(drawArena);
+    };
+
+    var startRendering = function () {
         requestAnimationFrame(drawArena);
     };
 
     return {
-        startRendering: drawArena
+        startRendering: startRendering,
     };
 };
