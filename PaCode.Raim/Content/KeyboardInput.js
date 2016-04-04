@@ -16,21 +16,19 @@
     };
 
     function buildDirectionKey() {
-        var keyPressed = 0;
-        for (var i = 0; i < keys.length; i++) {
-            var k = keys[i];
-            if (k === 87 || k === 119 || k === 38)
-                keyPressed |= moveDirections.Up;
+        var keyPressed = keys.reduce(function (prev, current) {
+            if (current === 87 || current === 119 || current === 38)
+                return prev | moveDirections.Up;
 
-            if (k === 83 || k === 115 || k === 40)
-                keyPressed |= moveDirections.Down;
+            if (current === 83 || current === 115 || current === 40)
+                return prev | moveDirections.Down;
 
-            if (k === 65 || k === 97 || k === 37)
-                keyPressed |= moveDirections.Left;
+            if (current === 65 || current === 97 || current === 37)
+                return prev | moveDirections.Left;
 
-            if (k === 68 || k === 100 || k === 39)
-                keyPressed |= moveDirections.Right;
-        }
+            if (current === 68 || current === 100 || current === 39)
+                return prev | moveDirections.Right;
+        }, 0);
 
         return keyPressed;
     }
