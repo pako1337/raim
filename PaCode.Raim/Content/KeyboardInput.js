@@ -1,19 +1,27 @@
 ﻿function keyboardInput(args) {
     var keys = [];
+    var lastKeys = 0;
 
     var keyDown = function (e) {
         if (keys.indexOf(e.which) == -1)
             keys.push(e.which);
 
-        args.inputChanged({ direction: buildDirectionKey() });
+        notifyKeysChanged();
     };
 
 
     var keyUp = function (e) {
         keys.splice(keys.indexOf(e.which), 1);
-
-        args.inputChanged({ direction: buildDirectionKey() });
+        notifyKeysChanged();
     };
+
+    function notifyKeysChanged() {
+        var keysPressed = buildDirectionKey();
+        if (keysPressed !== lastKeys) {
+            args.inputChanged({ direction: buildDirectionKey() });
+            lastKeys = keysPressed;
+        }
+    }
 
     function buildDirectionKey() {
         var keyPressed = keys.reduce(function (prev, current) {
