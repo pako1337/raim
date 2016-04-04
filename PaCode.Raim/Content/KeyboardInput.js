@@ -1,42 +1,39 @@
 ﻿function keyboardInput(args) {
-    var keyPressed = 0;
+    var keys = [];
 
     var keyDown = function (e) {
-        var key = keyPressed;
-        if (e.which === 87 || e.which === 119 || e.which === 38)
-            keyPressed |= moveDirections.Up;
+        if (keys.indexOf(e.which) == -1)
+            keys.push(e.which);
 
-        if (e.which === 83 || e.which === 115 || e.which === 40)
-            keyPressed |= moveDirections.Down;
-
-        if (e.which === 65 || e.which === 97 || e.which === 37)
-            keyPressed |= moveDirections.Left;
-
-        if (e.which === 68 || e.which === 100 || e.which === 39)
-            keyPressed |= moveDirections.Right;
-
-        if (keyPressed !== key)
-            args.inputChanged({ direction: keyPressed });
+        args.inputChanged({ direction: buildDirectionKey() });
     };
 
 
     var keyUp = function (e) {
-        var key = keyPressed;
-        if (e.which === 87 || e.which === 119 || e.which === 38)
-            keyPressed ^= moveDirections.Up;
+        keys.splice(keys.indexOf(e.which), 1);
 
-        if (e.which === 83 || e.which === 115 || e.which === 40)
-            keyPressed ^= moveDirections.Down;
-
-        if (e.which === 65 || e.which === 97 || e.which === 37)
-            keyPressed ^= moveDirections.Left;
-
-        if (e.which === 68 || e.which === 100 || e.which === 39)
-            keyPressed ^= moveDirections.Right;
-
-        if (keyPressed !== key)
-            args.inputChanged({ direction: keyPressed });
+        args.inputChanged({ direction: buildDirectionKey() });
     };
+
+    function buildDirectionKey() {
+        var keyPressed = 0;
+        for (var i = 0; i < keys.length; i++) {
+            var k = keys[i];
+            if (k === 87 || k === 119 || k === 38)
+                keyPressed |= moveDirections.Up;
+
+            if (k === 83 || k === 115 || k === 40)
+                keyPressed |= moveDirections.Down;
+
+            if (k === 65 || k === 97 || k === 37)
+                keyPressed |= moveDirections.Left;
+
+            if (k === 68 || k === 100 || k === 39)
+                keyPressed |= moveDirections.Right;
+        }
+
+        return keyPressed;
+    }
 
     (function () {
         document.addEventListener("keydown", keyDown);
