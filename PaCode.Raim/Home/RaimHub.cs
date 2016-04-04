@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNet.SignalR;
 using Nancy.Helpers;
 using PaCode.Raim.Model;
@@ -19,9 +21,18 @@ namespace PaCode.Raim.Home
 
         public void PlayerMoving(MoveDirection direction)
         {
+            UpdatePlayers();
             var player = players[Context.ConnectionId];
             player.ChangeSpeed(direction);
             Clients.All.PlayerMoved(player);
+        }
+
+        private void UpdatePlayers()
+        {
+            var updateTime = DateTime.Now;
+
+            foreach (var player in players.Values)
+                player.Update(updateTime);
         }
     }
 }

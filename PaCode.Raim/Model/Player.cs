@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using PaCode.Raim.Home;
 
 namespace PaCode.Raim.Model
 {
     public class Player
     {
-        private const int MaxSpeed = 10;
+        private const int MaxSpeed = 50;
+
+        private DateTime lastUpdate = DateTime.Now;
+
         public string Name { get; private set; }
         public Vector2d Position { get; private set; }
         public Vector2d Speed { get; private set; }
@@ -24,6 +25,17 @@ namespace PaCode.Raim.Model
                 Speed = new Vector2d(0, 0),
                 Size = 20,
             };
+        }
+
+        public void Update(DateTime updateTime)
+        {
+            var changeTime = DateTime.Now;
+            var timeBetweenEvents = changeTime - lastUpdate;
+
+            Position.X += (int)(Speed.X * timeBetweenEvents.TotalSeconds);
+            Position.Y += (int)(Speed.Y * timeBetweenEvents.TotalSeconds);
+
+            lastUpdate = changeTime;
         }
 
         public void ChangeSpeed(MoveDirection direction)
