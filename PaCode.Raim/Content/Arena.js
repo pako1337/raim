@@ -1,11 +1,16 @@
 ﻿function arena(args) {
     args = args || {};
+    var playerName;
     var players;
     var arenaHandler;
     var playerMoving;
     var view;
     var keyboard;
     var gfx;
+
+    var setPlayer = function (p) {
+        playerName = p;
+    }
     
     var addNewPlayer = function (who) {
         players.addNewPlayer(who);
@@ -15,6 +20,13 @@
         var player = players.get(who.Name);
         player.Position = who.Position;
         player.Speed = who.Speed;
+    };
+
+    var mouseChange = function (mouse) {
+        var p = players.get(playerName);
+
+        var vector = { x: mouse.x - p.Position.X, y: mouse.y - p.Position.Y };
+        console.log(vector);
     };
 
     (function init() {
@@ -37,13 +49,15 @@
 
         gfx.startRendering();
 
-        keyboard = new keyboardInput({
-            inputChanged: playerMoving
+        keyboard = new userInput({
+            inputChanged: playerMoving,
+            mouseChange: mouseChange,
         });
     })();
 
     return {
         addNewPlayer: addNewPlayer,
         playerMoved: playerMoved,
+        setPlayer: setPlayer,
     };
 };

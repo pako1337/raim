@@ -11,5 +11,6 @@
 
     $.connection.hub.start().done(function () {
         raim.server.register("Pako");
+        gameArena.setPlayer("Pako");
     });
 })();

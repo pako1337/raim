@@ -1,4 +1,4 @@
-﻿function keyboardInput(args) {
+﻿function userInput(args) {
     var keys = [];
     var lastKeys = 0;
 
@@ -41,8 +41,16 @@
         return keyPressed;
     }
 
+    function mouseMove(e) {
+        var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
+        var mouseCanvasCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
+
+        args.mouseChange(mouseCanvasCoordinates);
+    }
+
     (function () {
         document.addEventListener("keydown", keyDown);
         document.addEventListener("keyup", keyUp);
+        document.addEventListener("mousemove", mouseMove);
     })();
 };
