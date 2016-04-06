@@ -96,6 +96,7 @@
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Home\HomeModule.cs" />
     <Compile Include="Home\MoveDirection.cs" />
+    <Compile Include="Home\PlayerInput.cs" />
     <Compile Include="Home\RaimHub.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Vector2d.cs" />
@@ -104,7 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\arena.js" />
-    <Content Include="Content\keyboardInput.js" />
+    <Content Include="Content\userInput.js" />
     <Content Include="Content\moveDirections.js" />
     <Content Include="Content\raimGraphics.js" />
     <Content Include="gulpfile.js" />

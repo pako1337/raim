@@ -19,11 +19,11 @@ namespace PaCode.Raim.Home
             Clients.All.Registered(player);
         }
 
-        public void PlayerMoving(MoveDirection direction)
+        public void PlayerMoving(PlayerInput input)
         {
             UpdatePlayers();
             var player = players[Context.ConnectionId];
-            player.ChangeSpeed(direction);
+            player.ChangeSpeed(input.Direction);
             Clients.All.PlayerMoved(player);
         }
 

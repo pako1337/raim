@@ -1,6 +1,7 @@
 ﻿function userInput(args) {
     var keys = [];
     var lastKeys = 0;
+    var mouseCanvasCoordinates = { x: 0, y: 0 };
 
     var keyDown = function (e) {
         if (keys.indexOf(e.which) == -1)
@@ -18,7 +19,7 @@
     function notifyKeysChanged() {
         var keysPressed = buildDirectionKey();
         if (keysPressed !== lastKeys) {
-            args.inputChanged({ direction: buildDirectionKey() });
+            args.inputChanged({ direction: keysPressed, mouse: mouseCanvasCoordinates });
             lastKeys = keysPressed;
         }
     }
@@ -43,9 +44,8 @@
 
     function mouseMove(e) {
         var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
-        var mouseCanvasCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
-
-        args.mouseChange(mouseCanvasCoordinates);
+        mouseCanvasCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
+        args.inputChanged({ direction: lastKeys, mouse: mouseCanvasCoordinates });
     }
 
     (function () {

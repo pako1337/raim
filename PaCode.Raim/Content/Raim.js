@@ -2,7 +2,7 @@
     var raim = $.connection.raimHub;
     var gameArena = new arena({
         playerMoving: function (e) {
-            raim.server.playerMoving(e.direction);
+            raim.server.playerMoving(e);
         }
     });
 
