@@ -32,8 +32,8 @@ namespace PaCode.Raim.Model
             var changeTime = DateTime.Now;
             var timeBetweenEvents = changeTime - lastUpdate;
 
-            Position.X += (int)(Speed.X * timeBetweenEvents.TotalSeconds);
-            Position.Y += (int)(Speed.Y * timeBetweenEvents.TotalSeconds);
+            Position.X += Speed.X * timeBetweenEvents.TotalSeconds;
+            Position.Y += Speed.Y * timeBetweenEvents.TotalSeconds;
 
             lastUpdate = changeTime;
         }

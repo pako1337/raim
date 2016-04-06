@@ -7,10 +7,10 @@ namespace PaCode.Raim.Model
 {
     public class Vector2d
     {
-        public int X { get; set; }
-        public int Y { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
 
-        public Vector2d(int x, int y)
+        public Vector2d(double x, double y)
         {
             X = x;
             Y = y;
