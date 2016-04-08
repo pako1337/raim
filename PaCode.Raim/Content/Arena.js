@@ -25,9 +25,10 @@
 
     var inputChange = function (input) {
         var p = players.get(playerName);
+        if (p == undefined) return;
 
         var mouse = input.mouse;
-        var vector = { x: mouse.x - p.Position.X, y: (mouse.y - p.Position.Y) };
+        var vector = { x: mouse.x - p.Position.X, y: -mouse.y - p.Position.Y }; // invert y axis input
 
         var vectorLength = vector.x * vector.x + vector.y * vector.y;
         vectorLength = Math.sqrt(vectorLength);
