@@ -20,12 +20,28 @@
             gameObject.Position.Y += gameObject.Speed.Y * timeDiff;
 
             drawingContext.beginPath();
+
             drawingContext.strokeStyle = "#F00";
             drawingContext.fillStyle = "#F00";
             drawingContext.arc(gameObject.Position.X, gameObject.Position.Y, gameObject.Size, 0, 2 * Math.PI);
             drawingContext.stroke();
             drawingContext.fill();
+
             drawingContext.closePath();
+
+            drawingContext.beginPath();
+
+            drawingContext.strokeStyle = "#0F0";
+            
+            var x = gameObject.Position.X + gameObject.FacingDirection.X * gameObject.Size / 2;
+            var y = gameObject.Position.Y + gameObject.FacingDirection.Y * gameObject.Size / 2;
+            drawingContext.moveTo(x, y);
+
+            x = gameObject.Position.X + gameObject.FacingDirection.X * gameObject.Size;
+            y = gameObject.Position.Y + gameObject.FacingDirection.Y * gameObject.Size;
+            drawingContext.lineTo(x, y);
+            drawingContext.stroke();
+
         }
 
         lastFrameTime = timestamp;

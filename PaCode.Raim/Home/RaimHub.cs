@@ -23,7 +23,7 @@ namespace PaCode.Raim.Home
         {
             UpdatePlayers();
             var player = players[Context.ConnectionId];
-            player.ChangeSpeed(input.Direction);
+            player.ProcessInput(input);
             Clients.All.PlayerMoved(player);
         }
 
