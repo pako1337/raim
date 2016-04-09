@@ -42,12 +42,16 @@
         return keyPressed;
     }
 
+    var lastMouseInput = 0;
     function mouseMove(e) {
+        var now = Date.now();
+        if (now - lastMouseInput < 16) return;
+        lastMouseInput = now;
+
         var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
         mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
         mouseCoordinates.x = mouseCoordinates.x - args.viewport.x;
         mouseCoordinates.y = -(mouseCoordinates.y - args.viewport.y)
-
         args.inputChanged({ direction: lastKeys, mouse: mouseCoordinates });
     }
 
