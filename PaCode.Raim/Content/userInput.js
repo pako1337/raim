@@ -1,6 +1,5 @@
 ﻿function userInput(args) {
     var keys = [];
-    var lastKeys = 0;
     var mouseCoordinates = { x: 0, y: 0 };
 
     var keyDown = function (e) {
@@ -10,18 +9,13 @@
         notifyKeysChanged();
     };
 
-
     var keyUp = function (e) {
         keys.splice(keys.indexOf(e.which), 1);
         notifyKeysChanged();
     };
 
     function notifyKeysChanged() {
-        var keysPressed = buildDirectionKey();
-        if (keysPressed !== lastKeys) {
-            args.inputChanged({ direction: keysPressed, mouse: mouseCoordinates });
-            lastKeys = keysPressed;
-        }
+        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
     }
 
     function buildDirectionKey() {
@@ -42,17 +36,12 @@
         return keyPressed;
     }
 
-    var lastMouseInput = 0;
     function mouseMove(e) {
-        var now = Date.now();
-        if (now - lastMouseInput < 16) return;
-        lastMouseInput = now;
-
         var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
         mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
         mouseCoordinates.x = mouseCoordinates.x - args.viewport.x;
         mouseCoordinates.y = -(mouseCoordinates.y - args.viewport.y)
-        args.inputChanged({ direction: lastKeys, mouse: mouseCoordinates });
+        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
     }
 
     (function () {

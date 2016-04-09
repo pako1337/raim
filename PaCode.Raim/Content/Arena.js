@@ -24,7 +24,12 @@
         player.FacingDirection = who.FacingDirection;
     };
 
+    var lastInput = Date.now();
     var inputChange = function (input) {
+        var now = Date.now();
+        if (now - lastInput < 16) return;
+        lastInput = now;
+
         var p = players.get(playerName);
         if (p == undefined) return;
 
