@@ -27,11 +27,7 @@
         var p = players.get(playerName);
         if (p == undefined) return;
 
-        var mouse = input.mouse;
-        var vector = {
-            x: (mouse.x - gfx.viewport.x) - p.Position.X,
-            y: -(mouse.y - gfx.viewport.y) - p.Position.Y
-        }; // invert y axis input
+        var vector = { x: input.mouse.x - p.Position.X, y: input.mouse.y - p.Position.Y };
 
         var vectorLength = vector.x * vector.x + vector.y * vector.y;
         vectorLength = Math.sqrt(vectorLength);
@@ -66,6 +62,7 @@
 
         input = new userInput({
             inputChanged: inputChange,
+            viewport: viewport
         });
     })();
 
