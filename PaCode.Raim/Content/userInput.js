@@ -16,7 +16,10 @@
     };
 
     function notifyKeysChanged() {
-        keysPressed = buildDirectionKey();
+        var newKeys = buildDirectionKey();
+        if (keysPressed === newKeys) return;
+
+        keysPressed = newKeys;
         args.inputChanged({ direction: keysPressed, mouse: mouseCoordinates });
     }
 
