@@ -29,18 +29,13 @@
         if (player == undefined) return;
 
         player.FacingDirection = calculateFacingDirection(player, input.mouse);
-
         playerMoving({ moveDirection: input.direction, facingDirection: player.FacingDirection });
     };
 
     function calculateFacingDirection(player, mouse) {
         var facingDirection = { X: mouse.x - player.Position.X, Y: mouse.y - player.Position.Y };
-
         var facingDirectionLength = facingDirection.X * facingDirection.X + facingDirection.Y * facingDirection.Y;
         facingDirectionLength = Math.sqrt(facingDirectionLength);
-
-        facingDirection.X = facingDirection.X / facingDirectionLength;
-        facingDirection.Y = facingDirection.Y / facingDirectionLength;
 
         return facingDirection;
     }
@@ -48,19 +43,17 @@
     var processFrame = function (timestamp) {
         if (!lastFrameTime)
             lastFrameTime = timestamp;
-
+        
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
         for (var i = 0; i < players.count() ; i++) {
             var player = players.get(i);
 
+            var directionPoint = { x: player.Position.X + player.FacingDirection.X, y: player.Position.Y + player.FacingDirection.Y };
             player.Position.X += player.Speed.X * timeDiff;
             player.Position.Y += player.Speed.Y * timeDiff;
+            player.FacingDirection = calculateFacingDirection(player, directionPoint);
         }
-
-        var player = players.get(playerName);
-        if (player !== undefined)
-            player.FacingDirection = calculateFacingDirection(player, input.mouse());
 
         gfx.drawArena();
 

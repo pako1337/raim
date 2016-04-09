@@ -32,14 +32,20 @@
         drawingContext.strokeStyle = "rgba(0, 255, 0, 1)";
         drawingContext.fillStyle = "rgba(0, 255, 0, 1)";
 
-        x = gameObject.Position.X + gameObject.FacingDirection.X * gameObject.Size / 2;
-        y = gameObject.Position.Y + gameObject.FacingDirection.Y * gameObject.Size / 2;
+        var directionVector = { X: gameObject.FacingDirection.X, Y: gameObject.FacingDirection.Y };
+        var length = directionVector.X * directionVector.X + directionVector.Y * directionVector.Y;
+        length = Math.sqrt(length);
+        directionVector.X /= length;
+        directionVector.Y /= length;
+
+        x = gameObject.Position.X + directionVector.X * gameObject.Size / 2;
+        y = gameObject.Position.Y + directionVector.Y * gameObject.Size / 2;
         x -= viewport.x;
         y -= viewport.y;
         drawingContext.moveTo(x, -y);
 
-        x = gameObject.Position.X + gameObject.FacingDirection.X * gameObject.Size;
-        y = gameObject.Position.Y + gameObject.FacingDirection.Y * gameObject.Size;
+        x = gameObject.Position.X + directionVector.X * gameObject.Size;
+        y = gameObject.Position.Y + directionVector.Y * gameObject.Size;
         x -= viewport.x;
         y -= viewport.y;
         drawingContext.lineTo(x, -y);
