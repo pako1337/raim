@@ -10,7 +10,7 @@
 
     var setPlayer = function (p) {
         playerName = p;
-    }
+    };
     
     var addNewPlayer = function (who) {
         players.addNewPlayer(who);
@@ -27,15 +27,15 @@
         var p = players.get(playerName);
         if (p == undefined) return;
 
-        var vector = { x: input.mouse.x - p.Position.X, y: input.mouse.y - p.Position.Y };
+        var facingDirection = { x: input.mouse.x - p.Position.X, y: input.mouse.y - p.Position.Y };
 
-        var vectorLength = vector.x * vector.x + vector.y * vector.y;
-        vectorLength = Math.sqrt(vectorLength);
+        var facingDirectionLength = facingDirection.x * facingDirection.x + facingDirection.y * facingDirection.y;
+        facingDirectionLength = Math.sqrt(facingDirectionLength);
 
-        vector.x = vector.x / vectorLength;
-        vector.y = vector.y / vectorLength;
+        facingDirection.x = facingDirection.x / facingDirectionLength;
+        facingDirection.y = facingDirection.y / facingDirectionLength;
 
-        playerMoving({ moveDirection: input.direction, facingDirection: vector });
+        playerMoving({ moveDirection: input.direction, facingDirection: facingDirection });
     };
 
     (function init() {
