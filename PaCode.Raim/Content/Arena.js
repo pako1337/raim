@@ -6,6 +6,7 @@
     var playerMoving;
     var input;
     var gfx;
+    var lastFrameTime;
     var viewport = { x: 0, y: 0 };
 
     var setPlayer = function (p) {
@@ -35,7 +36,28 @@
         facingDirection.x = facingDirection.x / facingDirectionLength;
         facingDirection.y = facingDirection.y / facingDirectionLength;
 
+        p.FacingDirection = facingDirection;
+
         playerMoving({ moveDirection: input.direction, facingDirection: facingDirection });
+    };
+
+    var processFrame = function (timestamp) {
+        if (!lastFrameTime)
+            lastFrameTime = timestamp;
+
+        var timeDiff = (timestamp - lastFrameTime) / 1000;
+
+        for (var i = 0; i < players.count() ; i++) {
+            var player = players.get(i);
+
+            player.Position.X += player.Speed.X * timeDiff;
+            player.Position.Y += player.Speed.Y * timeDiff;
+        }
+
+        gfx.drawArena();
+
+        lastFrameTime = timestamp;
+        requestAnimationFrame(processFrame);
     };
 
     (function init() {
@@ -58,7 +80,7 @@
             objects: players
         });
 
-        gfx.startRendering();
+        requestAnimationFrame(processFrame);
 
         input = new userInput({
             inputChanged: inputChange,

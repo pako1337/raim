@@ -4,26 +4,13 @@
     var drawingContext = canvas.getContext("2d");
     var viewport = args.viewport;
 
-    var lastFrameTime;
-    
-    var drawArena = function (timestamp) {
-        if (!lastFrameTime)
-            lastFrameTime = timestamp;
-
+    var drawArena = function () {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
-
-        var timeDiff = (timestamp - lastFrameTime) / 1000;
 
         for (var i = 0; i < objects.count() ; i++) {
             var gameObject = objects.get(i);
-
-            gameObject.Position.X += gameObject.Speed.X * timeDiff;
-            gameObject.Position.Y += gameObject.Speed.Y * timeDiff;
             drawObject(gameObject);
         }
-
-        lastFrameTime = timestamp;
-        requestAnimationFrame(drawArena);
     };
 
     function drawObject(gameObject) {
@@ -62,11 +49,7 @@
         drawingContext.closePath();
     }
 
-    var startRendering = function () {
-        requestAnimationFrame(drawArena);
-    };
-
     return {
-        startRendering: startRendering
+        drawArena: drawArena
     };
 };
