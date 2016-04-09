@@ -30,20 +30,20 @@
         var x, y;
         drawingContext.beginPath();
 
-        drawingContext.strokeStyle = "#F00";
-        drawingContext.fillStyle = "#F00";
+        drawingContext.fillStyle = "rgba(255, 0, 0, 0.7)";
+        drawingContext.strokeT
 
         x = gameObject.Position.X - viewport.x;
         y = gameObject.Position.Y - viewport.y;
         drawingContext.arc(x, -y, gameObject.Size, 0, 2 * Math.PI);
-        drawingContext.stroke();
         drawingContext.fill();
 
         drawingContext.closePath();
 
         drawingContext.beginPath();
 
-        drawingContext.strokeStyle = "#0F0";
+        drawingContext.strokeStyle = "rgba(0, 255, 0, 1)";
+        drawingContext.fillStyle = "rgba(0, 255, 0, 1)";
 
         x = gameObject.Position.X + gameObject.FacingDirection.X * gameObject.Size / 2;
         y = gameObject.Position.Y + gameObject.FacingDirection.Y * gameObject.Size / 2;
@@ -57,6 +57,9 @@
         y -= viewport.y;
         drawingContext.lineTo(x, -y);
         drawingContext.stroke();
+        drawingContext.fill();
+
+        drawingContext.closePath();
     }
 
     var startRendering = function () {
