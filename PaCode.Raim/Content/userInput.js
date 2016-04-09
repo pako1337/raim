@@ -1,5 +1,6 @@
 ﻿function userInput(args) {
     var keys = [];
+    var keysPressed = 0;
     var mouseCoordinates = { x: 0, y: 0 };
 
     var keyDown = function (e) {
@@ -15,7 +16,8 @@
     };
 
     function notifyKeysChanged() {
-        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
+        keysPressed = buildDirectionKey();
+        args.inputChanged({ direction: keysPressed, mouse: mouseCoordinates });
     }
 
     function buildDirectionKey() {
@@ -41,7 +43,7 @@
         mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
         mouseCoordinates.x = mouseCoordinates.x - args.viewport.x;
         mouseCoordinates.y = -(mouseCoordinates.y - args.viewport.y)
-        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
+        args.inputChanged({ direction: keysPressed, mouse: mouseCoordinates });
     }
 
     (function () {
@@ -51,7 +53,7 @@
     })();
 
     return {
-        keys: buildDirectionKey,
-        mouse: mouseCoordinates
+        keys: keysPressed,
+        mouse: function () { return mouseCoordinates; }
     };
 };
