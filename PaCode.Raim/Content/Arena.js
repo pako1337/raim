@@ -24,12 +24,7 @@
         player.FacingDirection = who.FacingDirection;
     };
 
-    var lastInput = Date.now();
     var inputChange = function (input) {
-        var now = Date.now();
-        if (now - lastInput < 16) return;
-        lastInput = now;
-
         var player = players.get(playerName);
         if (player == undefined) return;
 
@@ -39,13 +34,13 @@
     };
 
     function calculateFacingDirection(player, mouse) {
-        var facingDirection = { x: mouse.x - player.Position.X, y: mouse.y - player.Position.Y };
+        var facingDirection = { X: mouse.x - player.Position.X, Y: mouse.y - player.Position.Y };
 
-        var facingDirectionLength = facingDirection.x * facingDirection.x + facingDirection.y * facingDirection.y;
+        var facingDirectionLength = facingDirection.X * facingDirection.X + facingDirection.Y * facingDirection.Y;
         facingDirectionLength = Math.sqrt(facingDirectionLength);
 
-        facingDirection.x = facingDirection.x / facingDirectionLength;
-        facingDirection.y = facingDirection.y / facingDirectionLength;
+        facingDirection.X = facingDirection.X / facingDirectionLength;
+        facingDirection.Y = facingDirection.Y / facingDirectionLength;
 
         return facingDirection;
     }
@@ -62,6 +57,10 @@
             player.Position.X += player.Speed.X * timeDiff;
             player.Position.Y += player.Speed.Y * timeDiff;
         }
+
+        var player = players.get(playerName);
+        if (player !== undefined)
+            player.FacingDirection = calculateFacingDirection(player, input.mouse());
 
         gfx.drawArena();
 
