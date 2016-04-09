@@ -2,7 +2,7 @@
     var canvas = args.canvas;
     var objects = args.objects;
     var drawingContext = canvas.getContext("2d");
-    var viewport = { x: 0, y: canvas.height };
+    var viewport = args.viewport;
 
     var lastFrameTime;
     
@@ -64,7 +64,6 @@
     };
 
     return {
-        startRendering: startRendering,
-        viewport: viewport
+        startRendering: startRendering
     };
 };

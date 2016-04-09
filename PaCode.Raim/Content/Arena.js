@@ -4,9 +4,9 @@
     var players;
     var arenaHandler;
     var playerMoving;
-    var view;
-    var keyboard;
+    var input;
     var gfx;
+    var viewport = { x: 0, y: 0 };
 
     var setPlayer = function (p) {
         playerName = p;
@@ -48,21 +48,23 @@
         playerMoving = args.playerMoving || function () { };
 
         var arenaElement = document.getElementById(arenaHandler);
-        view = { width: arenaElement.offsetWidth, height: arenaElement.offsetHeight };
+        viewport.x = 0;
+        viewport.y = arenaElement.offsetHeight;
 
         var canvas = document.createElement("canvas");
-        canvas.width = view.width;
-        canvas.height = view.height;
+        canvas.width = arenaElement.offsetWidth;
+        canvas.height = arenaElement.offsetHeight;
         document.getElementById(arenaHandler).appendChild(canvas);
 
         gfx = new raimGraphics({
             canvas: canvas,
+            viewport: viewport,
             objects: players
         });
 
         gfx.startRendering();
 
-        keyboard = new userInput({
+        input = new userInput({
             inputChanged: inputChange,
         });
     })();
