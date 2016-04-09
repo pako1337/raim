@@ -49,4 +49,9 @@
         document.addEventListener("keyup", keyUp);
         document.addEventListener("mousemove", mouseMove);
     })();
+
+    return {
+        keys: buildDirectionKey,
+        mouse: mouseCoordinates
+    };
 };

@@ -30,10 +30,16 @@
         if (now - lastInput < 16) return;
         lastInput = now;
 
-        var p = players.get(playerName);
-        if (p == undefined) return;
+        var player = players.get(playerName);
+        if (player == undefined) return;
 
-        var facingDirection = { x: input.mouse.x - p.Position.X, y: input.mouse.y - p.Position.Y };
+        player.FacingDirection = calculateFacingDirection(player, input.mouse);
+
+        playerMoving({ moveDirection: input.direction, facingDirection: player.FacingDirection });
+    };
+
+    function calculateFacingDirection(player, mouse) {
+        var facingDirection = { x: mouse.x - player.Position.X, y: mouse.y - player.Position.Y };
 
         var facingDirectionLength = facingDirection.x * facingDirection.x + facingDirection.y * facingDirection.y;
         facingDirectionLength = Math.sqrt(facingDirectionLength);
@@ -41,10 +47,8 @@
         facingDirection.x = facingDirection.x / facingDirectionLength;
         facingDirection.y = facingDirection.y / facingDirectionLength;
 
-        p.FacingDirection = facingDirection;
-
-        playerMoving({ moveDirection: input.direction, facingDirection: facingDirection });
-    };
+        return facingDirection;
+    }
 
     var processFrame = function (timestamp) {
         if (!lastFrameTime)
