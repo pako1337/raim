@@ -33,11 +33,7 @@
     };
 
     function calculateFacingDirection(player, mouse) {
-        var facingDirection = { X: mouse.x - player.Position.X, Y: mouse.y - player.Position.Y };
-        var facingDirectionLength = facingDirection.X * facingDirection.X + facingDirection.Y * facingDirection.Y;
-        facingDirectionLength = Math.sqrt(facingDirectionLength);
-
-        return facingDirection;
+        return { X: mouse.x - player.Position.X, Y: mouse.y - player.Position.Y };
     }
 
     var processFrame = function (timestamp) {

@@ -17,6 +17,7 @@ namespace PaCode.Raim.Home
             var player = Player.Create(name, 250, 250);
             players.Add(Context.ConnectionId, player);
             Clients.All.Registered(player);
+            Clients.Caller.OtherPlayers(players.Values.Where(p => p.Name != name));
         }
 
         public void PlayerMoving(PlayerInput input)

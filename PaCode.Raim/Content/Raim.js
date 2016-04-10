@@ -7,10 +7,17 @@
     });
 
     raim.client.registered = gameArena.addNewPlayer;
+    raim.client.otherPlayers = function (players) {
+        for (var i = 0; i < players.length; i++) {
+            gameArena.addNewPlayer(players[i]);
+        }
+    };
+
     raim.client.playerMoved = gameArena.playerMoved;
 
     $.connection.hub.start().done(function () {
-        raim.server.register("Pako");
-        gameArena.setPlayer("Pako");
+        var name = Date.now().toString();
+        raim.server.register(name);
+        gameArena.setPlayer(name);
     });
 })();
