@@ -20,6 +20,12 @@ namespace PaCode.Raim.Home
             Clients.Caller.OtherPlayers(players.Values.Where(p => p.Name != name));
         }
 
+        public void SignOff(string name)
+        {
+            players.Remove(Context.ConnectionId);
+            Clients.All.SignedOff(name);
+        }
+
         public void PlayerMoving(PlayerInput input)
         {
             UpdatePlayers();

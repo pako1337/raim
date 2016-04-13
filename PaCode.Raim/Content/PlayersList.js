@@ -12,6 +12,11 @@
         players.appendChild(playerNameElement);
     };
 
+    var removePlayer = function (player) {
+        var playerIndex = _players.findIndex(function (p) { return p.Name === player; });
+        _players.splice(playerIndex, 1);
+    }
+
     var count = function () {
         return _players.length;
     };
@@ -25,6 +30,7 @@
 
     return {
         addNewPlayer: addNewPlayer,
+        removePlayer: removePlayer,
         count: count,
         get: get
     };

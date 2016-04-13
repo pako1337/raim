@@ -17,6 +17,10 @@
         players.addNewPlayer(who);
     };
 
+    var removePlayer = function (who) {
+        players.removePlayer(who);
+    };
+
     var playerMoved = function (who) {
         var player = players.get(who.Name);
         player.Position = who.Position;
@@ -87,6 +91,7 @@
 
     return {
         addNewPlayer: addNewPlayer,
+        removePlayer: removePlayer,
         playerMoved: playerMoved,
         setPlayer: setPlayer,
     };
