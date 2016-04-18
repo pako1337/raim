@@ -1,10 +1,10 @@
 ﻿.titleSection {
     position: fixed;
-    left:    10px;
-    bottom:  7px;
+    left:    1em;
+    bottom:  0.5em;
     opacity: 0.3;
     font-weight: bold;
-    /*transition: opacity ease-in .2s;*/
+    transition: opacity ease-in .2s;
 }
 
 .titleSection:hover {
@@ -14,25 +14,31 @@
 .dsp2016 {
     background-image: url(/Content/DSP2016.png);
     background-size: contain;
-    width: 21px;
-    height: 48px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 2em;
+    height: 2.5em;
     display: inline-block;
 }
 
 #playersList {
     opacity: 0.7;
-    font-size: small;
+    font-size: smaller;
     display: inline-block;
     position: absolute;
-    bottom: 70px;
+    bottom: 5em;
+    left: 1em;
 }
+    #playersList span {
+        display:block;
+    }
 
 #arena {
     z-index: -1;
-    border: 1px solid black;
+    border: 0.1em solid black;
     position: fixed;
-    top:    5px;
-    right:  5px;
-    bottom: 5px;
-    left:   5px;
+    top:    0.3em;
+    right:  0.3em;
+    bottom: 0.3em;
+    left:   0.3em;
 }
