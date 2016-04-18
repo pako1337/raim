@@ -1,28 +1,42 @@
 ﻿var raimGraphics = function (args) {
     var canvas = args.canvas;
-    var objects = args.objects;
+    var players = args.players;
+    var gameObjects = args.gameObjects;
     var drawingContext = canvas.getContext("2d");
     var viewport = args.viewport;
 
     var drawArena = function () {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
 
-        for (var i = 0; i < objects.count() ; i++) {
-            var gameObject = objects.get(i);
-            drawObject(gameObject);
+        for (var i = 0; i < players.count(); i++) {
+            var gameObject = players.get(i);
+            drawPlayer(gameObject);
+        }
+
+        for (var i = 0; i < gameObjects.length; i++) {
+            var gameObject = gameObjects[i];
+            drawingContext.beginPath();
+
+            drawingContext.fillStyle = "rgba(0, 0, 0, 1)";
+            x = gameObject.Position.X - viewport.x;
+            y = gameObject.Position.Y - viewport.y;
+
+            drawingContext.arc(x, -y, 2, 0, 2 * Math.PI);
+            drawingContext.fill();
+            drawingContext.closePath();
         }
     };
 
-    function drawObject(gameObject) {
+    function drawPlayer(player) {
         var x, y;
         drawingContext.beginPath();
 
         drawingContext.fillStyle = "rgba(255, 0, 0, 0.7)";
         drawingContext.strokeT
 
-        x = gameObject.Position.X - viewport.x;
-        y = gameObject.Position.Y - viewport.y;
-        drawingContext.arc(x, -y, gameObject.Size, 0, 2 * Math.PI);
+        x = player.Position.X - viewport.x;
+        y = player.Position.Y - viewport.y;
+        drawingContext.arc(x, -y, player.Size, 0, 2 * Math.PI);
         drawingContext.fill();
 
         drawingContext.closePath();
@@ -32,20 +46,20 @@
         drawingContext.strokeStyle = "rgba(0, 255, 0, 1)";
         drawingContext.fillStyle = "rgba(0, 255, 0, 1)";
 
-        var directionVector = { X: gameObject.FacingDirection.X, Y: gameObject.FacingDirection.Y };
+        var directionVector = { X: player.FacingDirection.X, Y: player.FacingDirection.Y };
         var length = directionVector.X * directionVector.X + directionVector.Y * directionVector.Y;
         length = Math.sqrt(length);
         directionVector.X /= length;
         directionVector.Y /= length;
 
-        x = gameObject.Position.X + directionVector.X * gameObject.Size / 2;
-        y = gameObject.Position.Y + directionVector.Y * gameObject.Size / 2;
+        x = player.Position.X + directionVector.X * player.Size / 2;
+        y = player.Position.Y + directionVector.Y * player.Size / 2;
         x -= viewport.x;
         y -= viewport.y;
         drawingContext.moveTo(x, -y);
 
-        x = gameObject.Position.X + directionVector.X * gameObject.Size;
-        y = gameObject.Position.Y + directionVector.Y * gameObject.Size;
+        x = player.Position.X + directionVector.X * player.Size;
+        y = player.Position.Y + directionVector.Y * player.Size;
         x -= viewport.x;
         y -= viewport.y;
         drawingContext.lineTo(x, -y);

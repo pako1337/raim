@@ -9,6 +9,8 @@
     var lastFrameTime;
     var viewport = { x: 0, y: 0 };
 
+    var gameObjects;
+
     var setPlayer = function (p) {
         playerName = p;
     };
@@ -21,11 +23,15 @@
         players.removePlayer(who);
     };
 
-    var playerMoved = function (who) {
+    var playerMoved = function (who, createdObjects) {
         var player = players.get(who.Name);
         player.Position = who.Position;
         player.Speed = who.Speed;
         player.FacingDirection = who.FacingDirection;
+
+        for (var i = 0; i < createdObjects.length; i++) {
+            gameObjects.push(createdObjects[i]);
+        }
     };
 
     var inputChange = function (input) {
@@ -33,7 +39,7 @@
         if (player == undefined) return;
 
         player.FacingDirection = calculateFacingDirection(player, input.mouse);
-        playerMoving({ moveDirection: input.direction, facingDirection: player.FacingDirection });
+        playerMoving({ keysInput: input.direction, facingDirection: player.FacingDirection });
     };
 
     function calculateFacingDirection(player, mouse) {
@@ -66,6 +72,8 @@
         players = args.playersList || new playersList(args.playersListOptions);
         playerMoving = args.playerMoving || function () { };
 
+        gameObjects = [];
+
         var arenaElement = document.getElementById(arenaHandler);
         viewport.x = 0;
         viewport.y = arenaElement.offsetHeight;
@@ -78,7 +86,8 @@
         gfx = new raimGraphics({
             canvas: canvas,
             viewport: viewport,
-            objects: players
+            players: players,
+            gameObjects: gameObjects,
         });
 
         requestAnimationFrame(processFrame);

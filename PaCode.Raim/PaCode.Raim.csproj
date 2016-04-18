@@ -98,6 +98,8 @@
     <Compile Include="Home\MoveDirection.cs" />
     <Compile Include="Home\PlayerInput.cs" />
     <Compile Include="Home\RaimHub.cs" />
+    <Compile Include="Model\Bullet.cs" />
+    <Compile Include="Model\IGameObject.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Vector2d.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -106,7 +108,7 @@
   <ItemGroup>
     <Content Include="Content\arena.js" />
     <Content Include="Content\userInput.js" />
-    <Content Include="Content\moveDirections.js" />
+    <Content Include="Content\keysInput.js" />
     <Content Include="Content\raimGraphics.js" />
     <Content Include="gulpfile.js" />
     <Content Include="package.json" />

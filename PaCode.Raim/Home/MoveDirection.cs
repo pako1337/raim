@@ -1,16 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace PaCode.Raim.Home
 {
     [Flags]
-    public enum MoveDirection
+    public enum KeysInput
     {
-        Up = 1,
-        Down = 2,
-        Left = 4,
-        Right = 8
+        Up = 1 << 0,
+        Down = 1 << 1,
+        Left = 1 << 2,
+        Right = 1 << 3,
+        MouseLeft = 1 << 4,
     }
 }

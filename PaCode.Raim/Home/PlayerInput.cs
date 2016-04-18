@@ -8,7 +8,7 @@ namespace PaCode.Raim.Home
 {
     public class PlayerInput
     {
-        public MoveDirection MoveDirection { get; set; }
+        public KeysInput KeysInput { get; set; }
         public Vector2d FacingDirection { get; set; }
     }
 }

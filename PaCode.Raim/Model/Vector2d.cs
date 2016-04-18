@@ -15,5 +15,21 @@ namespace PaCode.Raim.Model
             X = x;
             Y = y;
         }
+
+        public double Length()
+        {
+            return Math.Sqrt(X * X + Y * Y);
+        }
+
+        public Vector2d Unit()
+        {
+            var length = Length();
+            return new Vector2d(X / length, Y = Y / length);
+        }
+
+        public Vector2d Scale(double scale)
+        {
+            return new Vector2d(X * scale, Y * scale);
+        }
     }
 }

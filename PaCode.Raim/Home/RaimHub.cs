@@ -10,6 +10,7 @@ namespace PaCode.Raim.Home
     public class RaimHub : Hub
     {
         private static Dictionary<string, Player> players = new Dictionary<string, Player>();
+        private static List<IGameObject> gameObjects = new List<IGameObject>();
 
         public void Register(string name)
         {
@@ -30,8 +31,9 @@ namespace PaCode.Raim.Home
         {
             UpdatePlayers();
             var player = players[Context.ConnectionId];
-            player.ProcessInput(input);
-            Clients.All.PlayerMoved(player);
+            var createdObjects = player.ProcessInput(input);
+            gameObjects.AddRange(createdObjects);
+            Clients.All.PlayerMoved(player, createdObjects);
         }
 
         private void UpdatePlayers()

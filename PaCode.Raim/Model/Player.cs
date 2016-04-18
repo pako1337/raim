@@ -1,18 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using PaCode.Raim.Home;
 
 namespace PaCode.Raim.Model
 {
-    public class Player
+    public class Player : IGameObject
     {
         private const int MaxSpeed = 50;
 
         private DateTime lastUpdate = DateTime.Now;
 
+        public Guid Id { get; set; }
         public string Name { get; private set; }
+        public int Size { get; private set; }
         public Vector2d Position { get; private set; }
         public Vector2d Speed { get; private set; }
-        public int Size { get; private set; }
         public Vector2d FacingDirection { get; set; }
 
         private Player() { }
@@ -21,6 +24,7 @@ namespace PaCode.Raim.Model
         {
             return new Player
             {
+                Id = Guid.NewGuid(),
                 Name = name,
                 Position = new Vector2d(x, y),
                 Speed = new Vector2d(0, 0),
@@ -31,7 +35,7 @@ namespace PaCode.Raim.Model
 
         public void Update(DateTime updateTime)
         {
-            var changeTime = DateTime.Now;
+            var changeTime = updateTime;
             var timeBetweenEvents = changeTime - lastUpdate;
 
             Position.X += Speed.X * timeBetweenEvents.TotalSeconds;
@@ -40,24 +44,32 @@ namespace PaCode.Raim.Model
             lastUpdate = changeTime;
         }
 
-        public void ProcessInput(PlayerInput input)
+        public IEnumerable<IGameObject> ProcessInput(PlayerInput input)
         {
-            ProcessDirection(input.MoveDirection);
+            ProcessDirection(input.KeysInput);
             FacingDirection = input.FacingDirection;
+
+            if (input.KeysInput.HasFlag(KeysInput.MouseLeft))
+            {
+                var bullet = Bullet.Create(Position.X, Position.Y, FacingDirection);
+                return new[] { bullet };
+            }
+
+            return Enumerable.Empty<IGameObject>();
         }
 
-        private void ProcessDirection(MoveDirection moveDirection)
+        private void ProcessDirection(KeysInput keysInput)
         {
             Speed.X = 0;
             Speed.Y = 0;
 
-            if (moveDirection.HasFlag(MoveDirection.Up))
+            if (keysInput.HasFlag(KeysInput.Up))
                 Speed.Y = MaxSpeed;
-            if (moveDirection.HasFlag(MoveDirection.Down))
+            if (keysInput.HasFlag(KeysInput.Down))
                 Speed.Y = -MaxSpeed;
-            if (moveDirection.HasFlag(MoveDirection.Right))
+            if (keysInput.HasFlag(KeysInput.Right))
                 Speed.X = MaxSpeed;
-            if (moveDirection.HasFlag(MoveDirection.Left))
+            if (keysInput.HasFlag(KeysInput.Left))
                 Speed.X = -MaxSpeed;
         }
     }

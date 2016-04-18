@@ -1,7 +1,7 @@
 ﻿[
   {
     "scripts": [
-      "Content/moveDirections.js",
+      "Content/keysInput.js",
       "Content/userInput.js",
       "Content/raimGraphics.js",
       "Content/PlayersList.js",
