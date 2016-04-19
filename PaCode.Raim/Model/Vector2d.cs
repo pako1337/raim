@@ -24,7 +24,7 @@ namespace PaCode.Raim.Model
         public Vector2d Unit()
         {
             var length = Length();
-            return new Vector2d(X / length, Y = Y / length);
+            return new Vector2d(X / length, Y / length);
         }
 
         public Vector2d Scale(double scale)
