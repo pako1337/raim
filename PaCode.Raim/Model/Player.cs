@@ -11,12 +11,15 @@ namespace PaCode.Raim.Model
 
         private DateTime lastUpdate = DateTime.Now;
 
+
         public Guid Id { get; set; }
         public string Name { get; private set; }
         public int Size { get; private set; }
         public Vector2d Position { get; private set; }
         public Vector2d Speed { get; private set; }
         public Vector2d FacingDirection { get; set; }
+
+        public List<Bullet> Bullets { get; } = new List<Bullet>();
 
         private Player() { }
 
@@ -52,6 +55,7 @@ namespace PaCode.Raim.Model
             if (input.KeysInput.HasFlag(KeysInput.MouseLeft))
             {
                 var bullet = Bullet.Create(Position.X, Position.Y, FacingDirection);
+                Bullets.Add(bullet);
                 return new[] { bullet };
             }
 

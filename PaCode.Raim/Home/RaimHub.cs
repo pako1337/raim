@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Nancy.Helpers;
 using PaCode.Raim.Model;
@@ -25,15 +26,22 @@ namespace PaCode.Raim.Home
             Clients.All.PlayerMoved(gameObjects);
         }
 
-        public void SignOff(string name)
+        public void SignOff()
         {
             var player = players[Context.ConnectionId];
             players.Remove(Context.ConnectionId);
+            gameObjects.RemoveAll(g => player.Bullets.Any(b => b.Id == g.Id));
             gameObjects.RemoveAll(g => g.Id == player.Id);
-            Clients.All.SignedOff(name);
+            Clients.All.SignedOff(player.Name);
 
             UpdateGameState();
             Clients.All.PlayerMoved(gameObjects);
+        }
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            SignOff();
+            return base.OnDisconnected(stopCalled);
         }
 
         public void PlayerMoving(PlayerInput input)
