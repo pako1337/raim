@@ -19,6 +19,7 @@ namespace PaCode.Raim.Model
             {
                 Id = Guid.NewGuid(),
                 Position = new Vector2d(x, y),
+                FacingDirection = direction,
                 Speed = direction.Unit().Scale(10),
             };
         }
