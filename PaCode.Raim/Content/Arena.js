@@ -23,15 +23,8 @@
         players.removePlayer(who);
     };
 
-    var playerMoved = function (who, createdObjects) {
-        var player = players.get(who.Name);
-        player.Position = who.Position;
-        player.Speed = who.Speed;
-        player.FacingDirection = who.FacingDirection;
-
-        for (var i = 0; i < createdObjects.length; i++) {
-            gameObjects.push(createdObjects[i]);
-        }
+    var playerMoved = function (gameObjectsFromServer) {
+        gameObjects = gameObjectsFromServer;
     };
 
     var inputChange = function (input) {
@@ -52,8 +45,8 @@
         
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
-        for (var i = 0; i < players.count() ; i++) {
-            var player = players.get(i);
+        for (var i = 0; i < gameObjects.length; i++) {
+            var player = gameObjects[i];
 
             var directionPoint = { x: player.Position.X + player.FacingDirection.X, y: player.Position.Y + player.FacingDirection.Y };
             player.Position.X += player.Speed.X * timeDiff;
@@ -61,7 +54,7 @@
             player.FacingDirection = calculateFacingDirection(player, directionPoint);
         }
 
-        gfx.drawArena();
+        gfx.drawArena(gameObjects);
 
         lastFrameTime = timestamp;
         requestAnimationFrame(processFrame);
@@ -86,8 +79,6 @@
         gfx = new raimGraphics({
             canvas: canvas,
             viewport: viewport,
-            players: players,
-            gameObjects: gameObjects,
         });
 
         requestAnimationFrame(processFrame);

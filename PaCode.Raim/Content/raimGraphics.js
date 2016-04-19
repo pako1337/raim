@@ -1,17 +1,10 @@
 ﻿var raimGraphics = function (args) {
     var canvas = args.canvas;
-    var players = args.players;
-    var gameObjects = args.gameObjects;
     var drawingContext = canvas.getContext("2d");
     var viewport = args.viewport;
 
-    var drawArena = function () {
+    var drawArena = function (gameObjects) {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
-
-        for (var i = 0; i < players.count(); i++) {
-            var gameObject = players.get(i);
-            drawPlayer(gameObject);
-        }
 
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
