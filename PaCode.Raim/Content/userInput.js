@@ -49,14 +49,22 @@
         mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
         mouseCoordinates.x = mouseCoordinates.x - args.viewport.x;
         mouseCoordinates.y = -(mouseCoordinates.y - args.viewport.y);
+
+        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
+    }
+
+    function mouseDown(e) {
         console.log(e.buttons);
-        if (e.buttons && 1) {
+        if ((e.buttons && 1) && (keys.indexOf(1) === -1)) {
             keys.push(1);
         }
-        else if (keys.indexOf(1) >= 0) {
+        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
+    }
+
+    function mouseUp(e) {
+        if (keys.indexOf(1) >= 0) {
             keys.splice(keys.indexOf(1), 1);
         }
-
         args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
     }
 
@@ -64,6 +72,8 @@
         document.addEventListener("keydown", keyDown);
         document.addEventListener("keyup", keyUp);
         document.addEventListener("mousemove", mouseMove);
+        document.addEventListener("mousedown", mouseDown);
+        document.addEventListener("mouseup", mouseUp);
     })();
 
     return {
