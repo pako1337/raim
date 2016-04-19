@@ -8,17 +8,25 @@
 
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
-            drawingContext.beginPath();
-
-            drawingContext.fillStyle = "rgba(0, 0, 0, 1)";
-            x = gameObject.Position.X - viewport.x;
-            y = gameObject.Position.Y - viewport.y;
-
-            drawingContext.arc(x, -y, 2, 0, 2 * Math.PI);
-            drawingContext.fill();
-            drawingContext.closePath();
+            if (gameObject.Name === undefined) {
+                drawBullet(gameObject);
+            } else {
+                drawPlayer(gameObject);
+            }
         }
     };
+
+    function drawBullet(bullet) {
+        drawingContext.beginPath();
+
+        drawingContext.fillStyle = "rgba(0, 0, 0, 1)";
+        x = bullet.Position.X - viewport.x;
+        y = bullet.Position.Y - viewport.y;
+
+        drawingContext.arc(x, -y, 2, 0, 2 * Math.PI);
+        drawingContext.fill();
+        drawingContext.closePath();
+    }
 
     function drawPlayer(player) {
         var x, y;
