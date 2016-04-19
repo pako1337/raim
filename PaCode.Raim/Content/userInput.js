@@ -17,7 +17,6 @@
 
     function notifyKeysChanged() {
         var newKeys = buildDirectionKey();
-        if (keysPressed === newKeys) return;
 
         keysPressed = newKeys;
         args.inputChanged({ direction: keysPressed, mouse: mouseCoordinates });
@@ -50,22 +49,21 @@
         mouseCoordinates.x = mouseCoordinates.x - args.viewport.x;
         mouseCoordinates.y = -(mouseCoordinates.y - args.viewport.y);
 
-        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
+        notifyKeysChanged();
     }
 
     function mouseDown(e) {
-        console.log(e.buttons);
         if ((e.buttons && 1) && (keys.indexOf(1) === -1)) {
             keys.push(1);
         }
-        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
+        notifyKeysChanged();
     }
 
     function mouseUp(e) {
         if (keys.indexOf(1) >= 0) {
             keys.splice(keys.indexOf(1), 1);
         }
-        args.inputChanged({ direction: buildDirectionKey(), mouse: mouseCoordinates });
+        notifyKeysChanged();
     }
 
     (function () {
