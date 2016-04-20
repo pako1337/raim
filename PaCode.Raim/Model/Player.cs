@@ -62,17 +62,17 @@ namespace PaCode.Raim.Model
             return createdObjects;
         }
 
-        private DateTime _lastShot = DateTime.Now;
+        private DateTime lastShot = DateTime.Now;
         private void Shoot(List<IGameObject> createdObjects, DateTime shotTime)
         {
-            if (shotTime - _lastShot < TimeSpan.FromMilliseconds(500))
+            if (shotTime - lastShot < TimeSpan.FromMilliseconds(500))
                 return;
 
             var bullet = Bullet.Create(Position.X, Position.Y, FacingDirection);
             Bullets.Add(bullet);
             createdObjects.Add(bullet);
 
-            _lastShot = shotTime;
+            lastShot = shotTime;
         }
 
         private void ProcessDirection(KeysInput keysInput)
