@@ -6,6 +6,13 @@
         }
     });
 
+    var _playerId;
+
+    raim.client.signedIn = function (id) {
+        _playerId = id;
+        gameArena.setPlayer(id);
+    };
+
     raim.client.registered = gameArena.addNewPlayer;
     raim.client.signedOff = gameArena.removePlayer;
     raim.client.otherPlayers = function (players) {
@@ -16,17 +23,14 @@
 
     raim.client.playerMoved = gameArena.playerMoved;
 
-    var name;
-
     function signOff() {
         console.log("unloading");
-        raim.server.signOff(name);
+        raim.server.signOff(_playerId);
     }
 
     $.connection.hub.start().done(function () {
-        name = Date.now().toString();
+        name = "test";
         raim.server.register(name);
-        gameArena.setPlayer(name);
 
         window.addEventListener("beforeunload", signOff);
     });

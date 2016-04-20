@@ -1,6 +1,6 @@
 ﻿function arena(args) {
     args = args || {};
-    var playerName;
+    var playerId;
     var players;
     var arenaHandler;
     var playerMoving;
@@ -12,7 +12,7 @@
     var gameObjects;
 
     var setPlayer = function (p) {
-        playerName = p;
+        playerId = p;
     };
     
     var addNewPlayer = function (who) {
@@ -28,7 +28,7 @@
     };
 
     var inputChange = function (input) {
-        var player = players.get(playerName);
+        var player = gameObjects.find(function (g) { return g.Id == playerId; });
         if (player == undefined) return;
 
         player.FacingDirection = calculateFacingDirection(player, input.mouse);

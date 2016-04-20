@@ -19,6 +19,7 @@ namespace PaCode.Raim.Home
             var player = Player.Create(name, 250, 250);
             players.Add(Context.ConnectionId, player);
             gameObjects.Add(player);
+            Clients.Caller.SignedIn(player.Id);
             Clients.All.Registered(player);
             Clients.Caller.OtherPlayers(players.Values.Where(p => p.Name != name));
 
@@ -46,16 +47,17 @@ namespace PaCode.Raim.Home
 
         public void PlayerMoving(PlayerInput input)
         {
-            UpdateGameState();
+            var updateTime = DateTime.Now;
+            UpdateGameState(updateTime);
             var player = players[Context.ConnectionId];
-            var createdObjects = player.ProcessInput(input);
+            var createdObjects = player.ProcessInput(input, updateTime);
             gameObjects.AddRange(createdObjects);
             Clients.All.PlayerMoved(gameObjects);
         }
 
-        private void UpdateGameState()
+        private void UpdateGameState(DateTime? updateTimestamp = null)
         {
-            var updateTime = DateTime.Now;
+            var updateTime = updateTimestamp ?? DateTime.Now;
 
             foreach (var player in gameObjects)
                 player.Update(updateTime);
