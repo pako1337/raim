@@ -59,8 +59,8 @@ namespace PaCode.Raim.Home
         {
             var updateTime = updateTimestamp ?? DateTime.Now;
 
-            foreach (var player in gameObjects)
-                player.Update(updateTime);
+            foreach (var gameObject in gameObjects)
+                gameObject.Update(updateTime);
         }
     }
 }
