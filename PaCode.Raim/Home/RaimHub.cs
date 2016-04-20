@@ -61,9 +61,8 @@ namespace PaCode.Raim.Home
             
             foreach (var gameObject in gameObjects)
                 gameObject.Update(updateTime);
-
-            var destroyedObjects = gameObjects.OfType<IDestroyable>().Where(g => g.IsDestroyed).Select(g => ((IGameObject)g).Id).ToList();
-            gameObjects.RemoveAll(g => destroyedObjects.Contains(g.Id));
+            
+            gameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
         }
     }
 }
