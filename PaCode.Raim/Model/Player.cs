@@ -47,19 +47,32 @@ namespace PaCode.Raim.Model
             lastUpdate = changeTime;
         }
 
-        public IEnumerable<IGameObject> ProcessInput(PlayerInput input)
+        public IEnumerable<IGameObject> ProcessInput(PlayerInput input, DateTime updateTime)
         {
             ProcessDirection(input.KeysInput);
             FacingDirection = input.FacingDirection;
 
+            var createdObjects = new List<IGameObject>();
+
             if (input.KeysInput.HasFlag(KeysInput.MouseLeft))
             {
-                var bullet = Bullet.Create(Position.X, Position.Y, FacingDirection);
-                Bullets.Add(bullet);
-                return new[] { bullet };
+                Shoot(createdObjects, updateTime);
             }
 
-            return Enumerable.Empty<IGameObject>();
+            return createdObjects;
+        }
+
+        private DateTime _lastShot = DateTime.Now;
+        private void Shoot(List<IGameObject> createdObjects, DateTime shotTime)
+        {
+            if (shotTime - _lastShot < TimeSpan.FromMilliseconds(500))
+                return;
+
+            var bullet = Bullet.Create(Position.X, Position.Y, FacingDirection);
+            Bullets.Add(bullet);
+            createdObjects.Add(bullet);
+
+            _lastShot = shotTime;
         }
 
         private void ProcessDirection(KeysInput keysInput)
