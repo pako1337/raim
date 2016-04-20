@@ -58,9 +58,12 @@ namespace PaCode.Raim.Home
         private void UpdateGameState(DateTime? updateTimestamp = null)
         {
             var updateTime = updateTimestamp ?? DateTime.Now;
-
+            
             foreach (var gameObject in gameObjects)
                 gameObject.Update(updateTime);
+
+            var destroyedObjects = gameObjects.OfType<IDestroyable>().Where(g => g.IsDestroyed).Select(g => ((IGameObject)g).Id).ToList();
+            gameObjects.RemoveAll(g => destroyedObjects.Contains(g.Id));
         }
     }
 }
