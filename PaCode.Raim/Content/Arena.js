@@ -46,13 +46,23 @@
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
         for (var i = 0; i < gameObjects.length; i++) {
-            var player = gameObjects[i];
+            var gameObject = gameObjects[i];
 
-            var directionPoint = { x: player.Position.X + player.FacingDirection.X, y: player.Position.Y + player.FacingDirection.Y };
-            player.Position.X += player.Speed.X * timeDiff;
-            player.Position.Y += player.Speed.Y * timeDiff;
-            player.FacingDirection = calculateFacingDirection(player, directionPoint);
+            if (!gameObject.IsDestroyed) {
+                var directionPoint = { x: gameObject.Position.X + gameObject.FacingDirection.X, y: gameObject.Position.Y + gameObject.FacingDirection.Y };
+                gameObject.Position.X += gameObject.Speed.X * timeDiff;
+                gameObject.Position.Y += gameObject.Speed.Y * timeDiff;
+                gameObject.FacingDirection = calculateFacingDirection(gameObject, directionPoint);
+
+                if (!!gameObject.TimeToLive) {
+                    gameObject.TimeToLive -= timestamp - lastFrameTime;
+                    if (gameObject.TimeToLive <= 0)
+                        gameObject.IsDestroyed = true;
+                }
+            }
         }
+
+        gameObjects = gameObjects.filter(function (g) { return !g.IsDestroyed });
 
         gfx.drawArena(gameObjects);
 
