@@ -81,13 +81,16 @@ namespace PaCode.Raim.Model
             Speed.Y = 0;
 
             if (keysInput.HasFlag(KeysInput.Up))
-                Speed.Y = MaxSpeed;
+                Speed.Y = 1;
             if (keysInput.HasFlag(KeysInput.Down))
-                Speed.Y = -MaxSpeed;
+                Speed.Y = -1;
             if (keysInput.HasFlag(KeysInput.Right))
-                Speed.X = MaxSpeed;
+                Speed.X = 1;
             if (keysInput.HasFlag(KeysInput.Left))
-                Speed.X = -MaxSpeed;
+                Speed.X = -1;
+
+            if (Speed.X != 0 || Speed.Y != 0)
+                Speed = Speed.Unit().Scale(MaxSpeed);
         }
     }
 }
