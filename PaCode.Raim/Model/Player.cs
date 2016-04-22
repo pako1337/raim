@@ -68,7 +68,7 @@ namespace PaCode.Raim.Model
             if (shotTime - lastShot < TimeSpan.FromMilliseconds(500))
                 return;
 
-            var bullet = Bullet.Create(Position.X, Position.Y, FacingDirection);
+            var bullet = Bullet.Create(Position.Add(FacingDirection.Unit().Scale(Size)), FacingDirection);
             Bullets.Add(bullet);
             createdObjects.Add(bullet);
 

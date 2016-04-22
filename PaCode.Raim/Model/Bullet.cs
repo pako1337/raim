@@ -15,12 +15,12 @@ namespace PaCode.Raim.Model
 
         private Bullet() { }
 
-        public static Bullet Create(double x, double y, Vector2d direction)
+        public static Bullet Create(Vector2d position, Vector2d direction)
         {
             return new Bullet()
             {
                 Id = Guid.NewGuid(),
-                Position = new Vector2d(x, y),
+                Position = position,
                 FacingDirection = direction,
                 Speed = direction.Unit().Scale(10),
                 TimeToLive = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,

@@ -16,6 +16,11 @@ namespace PaCode.Raim.Model
             Y = y;
         }
 
+        public Vector2d Add(Vector2d other)
+        {
+            return new Vector2d(X + other.X, Y + other.Y);
+        }
+
         public double Length()
         {
             return Math.Sqrt(X * X + Y * Y);
