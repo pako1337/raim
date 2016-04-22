@@ -23,7 +23,7 @@ namespace PaCode.Raim.Model
                 Id = Guid.NewGuid(),
                 Position = position,
                 FacingDirection = direction,
-                Speed = direction.Unit().Scale(10),
+                Speed = direction.Unit().Scale(50),
                 TimeToLive = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
             };
         }
