@@ -5,14 +5,13 @@ namespace PaCode.Raim.Model
     public class Bullet : IGameObject, IDestroyable
     {
         private static int _speed = 60;
-        private DateTime lastUpdate = DateTime.Now;
 
         public Guid Id { get; private set; }
         public Vector2d Position { get; private set; }
         public Vector2d Speed { get; private set; }
         public Vector2d FacingDirection { get; private set; }
-        public bool IsDestroyed { get; private set; }
-        public int TimeToLive { get; private set; }
+        public bool IsDestroyed { get { return TimeToLive <= 0; } }
+        public int TimeToLive { get; set; }
         public int Size { get; } = 2;
 
         private Bullet() { }
@@ -27,24 +26,6 @@ namespace PaCode.Raim.Model
                 Speed = direction.Unit().Scale(_speed),
                 TimeToLive = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
             };
-        }
-
-        public void Update(DateTime updateTime)
-        {
-            if (TimeToLive <= 0)
-            {
-                IsDestroyed = true;
-                return;
-            }
-
-            var changeTime = updateTime;
-            var timeBetweenEvents = changeTime - lastUpdate;
-
-            Position.X += Speed.X * timeBetweenEvents.TotalSeconds;
-            Position.Y += Speed.Y * timeBetweenEvents.TotalSeconds;
-
-            TimeToLive -= (int)timeBetweenEvents.TotalMilliseconds;
-            lastUpdate = changeTime;
         }
     }
 }

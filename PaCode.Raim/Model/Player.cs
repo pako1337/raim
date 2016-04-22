@@ -9,9 +9,6 @@ namespace PaCode.Raim.Model
     {
         private const int MaxSpeed = 50;
 
-        private DateTime lastUpdate = DateTime.Now;
-
-
         public Guid Id { get; set; }
         public string Name { get; private set; }
         public int Size { get; private set; }
@@ -34,17 +31,6 @@ namespace PaCode.Raim.Model
                 Size = 20,
                 FacingDirection = new Vector2d(1, 0),
             };
-        }
-
-        public void Update(DateTime updateTime)
-        {
-            var changeTime = updateTime;
-            var timeBetweenEvents = changeTime - lastUpdate;
-
-            Position.X += Speed.X * timeBetweenEvents.TotalSeconds;
-            Position.Y += Speed.Y * timeBetweenEvents.TotalSeconds;
-
-            lastUpdate = changeTime;
         }
 
         public IEnumerable<IGameObject> ProcessInput(PlayerInput input, DateTime updateTime)

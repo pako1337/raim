@@ -8,7 +8,5 @@ namespace PaCode.Raim.Model
         Vector2d Position { get; }
         Vector2d Speed { get; }
         Vector2d FacingDirection { get; }
-
-        void Update(DateTime updateTime);
     }
 }

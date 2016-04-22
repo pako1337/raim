@@ -55,13 +55,26 @@ namespace PaCode.Raim.Home
             Clients.All.PlayerMoved(gameObjects);
         }
 
+        private static DateTime _lastUpdateTime = DateTime.Now;
         private void UpdateGameState(DateTime? updateTimestamp = null)
         {
             var updateTime = updateTimestamp ?? DateTime.Now;
             
+            var timeBetweenEvents = updateTime - _lastUpdateTime;
+
             foreach (var gameObject in gameObjects)
-                gameObject.Update(updateTime);
-            
+            {
+                gameObject.Position.X += gameObject.Speed.X * timeBetweenEvents.TotalSeconds;
+                gameObject.Position.Y += gameObject.Speed.Y * timeBetweenEvents.TotalSeconds;
+                if (gameObject is IDestroyable)
+                {
+                    var destroyable = ((IDestroyable)gameObject);
+                    destroyable.TimeToLive -= (int)timeBetweenEvents.TotalMilliseconds;
+                }
+            }
+
+            _lastUpdateTime = updateTime;
+
             gameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
         }
     }
