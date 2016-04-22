@@ -4,6 +4,7 @@ namespace PaCode.Raim.Model
 {
     public class Bullet : IGameObject, IDestroyable
     {
+        private static int _speed = 60;
         private DateTime lastUpdate = DateTime.Now;
 
         public Guid Id { get; private set; }
@@ -23,7 +24,7 @@ namespace PaCode.Raim.Model
                 Id = Guid.NewGuid(),
                 Position = position,
                 FacingDirection = direction,
-                Speed = direction.Unit().Scale(50),
+                Speed = direction.Unit().Scale(_speed),
                 TimeToLive = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
             };
         }
