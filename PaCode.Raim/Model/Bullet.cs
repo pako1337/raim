@@ -12,6 +12,7 @@ namespace PaCode.Raim.Model
         public Vector2d FacingDirection { get; private set; }
         public bool IsDestroyed { get; private set; }
         public int TimeToLive { get; private set; }
+        public int Size { get; } = 2;
 
         private Bullet() { }
 
