@@ -14,7 +14,7 @@
     var setPlayer = function (p) {
         playerId = p;
     };
-    
+
     var addNewPlayer = function (who) {
         players.addNewPlayer(who);
     };
@@ -42,7 +42,7 @@
     var processFrame = function (timestamp) {
         if (!lastFrameTime)
             lastFrameTime = timestamp;
-        
+
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
         for (var i = 0; i < gameObjects.length; i++) {
@@ -54,11 +54,9 @@
                 gameObject.Position.Y += gameObject.Speed.Y * timeDiff;
                 gameObject.FacingDirection = calculateFacingDirection(gameObject, directionPoint);
 
-                if (!!gameObject.TimeToLive) {
-                    gameObject.TimeToLive -= timestamp - lastFrameTime;
-                    if (gameObject.TimeToLive <= 0)
-                        gameObject.IsDestroyed = true;
-                }
+                gameObject.TimeToLive -= timestamp - lastFrameTime;
+                if (gameObject.TimeToLive <= 0)
+                    gameObject.IsDestroyed = true;
             }
         }
 
