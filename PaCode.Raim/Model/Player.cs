@@ -7,7 +7,7 @@ namespace PaCode.Raim.Model
 {
     public class Player : IGameObject
     {
-        private const int MaxSpeed = 50;
+        private const int MaxSpeed = 100;
 
         public Guid Id { get; set; }
         public string Name { get; private set; }
@@ -54,7 +54,7 @@ namespace PaCode.Raim.Model
             if (shotTime - lastShot < TimeSpan.FromMilliseconds(500))
                 return;
 
-            var bullet = Bullet.Create(Position.Add(FacingDirection.Unit().Scale(Size)), FacingDirection);
+            var bullet = Bullet.Create(Position.Add(FacingDirection.Unit().Scale(Size+3)), FacingDirection);
             Bullets.Add(bullet);
             createdObjects.Add(bullet);
 

@@ -55,11 +55,19 @@ namespace PaCode.Raim.Home
             Clients.All.PlayerMoved(gameObjects);
         }
 
-        private static DateTime _lastUpdateTime = DateTime.Now;
         private void UpdateGameState(DateTime? updateTimestamp = null)
         {
+            UpdatePositions(updateTimestamp);
+            CalculateCollisions();
+
+            gameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
+        }
+
+        private static DateTime _lastUpdateTime = DateTime.Now;
+        private void UpdatePositions(DateTime? updateTimestamp)
+        {
             var updateTime = updateTimestamp ?? DateTime.Now;
-            
+
             var timeBetweenEvents = updateTime - _lastUpdateTime;
 
             foreach (var gameObject in gameObjects)
@@ -74,8 +82,26 @@ namespace PaCode.Raim.Home
             }
 
             _lastUpdateTime = updateTime;
+        }
 
-            gameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
+        private void CalculateCollisions()
+        {
+            foreach (var o1 in gameObjects)
+                foreach (var o2 in gameObjects)
+                {
+                    if (o1 == o2) continue;
+                    if (ObjectsCollide(o1, o2))
+                        if (o1 is IDestroyable)
+                            ((IDestroyable)o1).TimeToLive = 0;
+                        else if (o2 is IDestroyable)
+                            ((IDestroyable)o2).TimeToLive = 0;
+                }
+        }
+
+        private bool ObjectsCollide(IGameObject o1, IGameObject o2)
+        {
+            var distanceVector = new Vector2d(o2.Position.X - o1.Position.X, o2.Position.Y - o1.Position.Y);
+            return distanceVector.Length() < o1.Size + o2.Size;
         }
     }
 }
