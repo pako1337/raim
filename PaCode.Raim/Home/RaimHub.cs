@@ -74,10 +74,10 @@ namespace PaCode.Raim.Home
             {
                 gameObject.Position.X += gameObject.Speed.X * timeBetweenEvents.TotalSeconds;
                 gameObject.Position.Y += gameObject.Speed.Y * timeBetweenEvents.TotalSeconds;
-                if (gameObject is IDestroyable)
+                if (gameObject is ILimitedTimelife)
                 {
-                    var destroyable = ((IDestroyable)gameObject);
-                    destroyable.TimeToLive -= (int)timeBetweenEvents.TotalMilliseconds;
+                    var destroyable = ((ILimitedTimelife)gameObject);
+                    destroyable.RecordTimePassed((int)timeBetweenEvents.TotalMilliseconds);
                 }
             }
 
@@ -91,10 +91,13 @@ namespace PaCode.Raim.Home
                 {
                     if (o1 == o2) continue;
                     if (ObjectsCollide(o1, o2))
+                    {
                         if (o1 is IDestroyable)
-                            ((IDestroyable)o1).TimeToLive = 0;
-                        else if (o2 is IDestroyable)
-                            ((IDestroyable)o2).TimeToLive = 0;
+                            ((IDestroyable)o1).IsDestroyed = true;
+
+                        if (o2 is IDestroyable)
+                            ((IDestroyable)o2).IsDestroyed = true;
+                    }
                 }
         }
 

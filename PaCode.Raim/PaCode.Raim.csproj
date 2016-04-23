@@ -101,6 +101,7 @@
     <Compile Include="Model\Bullet.cs" />
     <Compile Include="Model\IDestroyable.cs" />
     <Compile Include="Model\IGameObject.cs" />
+    <Compile Include="Model\ILimitedTimelife.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Vector2d.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

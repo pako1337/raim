@@ -2,7 +2,7 @@
 
 namespace PaCode.Raim.Model
 {
-    public class Bullet : IGameObject, IDestroyable
+    public class Bullet : IGameObject, IDestroyable, ILimitedTimelife
     {
         private static int _speed = 60;
 
@@ -10,7 +10,7 @@ namespace PaCode.Raim.Model
         public Vector2d Position { get; private set; }
         public Vector2d Speed { get; private set; }
         public Vector2d FacingDirection { get; private set; }
-        public bool IsDestroyed { get { return TimeToLive <= 0; } }
+        public bool IsDestroyed { get; set; }
         public int TimeToLive { get; set; }
         public int Size { get; } = 2;
 
@@ -26,6 +26,12 @@ namespace PaCode.Raim.Model
                 Speed = direction.Unit().Scale(_speed),
                 TimeToLive = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
             };
+        }
+
+        public void RecordTimePassed(int miliseconds)
+        {
+            TimeToLive -= miliseconds;
+            IsDestroyed = TimeToLive <= 0;
         }
     }
 }

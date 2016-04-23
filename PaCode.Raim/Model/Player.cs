@@ -5,7 +5,7 @@ using PaCode.Raim.Home;
 
 namespace PaCode.Raim.Model
 {
-    public class Player : IGameObject
+    public class Player : IGameObject, IDestroyable
     {
         private const int MaxSpeed = 100;
 
@@ -15,6 +15,7 @@ namespace PaCode.Raim.Model
         public Vector2d Position { get; private set; }
         public Vector2d Speed { get; private set; }
         public Vector2d FacingDirection { get; set; }
+        public bool IsDestroyed { get; set; }
 
         public List<Bullet> Bullets { get; } = new List<Bullet>();
 
