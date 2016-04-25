@@ -98,6 +98,7 @@
     <Compile Include="Home\MoveDirection.cs" />
     <Compile Include="Home\PlayerInput.cs" />
     <Compile Include="Home\RaimHub.cs" />
+    <Compile Include="Model\Arena.cs" />
     <Compile Include="Model\Bullet.cs" />
     <Compile Include="Model\IDestroyable.cs" />
     <Compile Include="Model\IGameObject.cs" />

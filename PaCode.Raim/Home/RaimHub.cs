@@ -11,32 +11,32 @@ namespace PaCode.Raim.Home
     public class RaimHub : Hub
     {
         private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-        private static List<IGameObject> gameObjects = new List<IGameObject>();
+        private static Arena arena = new Arena();
 
         public void Register(string name)
         {
             name = HttpUtility.HtmlEncode(name);
             var player = Player.Create(name, 250, 250);
             players.Add(Context.ConnectionId, player);
-            gameObjects.Add(player);
+            arena.GameObjects.Add(player);
             Clients.Caller.SignedIn(player.Id);
             Clients.All.Registered(player);
             Clients.Caller.OtherPlayers(players.Values.Where(p => p.Name != name));
 
             UpdateGameState();
-            Clients.All.PlayerMoved(gameObjects);
+            Clients.All.PlayerMoved(arena.GameObjects);
         }
 
         public void SignOff()
         {
             var player = players[Context.ConnectionId];
             players.Remove(Context.ConnectionId);
-            gameObjects.RemoveAll(g => player.Bullets.Any(b => b.Id == g.Id));
-            gameObjects.RemoveAll(g => g.Id == player.Id);
+            arena.GameObjects.RemoveAll(g => player.Bullets.Any(b => b.Id == g.Id));
+            arena.GameObjects.RemoveAll(g => g.Id == player.Id);
             Clients.All.SignedOff(player.Name);
 
             UpdateGameState();
-            Clients.All.PlayerMoved(gameObjects);
+            Clients.All.PlayerMoved(arena.GameObjects);
         }
 
         public override Task OnDisconnected(bool stopCalled)
@@ -51,8 +51,8 @@ namespace PaCode.Raim.Home
             UpdateGameState(updateTime);
             var player = players[Context.ConnectionId];
             var createdObjects = player.ProcessInput(input, updateTime);
-            gameObjects.AddRange(createdObjects);
-            Clients.All.PlayerMoved(gameObjects);
+            arena.GameObjects.AddRange(createdObjects);
+            Clients.All.PlayerMoved(arena.GameObjects);
         }
 
         private void UpdateGameState(DateTime? updateTimestamp = null)
@@ -60,7 +60,7 @@ namespace PaCode.Raim.Home
             UpdatePositions(updateTimestamp);
             CalculateCollisions();
 
-            gameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
+            arena.GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
         }
 
         private static DateTime _lastUpdateTime = DateTime.Now;
@@ -70,7 +70,7 @@ namespace PaCode.Raim.Home
 
             var timeBetweenEvents = updateTime - _lastUpdateTime;
 
-            foreach (var gameObject in gameObjects)
+            foreach (var gameObject in arena.GameObjects)
             {
                 gameObject.Position.X += gameObject.Speed.X * timeBetweenEvents.TotalSeconds;
                 gameObject.Position.Y += gameObject.Speed.Y * timeBetweenEvents.TotalSeconds;
@@ -86,8 +86,8 @@ namespace PaCode.Raim.Home
 
         private void CalculateCollisions()
         {
-            foreach (var o1 in gameObjects)
-                foreach (var o2 in gameObjects)
+            foreach (var o1 in arena.GameObjects)
+                foreach (var o2 in arena.GameObjects)
                 {
                     if (o1 == o2) continue;
                     if (ObjectsCollide(o1, o2))
