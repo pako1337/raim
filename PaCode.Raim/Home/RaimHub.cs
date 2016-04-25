@@ -24,7 +24,7 @@ namespace PaCode.Raim.Home
             Clients.All.Registered(player);
             Clients.Caller.OtherPlayers(players.Values.Where(p => p.Name != name));
 
-            UpdateGameState();
+            arena.UpdatePositions(DateTime.Now);
             Clients.All.PlayerMoved(arena.GameObjects);
         }
 
@@ -36,7 +36,7 @@ namespace PaCode.Raim.Home
             arena.GameObjects.RemoveAll(g => g.Id == player.Id);
             Clients.All.SignedOff(player.Name);
 
-            UpdateGameState();
+            arena.UpdatePositions(DateTime.Now);
             Clients.All.PlayerMoved(arena.GameObjects);
         }
 
@@ -49,18 +49,11 @@ namespace PaCode.Raim.Home
         public void PlayerMoving(PlayerInput input)
         {
             var updateTime = DateTime.Now;
-            UpdateGameState(updateTime);
+            arena.UpdatePositions(updateTime);
             var player = players[Context.ConnectionId];
             var createdObjects = player.ProcessInput(input, updateTime);
             arena.GameObjects.AddRange(createdObjects);
             Clients.All.PlayerMoved(arena.GameObjects);
         }
-
-        private void UpdateGameState(DateTime? updateTimestamp = null)
-        {
-            arena.UpdatePositions(updateTimestamp);
-
-        }
-
     }
 }
