@@ -15,6 +15,12 @@ namespace PaCode.Raim.Model
             return player;
         }
 
+        public void UnregisterPlayer(Player player)
+        {
+            GameObjects.RemoveAll(g => player.Bullets.Any(b => b.Id == g.Id));
+            GameObjects.RemoveAll(g => g.Id == player.Id);
+        }
+
         private DateTime _lastUpdateTime = DateTime.Now;
         public void UpdatePositions(DateTime? updateTimestamp)
         {

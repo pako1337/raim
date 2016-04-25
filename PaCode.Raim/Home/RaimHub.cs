@@ -32,8 +32,8 @@ namespace PaCode.Raim.Home
         {
             var player = players[Context.ConnectionId];
             players.Remove(Context.ConnectionId);
-            arena.GameObjects.RemoveAll(g => player.Bullets.Any(b => b.Id == g.Id));
-            arena.GameObjects.RemoveAll(g => g.Id == player.Id);
+
+            arena.UnregisterPlayer(player);
             Clients.All.SignedOff(player.Name);
 
             arena.UpdatePositions(DateTime.Now);
