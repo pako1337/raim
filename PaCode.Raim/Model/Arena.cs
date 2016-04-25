@@ -46,11 +46,7 @@ namespace PaCode.Raim.Model
                     if (o1 == o2) continue;
                     if (ObjectsCollide(o1, o2))
                     {
-                        if (o1 is IDestroyable)
-                            ((IDestroyable)o1).IsDestroyed = true;
-
-                        if (o2 is IDestroyable)
-                            ((IDestroyable)o2).IsDestroyed = true;
+                        HandleCollision(o1, o2);
                     }
                 }
         }
@@ -59,6 +55,28 @@ namespace PaCode.Raim.Model
         {
             var distanceVector = new Vector2d(o2.Position.X - o1.Position.X, o2.Position.Y - o1.Position.Y);
             return distanceVector.Length() < o1.Size + o2.Size;
+        }
+
+        private void HandleCollision(IGameObject o1, IGameObject o2)
+        {
+            if (o1 is Player && o2 is Bullet)
+                HandleCollision(o1 as Player, o2 as Bullet);
+            else if (o1 is Bullet && o2 is Player)
+                HandleCollision(o2 as Player, o1 as Bullet);
+            else if (o1 is Player && o2 is Player)
+                HandleCollision(o1 as Player, o2 as Player);
+        }
+
+        private void HandleCollision(Player o1, Bullet o2)
+        {
+            o1.IsDestroyed = true;
+            o2.IsDestroyed = true;
+        }
+
+        private void HandleCollision(Player o1, Player o2)
+        {
+            o1.Position.X -= 30;
+            o2.Position.X += 30;
         }
     }
 }
