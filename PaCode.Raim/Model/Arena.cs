@@ -34,9 +34,11 @@ namespace PaCode.Raim.Model
             }
 
             _lastUpdateTime = updateTime;
+            CalculateCollisions();
+            GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
         }
 
-        public void CalculateCollisions()
+        private void CalculateCollisions()
         {
             foreach (var o1 in GameObjects)
                 foreach (var o2 in GameObjects)

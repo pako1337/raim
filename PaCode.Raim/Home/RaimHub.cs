@@ -59,9 +59,7 @@ namespace PaCode.Raim.Home
         private void UpdateGameState(DateTime? updateTimestamp = null)
         {
             arena.UpdatePositions(updateTimestamp);
-            arena.CalculateCollisions();
 
-            arena.GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
         }
 
     }
