@@ -8,6 +8,13 @@ namespace PaCode.Raim.Model
     {
         public List<IGameObject> GameObjects = new List<IGameObject>();
 
+        public Player RegisterPlayer(string name)
+        {
+            var player = Player.Create(name, 250, 250);
+            GameObjects.Add(player);
+            return player;
+        }
+
         private DateTime _lastUpdateTime = DateTime.Now;
         public void UpdatePositions(DateTime? updateTimestamp)
         {

@@ -16,9 +16,10 @@ namespace PaCode.Raim.Home
         public void Register(string name)
         {
             name = HttpUtility.HtmlEncode(name);
-            var player = Player.Create(name, 250, 250);
+
+            var player = arena.RegisterPlayer(name);
             players.Add(Context.ConnectionId, player);
-            arena.GameObjects.Add(player);
+
             Clients.Caller.SignedIn(player.Id);
             Clients.All.Registered(player);
             Clients.Caller.OtherPlayers(players.Values.Where(p => p.Name != name));
