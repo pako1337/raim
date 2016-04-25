@@ -12,7 +12,7 @@ namespace PaCode.Raim.Model
         public Guid Id { get; set; }
         public string Name { get; private set; }
         public int Size { get; private set; }
-        public Vector2d Position { get; private set; }
+        public Vector2d Position { get; set; }
         public Vector2d Speed { get; private set; }
         public Vector2d FacingDirection { get; set; }
         public bool IsDestroyed { get; set; }

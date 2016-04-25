@@ -37,24 +37,24 @@ namespace PaCode.Raim.Model
                     var destroyable = ((ILimitedTimelife)gameObject);
                     destroyable.RecordTimePassed((int)timeBetweenEvents.TotalMilliseconds);
                 }
+
+                CalculateCollisions(gameObject);
             }
 
             _lastUpdateTime = updateTime;
-            CalculateCollisions();
             GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
         }
 
-        private void CalculateCollisions()
+        private void CalculateCollisions(IGameObject o1)
         {
-            foreach (var o1 in GameObjects)
-                foreach (var o2 in GameObjects)
+            foreach (var o2 in GameObjects)
+            {
+                if (o1 == o2) continue;
+                if (ObjectsCollide(o1, o2))
                 {
-                    if (o1 == o2) continue;
-                    if (ObjectsCollide(o1, o2))
-                    {
-                        HandleCollision(o1, o2);
-                    }
+                    HandleCollision(o1, o2);
                 }
+            }
         }
 
         private bool ObjectsCollide(IGameObject o1, IGameObject o2)
@@ -81,8 +81,13 @@ namespace PaCode.Raim.Model
 
         private void HandleCollision(Player o1, Player o2)
         {
-            o1.Position.X -= 30;
-            o2.Position.X += 30;
+            var distanceVector = new Vector2d(o2.Position.X - o1.Position.X, o2.Position.Y - o1.Position.Y);
+            var distance = distanceVector.Length();
+            var collisionLength = distance - (o1.Size + o2.Size);
+
+            var collisionFixVector = distanceVector.Unit().Scale(collisionLength);
+
+            o1.Position = o1.Position.Add(collisionFixVector);
         }
     }
 }
