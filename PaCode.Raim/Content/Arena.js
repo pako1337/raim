@@ -49,8 +49,10 @@
             lastFrameTime = timestamp;
 
         var currentPlayer = getCurrentPlayer();
-        //viewport.x = currentPlayer.Position.X + canvas.width / 2;
-        //viewport.y = currentPlayer.Position.Y + canvas.height / 2;
+        if (currentPlayer !== undefined) {
+            viewport.x = -(canvas.width / 2 - currentPlayer.Position.X);
+            viewport.y = canvas.height - (canvas.height / 2 - currentPlayer.Position.Y);
+        }
 
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
