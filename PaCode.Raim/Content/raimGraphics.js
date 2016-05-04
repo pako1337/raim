@@ -1,7 +1,6 @@
 ﻿var raimGraphics = function (args) {
     var canvas = args.canvas;
     var drawingContext = canvas.getContext("2d");
-    var viewport = args.viewport;
 
     var drawArena = function (gameObjects) {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
@@ -20,8 +19,8 @@
         drawingContext.beginPath();
 
         drawingContext.fillStyle = "rgba(0, 0, 0, 1)";
-        x = bullet.Position.X - viewport.x;
-        y = bullet.Position.Y - viewport.y;
+        x = bullet.Position.X - args.viewport().x;
+        y = bullet.Position.Y - args.viewport().y;
 
         drawingContext.arc(x, -y, bullet.Size, 0, 2 * Math.PI);
         drawingContext.fill();
@@ -35,8 +34,8 @@
         drawingContext.fillStyle = "rgba(255, 0, 0, 0.7)";
         drawingContext.strokeT
 
-        x = player.Position.X - viewport.x;
-        y = player.Position.Y - viewport.y;
+        x = player.Position.X - args.viewport().x;
+        y = player.Position.Y - args.viewport().y;
         drawingContext.arc(x, -y, player.Size, 0, 2 * Math.PI);
         drawingContext.fill();
 
@@ -55,14 +54,14 @@
 
         x = player.Position.X + directionVector.X * player.Size / 2;
         y = player.Position.Y + directionVector.Y * player.Size / 2;
-        x -= viewport.x;
-        y -= viewport.y;
+        x -= args.viewport().x;
+        y -= args.viewport().y;
         drawingContext.moveTo(x, -y);
 
         x = player.Position.X + directionVector.X * player.Size;
         y = player.Position.Y + directionVector.Y * player.Size;
-        x -= viewport.x;
-        y -= viewport.y;
+        x -= args.viewport().x;
+        y -= args.viewport().y;
         drawingContext.lineTo(x, -y);
         drawingContext.stroke();
         drawingContext.fill();

@@ -6,6 +6,7 @@
     var playerMoving;
     var input;
     var gfx;
+    var canvas;
     var lastFrameTime;
     var viewport = { x: 0, y: 0 };
 
@@ -47,6 +48,10 @@
         if (!lastFrameTime)
             lastFrameTime = timestamp;
 
+        var currentPlayer = getCurrentPlayer();
+        //viewport.x = currentPlayer.Position.X + canvas.width / 2;
+        //viewport.y = currentPlayer.Position.Y + canvas.height / 2;
+
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
         for (var i = 0; i < gameObjects.length; i++) {
@@ -83,21 +88,21 @@
         viewport.x = 0;
         viewport.y = arenaElement.offsetHeight;
 
-        var canvas = document.createElement("canvas");
+        canvas = document.createElement("canvas");
         canvas.width = arenaElement.offsetWidth;
         canvas.height = arenaElement.offsetHeight;
         document.getElementById(arenaHandler).appendChild(canvas);
 
         gfx = new raimGraphics({
             canvas: canvas,
-            viewport: viewport,
+            viewport: function () { return viewport; },
         });
 
         requestAnimationFrame(processFrame);
 
         input = new userInput({
             inputChanged: inputChange,
-            viewport: viewport
+            viewport: function () { return viewport; }
         });
     })();
 
