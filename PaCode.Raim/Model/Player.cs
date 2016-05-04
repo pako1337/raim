@@ -21,7 +21,7 @@ namespace PaCode.Raim.Model
 
         private Player() { }
 
-        public static Player Create(string name, int x, int y)
+        public static Player Create(string name, double x, double y)
         {
             return new Player
             {

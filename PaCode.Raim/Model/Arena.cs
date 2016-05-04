@@ -6,11 +6,13 @@ namespace PaCode.Raim.Model
 {
     public class Arena
     {
+        private static Random rnd = new Random();
+        private Vector2d _arenaSize = new Vector2d(1000, 1000);
         public List<IGameObject> GameObjects = new List<IGameObject>();
 
         public Player RegisterPlayer(string name)
         {
-            var player = Player.Create(name, 250, 250);
+            var player = Player.Create(name, rnd.NextDouble() * _arenaSize.X, rnd.NextDouble() * _arenaSize.Y);
             GameObjects.Add(player);
             return player;
         }
