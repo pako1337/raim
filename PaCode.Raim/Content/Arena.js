@@ -27,8 +27,12 @@
         gameObjects = gameObjectsFromServer;
     };
 
+    var getCurrentPlayer = function () {
+        return gameObjects.find(function (g) { return g.Id == playerId; });
+    }
+
     var inputChange = function (input) {
-        var player = gameObjects.find(function (g) { return g.Id == playerId; });
+        var player = getCurrentPlayer();
         if (player == undefined) return;
 
         player.FacingDirection = calculateFacingDirection(player, input.mouse);
