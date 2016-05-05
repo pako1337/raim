@@ -19,7 +19,7 @@
         drawingContext.beginPath();
 
         drawingContext.fillStyle = "rgba(0, 0, 0, 1)";
-        x = bullet.Position.X - args.viewport().x;
+        x = bullet.Position.X + args.viewport().x;
         y = bullet.Position.Y - args.viewport().y;
 
         drawingContext.arc(x, -y, bullet.Size, 0, 2 * Math.PI);
@@ -34,7 +34,7 @@
         drawingContext.fillStyle = "rgba(255, 0, 0, 0.7)";
         drawingContext.strokeStyle = "rgba(255, 0, 0, 0.7)";
 
-        x = player.Position.X - args.viewport().x;
+        x = player.Position.X + args.viewport().x;
         y = player.Position.Y - args.viewport().y;
         drawingContext.arc(x, -y, player.Size, 0, 2 * Math.PI);
         drawingContext.fill();
@@ -54,13 +54,13 @@
 
         x = player.Position.X + directionVector.X * player.Size / 2;
         y = player.Position.Y + directionVector.Y * player.Size / 2;
-        x -= args.viewport().x;
+        x += args.viewport().x;
         y -= args.viewport().y;
         drawingContext.moveTo(x, -y);
 
         x = player.Position.X + directionVector.X * player.Size;
         y = player.Position.Y + directionVector.Y * player.Size;
-        x -= args.viewport().x;
+        x += args.viewport().x;
         y -= args.viewport().y;
         drawingContext.lineTo(x, -y);
         drawingContext.stroke();

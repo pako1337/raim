@@ -46,7 +46,7 @@
     function mouseMove(e) {
         var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
         mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
-        mouseCoordinates.x = mouseCoordinates.x + args.viewport().x;
+        mouseCoordinates.x = mouseCoordinates.x - args.viewport().x;
         mouseCoordinates.y = -mouseCoordinates.y + args.viewport().y;
 
         notifyKeysChanged();

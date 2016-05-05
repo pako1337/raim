@@ -50,7 +50,7 @@
 
         var currentPlayer = getCurrentPlayer();
         if (currentPlayer !== undefined) {
-            viewport.x = -(canvas.width / 2 - currentPlayer.Position.X);
+            viewport.x = canvas.width / 2 - currentPlayer.Position.X;
             viewport.y = canvas.height - (canvas.height / 2 - currentPlayer.Position.Y);
         }
 
