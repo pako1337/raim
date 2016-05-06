@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PaCode.Raim.Home;
 
 namespace PaCode.Raim.Model
 {
@@ -10,10 +11,13 @@ namespace PaCode.Raim.Model
         private Vector2d _arenaSize = new Vector2d(1000, 1000);
         public List<IGameObject> GameObjects = new List<IGameObject>();
 
+        public event EventHandler ArenaChanged;
+
         public Player RegisterPlayer(string name)
         {
             var player = Player.Create(name, rnd.NextDouble() * _arenaSize.X, rnd.NextDouble() * _arenaSize.Y);
             GameObjects.Add(player);
+            OnArenaChanged();
             return player;
         }
 
@@ -21,6 +25,7 @@ namespace PaCode.Raim.Model
         {
             GameObjects.RemoveAll(g => player.Bullets.Any(b => b.Id == g.Id));
             GameObjects.RemoveAll(g => g.Id == player.Id);
+            OnArenaChanged();
         }
 
         private DateTime _lastUpdateTime = DateTime.Now;
@@ -45,6 +50,14 @@ namespace PaCode.Raim.Model
 
             _lastUpdateTime = updateTime;
             GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
+            OnArenaChanged();
+        }
+
+        internal void ProcessInput(PlayerInput input, Player player)
+        {
+            var createdObjects = player.ProcessInput(input, DateTime.Now);
+            GameObjects.AddRange(createdObjects);
+            OnArenaChanged();
         }
 
         private void CalculateCollisions(IGameObject o1)
@@ -90,6 +103,11 @@ namespace PaCode.Raim.Model
             var collisionFixVector = distanceVector.Unit().Scale(collisionLength);
 
             o1.Position = o1.Position.Add(collisionFixVector);
+        }
+
+        private void OnArenaChanged()
+        {
+            ArenaChanged(this, EventArgs.Empty);
         }
     }
 }

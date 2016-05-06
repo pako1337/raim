@@ -13,6 +13,22 @@ namespace PaCode.Raim.Home
         private static Dictionary<string, Player> players = new Dictionary<string, Player>();
         private static Arena arena = new Arena();
 
+        public RaimHub()
+        {
+            arena.ArenaChanged += Arena_ArenaChanged;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            arena.ArenaChanged -= Arena_ArenaChanged;
+            base.Dispose(disposing);
+        }
+
+        private void Arena_ArenaChanged(object sender, EventArgs e)
+        {
+            Clients.All.PlayerMoved(arena.GameObjects);
+        }
+
         public void Register(string name)
         {
             name = HttpUtility.HtmlEncode(name);
@@ -23,9 +39,6 @@ namespace PaCode.Raim.Home
             Clients.Caller.SignedIn(player.Id);
             Clients.All.Registered(player);
             Clients.Caller.OtherPlayers(players.Values.Where(p => p.Name != name));
-
-            arena.UpdatePositions(DateTime.Now);
-            Clients.All.PlayerMoved(arena.GameObjects);
         }
 
         public void SignOff()
@@ -35,9 +48,6 @@ namespace PaCode.Raim.Home
 
             arena.UnregisterPlayer(player);
             Clients.All.SignedOff(player.Name);
-
-            arena.UpdatePositions(DateTime.Now);
-            Clients.All.PlayerMoved(arena.GameObjects);
         }
 
         public override Task OnDisconnected(bool stopCalled)
@@ -50,10 +60,7 @@ namespace PaCode.Raim.Home
         {
             var updateTime = DateTime.Now;
             arena.UpdatePositions(updateTime);
-            var player = players[Context.ConnectionId];
-            var createdObjects = player.ProcessInput(input, updateTime);
-            arena.GameObjects.AddRange(createdObjects);
-            Clients.All.PlayerMoved(arena.GameObjects);
+            arena.ProcessInput(input, players[Context.ConnectionId]);
         }
     }
 }
