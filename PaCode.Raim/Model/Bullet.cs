@@ -31,7 +31,7 @@ namespace PaCode.Raim.Model
         public void RecordTimePassed(int miliseconds)
         {
             TimeToLive -= miliseconds;
-            IsDestroyed = TimeToLive <= 0;
+            IsDestroyed = IsDestroyed || TimeToLive <= 0;
         }
     }
 }
