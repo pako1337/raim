@@ -17,8 +17,6 @@ namespace PaCode.Raim.Model
         public Vector2d FacingDirection { get; set; }
         public bool IsDestroyed { get; set; }
 
-        public List<Bullet> Bullets { get; } = new List<Bullet>();
-
         private Player() { }
 
         public static Player Create(string name, double x, double y)
@@ -56,7 +54,7 @@ namespace PaCode.Raim.Model
                 return;
 
             var bullet = Bullet.Create(Position.Add(FacingDirection.Unit().Scale(Size+3)), FacingDirection);
-            Bullets.Add(bullet);
+            bullet.Player = this;
             createdObjects.Add(bullet);
 
             lastShot = shotTime;

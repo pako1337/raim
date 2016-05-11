@@ -23,8 +23,8 @@ namespace PaCode.Raim.Model
 
         public void UnregisterPlayer(Player player)
         {
-            GameObjects.RemoveAll(g => player.Bullets.Any(b => b.Id == g.Id));
             GameObjects.RemoveAll(g => g.Id == player.Id);
+            GameObjects.RemoveAll(b => b is Bullet && ((Bullet)b).Player.Id == player.Id);
             OnArenaChanged();
         }
 

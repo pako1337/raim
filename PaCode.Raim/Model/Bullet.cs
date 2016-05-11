@@ -13,6 +13,7 @@ namespace PaCode.Raim.Model
         public bool IsDestroyed { get; set; }
         public int TimeToLive { get; set; }
         public int Size { get; } = 2;
+        public Player Player { get; internal set; }
 
         private Bullet() { }
 
