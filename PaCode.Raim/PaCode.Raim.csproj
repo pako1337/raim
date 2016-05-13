@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Home\ArenaTicker.cs" />
     <Compile Include="Home\HomeModule.cs" />
     <Compile Include="Home\MoveDirection.cs" />
     <Compile Include="Home\PlayerInput.cs" />

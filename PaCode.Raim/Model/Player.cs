@@ -16,6 +16,7 @@ namespace PaCode.Raim.Model
         public Vector2d Speed { get; private set; }
         public Vector2d FacingDirection { get; set; }
         public bool IsDestroyed { get; set; }
+        public int Score { get; private set; }
 
         private Player() { }
 
@@ -45,6 +46,11 @@ namespace PaCode.Raim.Model
             }
 
             return createdObjects;
+        }
+
+        internal void KilledEnemy()
+        {
+            Score++;
         }
 
         private DateTime lastShot = DateTime.Now;

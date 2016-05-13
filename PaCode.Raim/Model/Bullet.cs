@@ -34,5 +34,10 @@ namespace PaCode.Raim.Model
             TimeToLive -= miliseconds;
             IsDestroyed = IsDestroyed || TimeToLive <= 0;
         }
+
+        public void KilledPlayer()
+        {
+            Player.KilledEnemy();
+        }
     }
 }
