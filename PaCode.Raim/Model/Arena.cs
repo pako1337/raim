@@ -41,8 +41,7 @@ namespace PaCode.Raim.Model
             {
                 foreach (var gameObject in GameObjects)
                 {
-                    gameObject.Position.X += gameObject.Speed.X * timeBetweenEvents.TotalSeconds;
-                    gameObject.Position.Y += gameObject.Speed.Y * timeBetweenEvents.TotalSeconds;
+                    gameObject.Position = gameObject.Position.Add(gameObject.Speed.Scale(timeBetweenEvents.TotalSeconds));
 
                     if (gameObject.Position.X < 0)
                         gameObject.Position.X = 0;

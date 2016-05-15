@@ -7,7 +7,7 @@ namespace PaCode.Raim.Model
         private static int _speed = 60;
 
         public Guid Id { get; private set; }
-        public Vector2d Position { get; private set; }
+        public Vector2d Position { get; set; }
         public Vector2d Speed { get; private set; }
         public Vector2d FacingDirection { get; private set; }
         public bool IsDestroyed { get; set; }
