@@ -43,6 +43,17 @@ namespace PaCode.Raim.Model
                 {
                     gameObject.Position.X += gameObject.Speed.X * timeBetweenEvents.TotalSeconds;
                     gameObject.Position.Y += gameObject.Speed.Y * timeBetweenEvents.TotalSeconds;
+
+                    if (gameObject.Position.X < 0)
+                        gameObject.Position.X = 0;
+                    else if (gameObject.Position.X > _arenaSize.X)
+                        gameObject.Position.X = _arenaSize.X;
+
+                    if (gameObject.Position.Y < 0)
+                        gameObject.Position.Y = 0;
+                    else if (gameObject.Position.Y > _arenaSize.Y)
+                        gameObject.Position.Y = _arenaSize.Y;
+
                     if (gameObject is ILimitedTimelife)
                     {
                         var destroyable = ((ILimitedTimelife)gameObject);
