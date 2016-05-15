@@ -10,7 +10,7 @@ namespace PaCode.Raim.Home
     public class ArenaTicker
     {
         private readonly static ArenaTicker _instance = new ArenaTicker(GlobalHost.ConnectionManager.GetHubContext<RaimHub>().Clients);
-        private const int _updateInterval = 1000 / 30;
+        private const int _updateInterval = 1000 / 60;
 
         private readonly IHubConnectionContext<dynamic> _clients;
         private readonly Timer _timer;
