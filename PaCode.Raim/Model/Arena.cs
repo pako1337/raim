@@ -43,15 +43,15 @@ namespace PaCode.Raim.Model
                 {
                     gameObject.Position = gameObject.Position.Add(gameObject.Speed.Scale(timeBetweenEvents.TotalSeconds));
 
-                    if (gameObject.Position.X < 0)
-                        gameObject.Position.X = 0;
-                    else if (gameObject.Position.X > _arenaSize.X)
-                        gameObject.Position.X = _arenaSize.X;
+                    if (gameObject.Position.X < 0 + gameObject.Size)
+                        gameObject.Position.X = 0 + gameObject.Size;
+                    else if (gameObject.Position.X > _arenaSize.X - gameObject.Size)
+                        gameObject.Position.X = _arenaSize.X - gameObject.Size;
 
-                    if (gameObject.Position.Y < 0)
-                        gameObject.Position.Y = 0;
-                    else if (gameObject.Position.Y > _arenaSize.Y)
-                        gameObject.Position.Y = _arenaSize.Y;
+                    if (gameObject.Position.Y < 0 + gameObject.Size)
+                        gameObject.Position.Y = 0 + gameObject.Size;
+                    else if (gameObject.Position.Y > _arenaSize.Y - gameObject.Size)
+                        gameObject.Position.Y = _arenaSize.Y - gameObject.Size;
 
                     if (gameObject is ILimitedTimelife)
                     {
