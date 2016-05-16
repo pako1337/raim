@@ -43,15 +43,7 @@ namespace PaCode.Raim.Model
                 {
                     gameObject.Position = gameObject.Position.Add(gameObject.Speed.Scale(timeBetweenEvents.TotalSeconds));
 
-                    if (gameObject.Position.X < 0 + gameObject.Size)
-                        gameObject.Position.X = 0 + gameObject.Size;
-                    else if (gameObject.Position.X > _arenaSize.X - gameObject.Size)
-                        gameObject.Position.X = _arenaSize.X - gameObject.Size;
-
-                    if (gameObject.Position.Y < 0 + gameObject.Size)
-                        gameObject.Position.Y = 0 + gameObject.Size;
-                    else if (gameObject.Position.Y > _arenaSize.Y - gameObject.Size)
-                        gameObject.Position.Y = _arenaSize.Y - gameObject.Size;
+                    CheckArenaBoundsCollision(gameObject);
 
                     if (gameObject is ILimitedTimelife)
                     {
@@ -67,6 +59,19 @@ namespace PaCode.Raim.Model
 
                 return GameObjects.ToArray();
             }
+        }
+
+        private void CheckArenaBoundsCollision(IGameObject gameObject)
+        {
+            if (gameObject.Position.X < 0 + gameObject.Size)
+                gameObject.Position.X = 0 + gameObject.Size;
+            else if (gameObject.Position.X > _arenaSize.X - gameObject.Size)
+                gameObject.Position.X = _arenaSize.X - gameObject.Size;
+
+            if (gameObject.Position.Y < 0 + gameObject.Size)
+                gameObject.Position.Y = 0 + gameObject.Size;
+            else if (gameObject.Position.Y > _arenaSize.Y - gameObject.Size)
+                gameObject.Position.Y = _arenaSize.Y - gameObject.Size;
         }
 
         public void ProcessInput(PlayerInput input, Player player)
