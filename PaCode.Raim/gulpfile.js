@@ -1,5 +1,4 @@
-﻿/// <binding ProjectOpened='default' />
-
+/// <binding />
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var concatCss = require('gulp-concat-css');
