@@ -35,7 +35,7 @@
 
 #arena {
     z-index: -1;
-    border: 0.1em solid black;
+    border: none;
     position: fixed;
     top:    0.3em;
     right:  0.3em;
