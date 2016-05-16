@@ -19,7 +19,11 @@
         var newKeys = buildDirectionKey();
 
         keysPressed = newKeys;
-        args.inputChanged({ direction: keysPressed, mouse: mouseCoordinates });
+        var mouse = { x: 0, y: 0 };
+        mouse.x = mouseCoordinates.x - args.viewport().x;
+        mouse.y = -mouseCoordinates.y - args.viewport().y;
+
+        args.inputChanged({ direction: keysPressed, mouse: mouse });
     }
 
     function buildDirectionKey() {
@@ -46,8 +50,6 @@
     function mouseMove(e) {
         var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
         mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
-        mouseCoordinates.x = mouseCoordinates.x - args.viewport().x;
-        mouseCoordinates.y = -mouseCoordinates.y - args.viewport().y;
 
         notifyKeysChanged();
     }
