@@ -74,11 +74,11 @@
     function drawArenaBorders() {
         drawingContext.beginPath();
 
-        drawingContext.moveTo(0    + args.viewport().x, -(0    + args.viewport().y));
-        drawingContext.lineTo(0    + args.viewport().x, -(1000 + args.viewport().y));
-        drawingContext.lineTo(1000 + args.viewport().x, -(1000 + args.viewport().y));
-        drawingContext.lineTo(1000 + args.viewport().x, -(0    + args.viewport().y));
-        drawingContext.lineTo(0    + args.viewport().x, -(0    + args.viewport().y));
+        drawingContext.moveTo(0                  + args.viewport().x, -(0                  + args.viewport().y));
+        drawingContext.lineTo(0                  + args.viewport().x, -(args.arenaSize().Y + args.viewport().y));
+        drawingContext.lineTo(args.arenaSize().X + args.viewport().x, -(args.arenaSize().Y + args.viewport().y));
+        drawingContext.lineTo(args.arenaSize().X + args.viewport().x, -(0                  + args.viewport().y));
+        drawingContext.lineTo(0                  + args.viewport().x, -(0                  + args.viewport().y));
 
         drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
         drawingContext.stroke();

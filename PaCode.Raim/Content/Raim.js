@@ -13,6 +13,8 @@
         gameArena.setPlayer(id);
     };
 
+    raim.client.setupArena = gameArena.setupArena;
+
     raim.client.registered = gameArena.addNewPlayer;
     raim.client.signedOff = gameArena.removePlayer;
     raim.client.otherPlayers = function (players) {

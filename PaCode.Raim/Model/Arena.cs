@@ -9,12 +9,12 @@ namespace PaCode.Raim.Model
     {
         private static Random rnd = new Random();
         private static object _lock = new object();
-        private Vector2d _arenaSize = new Vector2d(1000, 1000);
+        public Vector2d ArenaSize { get { return new Vector2d(1000, 1000); } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
 
         public Player RegisterPlayer(string name)
         {
-            var player = Player.Create(name, rnd.NextDouble() * _arenaSize.X, rnd.NextDouble() * _arenaSize.Y);
+            var player = Player.Create(name, rnd.NextDouble() * ArenaSize.X, rnd.NextDouble() * ArenaSize.Y);
             lock (_lock)
                 GameObjects.Add(player);
             return player;
@@ -64,13 +64,13 @@ namespace PaCode.Raim.Model
         {
             if (gameObject.Position.X < 0 + gameObject.Size)
                 gameObject.Position.X = 0 + gameObject.Size;
-            else if (gameObject.Position.X > _arenaSize.X - gameObject.Size)
-                gameObject.Position.X = _arenaSize.X - gameObject.Size;
+            else if (gameObject.Position.X > ArenaSize.X - gameObject.Size)
+                gameObject.Position.X = ArenaSize.X - gameObject.Size;
 
             if (gameObject.Position.Y < 0 + gameObject.Size)
                 gameObject.Position.Y = 0 + gameObject.Size;
-            else if (gameObject.Position.Y > _arenaSize.Y - gameObject.Size)
-                gameObject.Position.Y = _arenaSize.Y - gameObject.Size;
+            else if (gameObject.Position.Y > ArenaSize.Y - gameObject.Size)
+                gameObject.Position.Y = ArenaSize.Y - gameObject.Size;
         }
 
         public void ProcessInput(PlayerInput input, Player player)
