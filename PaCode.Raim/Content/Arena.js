@@ -25,7 +25,6 @@
     };
 
     var playerMoved = function (gameObjectsFromServer) {
-        console.log("moved");
         gameObjects = gameObjectsFromServer;
         players.updateLeaderboard(gameObjects);
     };

@@ -5,6 +5,8 @@
     var drawArena = function (gameObjects) {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
 
+        drawArenaBorders();
+
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
             if (gameObject.Name === undefined) {
@@ -66,6 +68,20 @@
         drawingContext.stroke();
         drawingContext.fill();
 
+        drawingContext.closePath();
+    }
+
+    function drawArenaBorders() {
+        drawingContext.beginPath();
+
+        drawingContext.moveTo(0    + args.viewport().x, -(0    + args.viewport().y));
+        drawingContext.lineTo(0    + args.viewport().x, -(1000 + args.viewport().y));
+        drawingContext.lineTo(1000 + args.viewport().x, -(1000 + args.viewport().y));
+        drawingContext.lineTo(1000 + args.viewport().x, -(0    + args.viewport().y));
+        drawingContext.lineTo(0    + args.viewport().x, -(0    + args.viewport().y));
+
+        drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
+        drawingContext.stroke();
         drawingContext.closePath();
     }
 
