@@ -9,7 +9,7 @@
     var canvas;
     var lastFrameTime;
     var viewport = { x: 0, y: 0 };
-    var arenaSize = { X: 0, Y: 0 };
+    var arena;
 
     var gameObjects;
 
@@ -25,8 +25,8 @@
         players.removePlayer(who);
     };
 
-    var setupArena = function (arenaS) {
-        arenaSize = arenaS;
+    var setupArena = function (a) {
+        arena = a;
     };
 
     var playerMoved = function (gameObjectsFromServer) {
@@ -104,7 +104,7 @@
         gfx = new raimGraphics({
             canvas: canvas,
             viewport: function () { return viewport; },
-            arenaSize: function () { return arenaSize; }
+            arena: function () { return arena; }
         });
 
         requestAnimationFrame(processFrame);

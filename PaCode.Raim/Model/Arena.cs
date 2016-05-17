@@ -9,8 +9,9 @@ namespace PaCode.Raim.Model
     {
         private static Random rnd = new Random();
         private static object _lock = new object();
-        public Vector2d ArenaSize { get { return new Vector2d(1000, 1000); } }
+        public Vector2d ArenaSize { get { return new Vector2d(1000, 500); } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
+        public List<Obstacle> Obstacles = new List<Obstacle>() { new Obstacle() };
 
         public Player RegisterPlayer(string name)
         {

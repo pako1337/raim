@@ -6,6 +6,7 @@
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
 
         drawArenaBorders();
+        drawObstacles();
 
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
@@ -72,13 +73,35 @@
     }
 
     function drawArenaBorders() {
+        if (args.arena() == undefined) return;
+
+        drawRectangle([
+            { X: 0, Y: 0 },
+            { X: 0, Y: args.arena().ArenaSize.Y },
+            { X: args.arena().ArenaSize.X, Y: args.arena().ArenaSize.Y },
+            { X: args.arena().ArenaSize.X, Y: 0 }]);
+    }
+
+    function drawObstacles() {
+        if (args.arena() == undefined) return;
+
+        var obstacles = args.arena().Obstacles;
+        for (var i = 0; i < obstacles.length; i++) {
+            drawRectangle(obstacles[i].Points);
+        }
+    }
+
+    function drawRectangle(points) {
+        if (points.length < 2) return;
+
         drawingContext.beginPath();
 
-        drawingContext.moveTo(0                  + args.viewport().x, -(0                  + args.viewport().y));
-        drawingContext.lineTo(0                  + args.viewport().x, -(args.arenaSize().Y + args.viewport().y));
-        drawingContext.lineTo(args.arenaSize().X + args.viewport().x, -(args.arenaSize().Y + args.viewport().y));
-        drawingContext.lineTo(args.arenaSize().X + args.viewport().x, -(0                  + args.viewport().y));
-        drawingContext.lineTo(0                  + args.viewport().x, -(0                  + args.viewport().y));
+        drawingContext.moveTo(points[0].X + args.viewport().x, -(points[0].Y + args.viewport().y));
+        for (var i = 1; i < points.length; i++) {
+            drawingContext.lineTo(points[i].X + args.viewport().x, -(points[i].Y + args.viewport().y));
+        }
+
+        drawingContext.lineTo(points[0].X + args.viewport().x, -(points[0].Y + args.viewport().y));
 
         drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
         drawingContext.stroke();

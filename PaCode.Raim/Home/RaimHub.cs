@@ -27,7 +27,7 @@ namespace PaCode.Raim.Home
             players.Add(Context.ConnectionId, player);
 
             Clients.Caller.SignedIn(player.Id);
-            Clients.Caller.SetupArena(arena.ArenaSize);
+            Clients.Caller.SetupArena(arena);
             Clients.All.Registered(player);
             Clients.Caller.OtherPlayers(players.Values.Where(p => p.Name != name));
         }
