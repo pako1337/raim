@@ -89,7 +89,7 @@ namespace PaCode.Raim.Model
             {
                 if (ObstacleCollide(obstacle, o1))
                 {
-                    throw new Exception();
+                    ;
                 }
             }
 
@@ -138,9 +138,50 @@ namespace PaCode.Raim.Model
         }
 
 
-        private bool ObstacleCollide(Obstacle obstacle, IGameObject o1)
+        private bool ObstacleCollide(Obstacle obstacle, IGameObject gameObject)
         {
-            return false;
+            var prevPoint = obstacle.Points[0];
+
+            for (int i = 1; i < obstacle.Points.Length; i++)
+            {
+                var currentPoint = obstacle.Points[i];
+                var sideVector = currentPoint.Subtract(prevPoint);
+                var axisVector = sideVector.Unit().Normal();
+
+                var obstacleProjection = ProjectOntoAxis(axisVector, obstacle);
+                var objectProjection = ProjectOntoAxis(axisVector, gameObject);
+
+                var intersectionRange = obstacleProjection.Intersect(objectProjection);
+
+                if (intersectionRange.Length < 0.0001)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private Range ProjectOntoAxis(Vector2d axisVector, Obstacle obstacle)
+        {
+            double min = double.MaxValue;
+            double max = double.MinValue;
+
+            for (int i = 0; i < obstacle.Points.Length; i++)
+            {
+                var currentPoint = obstacle.Points[i];
+
+                var projectionSize = axisVector.DotProduct(currentPoint);
+                if (projectionSize < min)
+                    min = projectionSize;
+                if (projectionSize > max)
+                    max = projectionSize;
+            }
+
+            return new Range(min, max);
+        }
+
+        private Range ProjectOntoAxis(Vector2d axisVector, IGameObject gameObject)
+        {
+            return new Range(gameObject.Position.X - gameObject.Size, gameObject.Position.X + gameObject.Size);
         }
     }
 }
