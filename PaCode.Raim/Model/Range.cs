@@ -10,10 +10,10 @@ namespace PaCode.Raim.Model
         public double End { get; set; }
         public double Length { get { return End - Start; } }
 
-        public Range(double start, double end)
+        public Range(double a, double b)
         {
-            Start = start;
-            End = end;
+            Start = a < b ? a : b;
+            End = a < b ? b : a;
         }
 
         public Range Intersect(Range other)

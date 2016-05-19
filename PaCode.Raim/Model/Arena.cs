@@ -181,7 +181,8 @@ namespace PaCode.Raim.Model
 
         private Range ProjectOntoAxis(Vector2d axisVector, IGameObject gameObject)
         {
-            return new Range(gameObject.Position.X - gameObject.Size, gameObject.Position.X + gameObject.Size);
+            var centerProjection = axisVector.DotProduct(gameObject.Position);
+            return new Range(centerProjection - gameObject.Size, centerProjection + gameObject.Size);
         }
     }
 }
