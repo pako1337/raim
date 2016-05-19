@@ -85,6 +85,14 @@ namespace PaCode.Raim.Model
 
         private void CalculateCollisions(IGameObject o1)
         {
+            foreach (var obstacle in Obstacles)
+            {
+                if (ObstacleCollide(obstacle, o1))
+                {
+                    throw new Exception();
+                }
+            }
+
             foreach (var o2 in GameObjects)
             {
                 if (o1 == o2) continue;
@@ -127,6 +135,12 @@ namespace PaCode.Raim.Model
             var collisionFixVector = distanceVector.Unit().Scale(collisionLength);
 
             o1.Position = o1.Position.Add(collisionFixVector);
+        }
+
+
+        private bool ObstacleCollide(Obstacle obstacle, IGameObject o1)
+        {
+            return false;
         }
     }
 }

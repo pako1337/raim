@@ -5,13 +5,8 @@ using System.Web;
 
 namespace PaCode.Raim.Model
 {
-    public class Obstacle : IGameObject
+    public class Obstacle
     {
-        public Guid Id { get; set; }
-        public Vector2d Position { get; set; }
-        public Vector2d Speed { get; set; }
-        public Vector2d FacingDirection { get; set; }
-        public int Size { get; set; }
         public Vector2d[] Points { get; set; }
 
         public Obstacle()
