@@ -142,12 +142,8 @@ namespace PaCode.Raim.Model
         {
             var prevPoint = obstacle.Points[0];
 
-            for (int i = 1; i < obstacle.Points.Length; i++)
+            foreach (var axisVector in GetAxisVectors(obstacle, gameObject))
             {
-                var currentPoint = obstacle.Points[i];
-                var sideVector = currentPoint.Subtract(prevPoint);
-                var axisVector = sideVector.Unit().Normal();
-
                 var obstacleProjection = ProjectOntoAxis(axisVector, obstacle);
                 var objectProjection = ProjectOntoAxis(axisVector, gameObject);
 
@@ -158,6 +154,24 @@ namespace PaCode.Raim.Model
             }
 
             return true;
+        }
+
+        private IEnumerable<Vector2d> GetAxisVectors(Obstacle obstacle, IGameObject gameObject)
+        {
+            var prevPoint = obstacle.Points[0];
+
+            for (int i = 1; i < obstacle.Points.Length; i++)
+            {
+                var currentPoint = obstacle.Points[i];
+                var sideVector = currentPoint.Subtract(prevPoint);
+                yield return sideVector.Unit().Normal();
+            }
+
+            for (int i = 0; i < obstacle.Points.Length; i++)
+            {
+                var circleToPointVector = gameObject.Position.Subtract(obstacle.Points[i]);
+                yield return circleToPointVector.Unit();
+            }
         }
 
         private Range ProjectOntoAxis(Vector2d axisVector, Obstacle obstacle)

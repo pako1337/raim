@@ -7,7 +7,7 @@ namespace PaCode.Raim.Model
 {
     public class Player : IGameObject, IDestroyable
     {
-        private const int MaxSpeed = 100;
+        private const int MaxSpeed = 10;
 
         public Guid Id { get; set; }
         public string Name { get; private set; }
