@@ -13,10 +13,10 @@ namespace PaCode.Raim.Model
         {
             Points = new Vector2d[4]
             {
-                new Vector2d(50, 100),
-                new Vector2d(100, 75),
-                new Vector2d(50, 0),
-                new Vector2d(0, 25)
+                new Vector2d(150, 200),
+                new Vector2d(200, 175),
+                new Vector2d(150, 100),
+                new Vector2d(100, 125)
             };
         }
     }

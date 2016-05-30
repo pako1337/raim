@@ -87,9 +87,12 @@ namespace PaCode.Raim.Model
         {
             foreach (var obstacle in Obstacles)
             {
-                if (ObstacleCollide(obstacle, o1))
+                var collisionDisplacement = ObstacleCollide(obstacle, o1);
+                if (collisionDisplacement != null)
                 {
-                    ;
+                    // Item1 - axis unit vector, Item2 collision size
+                    var collisionFix = collisionDisplacement.Item1.Scale(collisionDisplacement.Item2);
+                    o1.Position = o1.Position.Add(collisionFix);
                 }
             }
 
@@ -138,39 +141,48 @@ namespace PaCode.Raim.Model
         }
 
 
-        private bool ObstacleCollide(Obstacle obstacle, IGameObject gameObject)
+        private Tuple<Vector2d, double> ObstacleCollide(Obstacle obstacle, IGameObject gameObject)
         {
-            var prevPoint = obstacle.Points[0];
+            var smallestDisplacement = Tuple.Create(new Vector2d(0, 0), new Range(double.MinValue, double.MaxValue));
 
             foreach (var axisVector in GetAxisVectors(obstacle, gameObject))
             {
-                var obstacleProjection = ProjectOntoAxis(axisVector, obstacle);
-                var objectProjection = ProjectOntoAxis(axisVector, gameObject);
+                var obstacleProjection = ProjectOntoAxis(axisVector.Item1, obstacle);
+                var objectProjection = ProjectOntoAxis(axisVector.Item1, gameObject);
 
                 var intersectionRange = obstacleProjection.Intersect(objectProjection);
+                intersectionRange = intersectionRange.Add(axisVector.Item2);
 
                 if (intersectionRange.Length < 0.0001)
-                    return false;
+                    return null;
+
+                if (intersectionRange.Length < smallestDisplacement.Item2.Length ||
+                    (Math.Abs(intersectionRange.Length - smallestDisplacement.Item2.Length) < 0.0001 && Math.Abs(intersectionRange.Start) < Math.Abs(smallestDisplacement.Item2.Start)))
+                    smallestDisplacement = Tuple.Create(axisVector.Item1, intersectionRange);
             }
 
-            return true;
+            return Tuple.Create(smallestDisplacement.Item1, smallestDisplacement.Item2.Length);
         }
 
-        private IEnumerable<Vector2d> GetAxisVectors(Obstacle obstacle, IGameObject gameObject)
+        private IEnumerable<Tuple<Vector2d, double>> GetAxisVectors(Obstacle obstacle, IGameObject gameObject)
         {
             var prevPoint = obstacle.Points[0];
 
-            for (int i = 1; i < obstacle.Points.Length; i++)
+            for (int i = 1; i <= obstacle.Points.Length; i++)
             {
-                var currentPoint = obstacle.Points[i];
+                var currentPoint = obstacle.Points[i % obstacle.Points.Length];
                 var sideVector = currentPoint.Subtract(prevPoint);
-                yield return sideVector.Unit().Normal();
+                var axisVector = sideVector.Unit().Normal();
+                var displacementFromOrigin = axisVector.DotProduct(prevPoint);
+                yield return Tuple.Create(axisVector, -displacementFromOrigin);
+                prevPoint = currentPoint;
             }
 
             for (int i = 0; i < obstacle.Points.Length; i++)
             {
-                var circleToPointVector = gameObject.Position.Subtract(obstacle.Points[i]);
-                yield return circleToPointVector.Unit();
+                var circleToPointVector = gameObject.Position.Subtract(obstacle.Points[i]).Unit();
+                var displacementFromOrigin = circleToPointVector.DotProduct(obstacle.Points[i]);
+                yield return Tuple.Create(circleToPointVector, -displacementFromOrigin);
             }
         }
 

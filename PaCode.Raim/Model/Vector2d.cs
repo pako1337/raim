@@ -43,7 +43,7 @@ namespace PaCode.Raim.Model
 
         public Vector2d Normal()
         {
-            return new Vector2d(Y, -X);
+            return new Vector2d(-Y, X);
         }
 
         public double DotProduct(Vector2d sideVector)
