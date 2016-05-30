@@ -87,39 +87,48 @@ namespace PaCode.Raim.Model
         {
             foreach (var obstacle in Obstacles)
             {
-                var collisionDisplacement = ObstacleCollide(obstacle, o1);
-                if (collisionDisplacement != null)
+                var collisionResult = ObstacleCollide(obstacle, o1);
+                if (collisionResult != null)
                 {
                     // Item1 - axis unit vector, Item2 collision size
-                    var collisionFix = collisionDisplacement.Item1.Scale(collisionDisplacement.Item2);
-                    o1.Position = o1.Position.Add(collisionFix);
+                    HandleCollision(o1, obstacle, collisionResult);
                 }
             }
 
             foreach (var o2 in GameObjects)
             {
                 if (o1 == o2) continue;
-                if (ObjectsCollide(o1, o2))
+                var collisionResult = ObjectsCollide(o1, o2);
+                if (collisionResult != null)
                 {
-                    HandleCollision(o1, o2);
+                    HandleCollision(o1, o2, collisionResult);
                 }
             }
         }
 
-        private bool ObjectsCollide(IGameObject o1, IGameObject o2)
+        private Tuple<Vector2d, double> ObjectsCollide(IGameObject o1, IGameObject o2)
         {
             var distanceVector = new Vector2d(o2.Position.X - o1.Position.X, o2.Position.Y - o1.Position.Y);
-            return distanceVector.Length() < o1.Size + o2.Size;
+            var collisionDistance = distanceVector.Length() - (o1.Size + o2.Size);
+
+            if (collisionDistance > 0)
+                return Tuple.Create(distanceVector.Unit(), collisionDistance);
+            else
+                return null;
         }
 
-        private void HandleCollision(IGameObject o1, IGameObject o2)
+        private void HandleCollision(object o1, object o2, Tuple<Vector2d, double> collision)
         {
             if (o1 is Player && o2 is Bullet)
                 HandleCollision(o1 as Player, o2 as Bullet);
             else if (o1 is Bullet && o2 is Player)
                 HandleCollision(o2 as Player, o1 as Bullet);
             else if (o1 is Player && o2 is Player)
-                HandleCollision(o1 as Player, o2 as Player);
+                HandleCollision(o1 as Player, collision);
+            else if (o1 is Player && o2 is Obstacle)
+                HandleCollision(o1 as Player, collision);
+            else if (o1 is Bullet && o2 is Obstacle)
+                HandleCollision(o1 as Bullet, o2 as Obstacle);
         }
 
         private void HandleCollision(Player o1, Bullet o2)
@@ -129,17 +138,17 @@ namespace PaCode.Raim.Model
             o2.KilledPlayer();
         }
 
-        private void HandleCollision(Player o1, Player o2)
+        private void HandleCollision(Bullet o1, Obstacle o2)
         {
-            var distanceVector = new Vector2d(o2.Position.X - o1.Position.X, o2.Position.Y - o1.Position.Y);
-            var distance = distanceVector.Length();
-            var collisionLength = distance - (o1.Size + o2.Size);
+            o1.IsDestroyed = true;
+        }
 
-            var collisionFixVector = distanceVector.Unit().Scale(collisionLength);
+        private void HandleCollision(Player o1, Tuple<Vector2d, double> collision)
+        {
+            var collisionFixVector = collision.Item1.Scale(collision.Item2);
 
             o1.Position = o1.Position.Add(collisionFixVector);
         }
-
 
         private Tuple<Vector2d, double> ObstacleCollide(Obstacle obstacle, IGameObject gameObject)
         {
