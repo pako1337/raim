@@ -109,10 +109,10 @@ namespace PaCode.Raim.Model
         private Tuple<Vector2d, double> ObjectsCollide(IGameObject o1, IGameObject o2)
         {
             var distanceVector = new Vector2d(o2.Position.X - o1.Position.X, o2.Position.Y - o1.Position.Y);
-            var collisionDistance = distanceVector.Length() - (o1.Size + o2.Size);
+            var collisionDistance = (o1.Size + o2.Size) - distanceVector.Length();
 
             if (collisionDistance > 0)
-                return Tuple.Create(distanceVector.Unit(), collisionDistance);
+                return Tuple.Create(distanceVector.Unit(), -collisionDistance);
             else
                 return null;
         }
