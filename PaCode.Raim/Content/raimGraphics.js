@@ -5,7 +5,6 @@
     var drawArena = function (gameObjects) {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
 
-        drawArenaBorders();
         drawObstacles();
 
         for (var i = 0; i < gameObjects.length; i++) {
@@ -70,16 +69,6 @@
         drawingContext.fill();
 
         drawingContext.closePath();
-    }
-
-    function drawArenaBorders() {
-        if (args.arena() == undefined) return;
-
-        drawRectangle([
-            { X: 0, Y: 0 },
-            { X: 0, Y: args.arena().ArenaSize.Y },
-            { X: args.arena().ArenaSize.X, Y: args.arena().ArenaSize.Y },
-            { X: args.arena().ArenaSize.X, Y: 0 }]);
     }
 
     function drawObstacles() {
