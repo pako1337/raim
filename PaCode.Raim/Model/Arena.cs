@@ -9,9 +9,45 @@ namespace PaCode.Raim.Model
     {
         private static Random rnd = new Random();
         private static object _lock = new object();
+        private CollisionEngine _collisionEngine;
+
         public Vector2d ArenaSize { get { return new Vector2d(1000, 500); } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
-        public List<Obstacle> Obstacles = new List<Obstacle>() { new Obstacle() };
+        public List<Obstacle> Obstacles;
+
+        public Arena()
+        {
+            _collisionEngine = new CollisionEngine(this);
+
+            int borderMargin = 200;
+            Obstacles = new List<Obstacle>() {
+                new Obstacle( // left
+                    new Vector2d(0, -borderMargin),
+                    new Vector2d(0, ArenaSize.Y+borderMargin),
+                    new Vector2d(-borderMargin, ArenaSize.Y),
+                    new Vector2d(-borderMargin, 0)),
+                new Obstacle( // bottom
+                    new Vector2d(0, 0),
+                    new Vector2d(ArenaSize.X, 0),
+                    new Vector2d(ArenaSize.X, -borderMargin),
+                    new Vector2d(0, -borderMargin)),
+                new Obstacle( // right
+                    new Vector2d(ArenaSize.X, -borderMargin),
+                    new Vector2d(ArenaSize.X, ArenaSize.Y + borderMargin),
+                    new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y),
+                    new Vector2d(ArenaSize.X + borderMargin, 0)),
+                new Obstacle( // top
+                    new Vector2d(0, ArenaSize.Y),
+                    new Vector2d(ArenaSize.X, ArenaSize.Y),
+                    new Vector2d(ArenaSize.X, ArenaSize.Y + borderMargin),
+                    new Vector2d(0, ArenaSize.Y + borderMargin)),
+                new Obstacle(
+                    new Vector2d(150, 200),
+                    new Vector2d(200, 175),
+                    new Vector2d(150, 100),
+                    new Vector2d(100, 125))
+            };
+        }
 
         public Player RegisterPlayer(string name)
         {
@@ -43,15 +79,13 @@ namespace PaCode.Raim.Model
                 {
                     gameObject.Position = gameObject.Position.Add(gameObject.Speed.Scale(timeBetweenEvents.TotalSeconds));
 
-                    CheckArenaBoundsCollision(gameObject);
-
                     if (gameObject is ILimitedTimelife)
                     {
                         var destroyable = ((ILimitedTimelife)gameObject);
                         destroyable.RecordTimePassed((int)timeBetweenEvents.TotalMilliseconds);
                     }
 
-                    CalculateCollisions(gameObject);
+                    _collisionEngine.CalculateCollisions(gameObject);
                 }
 
                 _lastUpdateTime = updateTime;
@@ -61,19 +95,6 @@ namespace PaCode.Raim.Model
             }
         }
 
-        private void CheckArenaBoundsCollision(IGameObject gameObject)
-        {
-            if (gameObject.Position.X < 0 + gameObject.Size)
-                gameObject.Position.X = 0 + gameObject.Size;
-            else if (gameObject.Position.X > ArenaSize.X - gameObject.Size)
-                gameObject.Position.X = ArenaSize.X - gameObject.Size;
-
-            if (gameObject.Position.Y < 0 + gameObject.Size)
-                gameObject.Position.Y = 0 + gameObject.Size;
-            else if (gameObject.Position.Y > ArenaSize.Y - gameObject.Size)
-                gameObject.Position.Y = ArenaSize.Y - gameObject.Size;
-        }
-
         public void ProcessInput(PlayerInput input, Player player)
         {
             lock (_lock)
@@ -81,143 +102,6 @@ namespace PaCode.Raim.Model
                 var createdObjects = player.ProcessInput(input, DateTime.Now);
                 GameObjects.AddRange(createdObjects);
             }
-        }
-
-        private void CalculateCollisions(IGameObject o1)
-        {
-            foreach (var obstacle in Obstacles)
-            {
-                var collisionResult = ObstacleCollide(obstacle, o1);
-                if (collisionResult != null)
-                {
-                    // Item1 - axis unit vector, Item2 collision size
-                    HandleCollision(o1, obstacle, collisionResult);
-                }
-            }
-
-            foreach (var o2 in GameObjects)
-            {
-                if (o1 == o2) continue;
-                var collisionResult = ObjectsCollide(o1, o2);
-                if (collisionResult != null)
-                {
-                    HandleCollision(o1, o2, collisionResult);
-                }
-            }
-        }
-
-        private Tuple<Vector2d, double> ObjectsCollide(IGameObject o1, IGameObject o2)
-        {
-            var distanceVector = new Vector2d(o2.Position.X - o1.Position.X, o2.Position.Y - o1.Position.Y);
-            var collisionDistance = (o1.Size + o2.Size) - distanceVector.Length();
-
-            if (collisionDistance > 0)
-                return Tuple.Create(distanceVector.Unit(), -collisionDistance);
-            else
-                return null;
-        }
-
-        private void HandleCollision(object o1, object o2, Tuple<Vector2d, double> collision)
-        {
-            if (o1 is Player && o2 is Bullet)
-                HandleCollision(o1 as Player, o2 as Bullet);
-            else if (o1 is Bullet && o2 is Player)
-                HandleCollision(o2 as Player, o1 as Bullet);
-            else if (o1 is Player && o2 is Player)
-                HandleCollision(o1 as Player, collision);
-            else if (o1 is Player && o2 is Obstacle)
-                HandleCollision(o1 as Player, collision);
-            else if (o1 is Bullet && o2 is Obstacle)
-                HandleCollision(o1 as Bullet, o2 as Obstacle);
-        }
-
-        private void HandleCollision(Player o1, Bullet o2)
-        {
-            o1.IsDestroyed = true;
-            o2.IsDestroyed = true;
-            o2.KilledPlayer();
-        }
-
-        private void HandleCollision(Bullet o1, Obstacle o2)
-        {
-            o1.IsDestroyed = true;
-        }
-
-        private void HandleCollision(Player o1, Tuple<Vector2d, double> collision)
-        {
-            var collisionFixVector = collision.Item1.Scale(collision.Item2);
-
-            o1.Position = o1.Position.Add(collisionFixVector);
-        }
-
-        private Tuple<Vector2d, double> ObstacleCollide(Obstacle obstacle, IGameObject gameObject)
-        {
-            var smallestDisplacement = Tuple.Create(new Vector2d(0, 0), new Range(double.MinValue, double.MaxValue));
-
-            foreach (var axisVector in GetAxisVectors(obstacle, gameObject))
-            {
-                var obstacleProjection = ProjectOntoAxis(axisVector.Item1, obstacle);
-                var objectProjection = ProjectOntoAxis(axisVector.Item1, gameObject);
-
-                var intersectionRange = obstacleProjection.Intersect(objectProjection);
-                intersectionRange = intersectionRange.Add(axisVector.Item2);
-
-                if (intersectionRange.Length < 0.0001)
-                    return null;
-
-                if (intersectionRange.Length < smallestDisplacement.Item2.Length ||
-                    (Math.Abs(intersectionRange.Length - smallestDisplacement.Item2.Length) < 0.0001 && Math.Abs(intersectionRange.Start) < Math.Abs(smallestDisplacement.Item2.Start)))
-                    smallestDisplacement = Tuple.Create(axisVector.Item1, intersectionRange);
-            }
-
-            return Tuple.Create(smallestDisplacement.Item1, smallestDisplacement.Item2.Length);
-        }
-
-        private IEnumerable<Tuple<Vector2d, double>> GetAxisVectors(Obstacle obstacle, IGameObject gameObject)
-        {
-            var prevPoint = obstacle.Points[0];
-
-            for (int i = 1; i <= obstacle.Points.Length; i++)
-            {
-                var currentPoint = obstacle.Points[i % obstacle.Points.Length];
-                var sideVector = currentPoint.Subtract(prevPoint);
-                var axisVector = sideVector.Unit().Normal();
-                var displacementFromOrigin = axisVector.DotProduct(prevPoint);
-                yield return Tuple.Create(axisVector, -displacementFromOrigin);
-                prevPoint = currentPoint;
-            }
-
-            for (int i = 0; i < obstacle.Points.Length; i++)
-            {
-                var circleToPointVector = gameObject.Position.Subtract(obstacle.Points[i]).Unit();
-                var displacementFromOrigin = circleToPointVector.DotProduct(obstacle.Points[i]);
-                yield return Tuple.Create(circleToPointVector, -displacementFromOrigin);
-            }
-        }
-
-        private Range ProjectOntoAxis(Vector2d axisVector, Obstacle obstacle)
-        {
-            double min = double.MaxValue;
-            double max = double.MinValue;
-
-            for (int i = 0; i < obstacle.Points.Length; i++)
-            {
-                var currentPoint = obstacle.Points[i];
-
-                var projectionSize = axisVector.DotProduct(currentPoint);
-                if (projectionSize < min)
-                    min = projectionSize;
-                if (projectionSize > max)
-                    max = projectionSize;
-            }
-
-            return new Range(min, max);
-        }
-
-        private Range ProjectOntoAxis(Vector2d axisVector, IGameObject gameObject)
-        {
-            var centerProjection = axisVector.DotProduct(gameObject.Position);
-            return new Range(centerProjection - gameObject.Size, centerProjection + gameObject.Size);
         }
     }
 }

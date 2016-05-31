@@ -101,6 +101,7 @@
     <Compile Include="Home\RaimHub.cs" />
     <Compile Include="Model\Arena.cs" />
     <Compile Include="Model\Bullet.cs" />
+    <Compile Include="Model\CollisionEngine.cs" />
     <Compile Include="Model\IDestroyable.cs" />
     <Compile Include="Model\IGameObject.cs" />
     <Compile Include="Model\ILimitedTimelife.cs" />
