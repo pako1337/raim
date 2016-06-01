@@ -64,7 +64,7 @@ namespace PaCode.Raim.Model
                 if (intersectionRange.Length < 0.0001)
                     return null;
 
-                if (intersectionRange.Length < smallestDisplacement.Item2.Length ||
+                if (intersectionRange.Length - smallestDisplacement.Item2.Length < -0.0001 ||
                     (Math.Abs(intersectionRange.Length - smallestDisplacement.Item2.Length) < 0.0001 && Math.Abs(intersectionRange.Start) < Math.Abs(smallestDisplacement.Item2.Start)))
                     smallestDisplacement = Tuple.Create(axisVector.Item1, intersectionRange);
             }
