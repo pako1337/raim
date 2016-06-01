@@ -64,9 +64,12 @@ namespace PaCode.Raim.Model
                 if (intersectionRange.Length < 0.0001)
                     return null;
 
-                if (intersectionRange.Length - smallestDisplacement.Item2.Length < -0.0001 ||
-                    (Math.Abs(intersectionRange.Length - smallestDisplacement.Item2.Length) < 0.0001 && Math.Abs(intersectionRange.Start) < Math.Abs(smallestDisplacement.Item2.Start)))
+                if (intersectionRange.Length < smallestDisplacement.Item2.Length - 0.0001 || // new collision is smaller
+                    (Math.Abs(intersectionRange.Length - smallestDisplacement.Item2.Length) < 0.0001 && // or collision sizes are the same
+                     Math.Abs(intersectionRange.Start) < Math.Abs(smallestDisplacement.Item2.Start)))    // but collision is closer to polygon side
+                {
                     smallestDisplacement = Tuple.Create(axisVector.Item1, intersectionRange);
+                }
             }
 
             return Tuple.Create(smallestDisplacement.Item1, smallestDisplacement.Item2.Length);
