@@ -11,7 +11,7 @@ namespace PaCode.Raim.Model
         private static object _lock = new object();
         private CollisionEngine _collisionEngine;
 
-        public Vector2d ArenaSize { get { return new Vector2d(1000, 500); } }
+        public Vector2d ArenaSize { get { return new Vector2d(500, 300); } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
         public List<Obstacle> Obstacles;
 
@@ -21,31 +21,31 @@ namespace PaCode.Raim.Model
 
             int borderMargin = 200;
             Obstacles = new List<Obstacle>() {
-                new Obstacle( // left
-                    new Vector2d(0, -borderMargin),
-                    new Vector2d(0, ArenaSize.Y+borderMargin),
-                    new Vector2d(-borderMargin, ArenaSize.Y),
-                    new Vector2d(-borderMargin, 0)),
-                new Obstacle( // bottom
-                    new Vector2d(0, 0),
-                    new Vector2d(ArenaSize.X, 0),
-                    new Vector2d(ArenaSize.X, -borderMargin),
-                    new Vector2d(0, -borderMargin)),
-                new Obstacle( // right
-                    new Vector2d(ArenaSize.X, -borderMargin),
-                    new Vector2d(ArenaSize.X, ArenaSize.Y + borderMargin),
-                    new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y),
-                    new Vector2d(ArenaSize.X + borderMargin, 0)),
                 new Obstacle( // top
                     new Vector2d(0, ArenaSize.Y),
-                    new Vector2d(ArenaSize.X, ArenaSize.Y),
+                    new Vector2d(0, ArenaSize.Y + borderMargin),
                     new Vector2d(ArenaSize.X, ArenaSize.Y + borderMargin),
-                    new Vector2d(0, ArenaSize.Y + borderMargin)),
+                    new Vector2d(ArenaSize.X, ArenaSize.Y)),
+                new Obstacle( // right
+                    new Vector2d(ArenaSize.X, 0),
+                    new Vector2d(ArenaSize.X, ArenaSize.Y),
+                    new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y),
+                    new Vector2d(ArenaSize.X + borderMargin, 0)),
+                new Obstacle( // bottom
+                    new Vector2d(0, -borderMargin),
+                    new Vector2d(0, 0),
+                    new Vector2d(ArenaSize.X, 0),
+                    new Vector2d(ArenaSize.X, -borderMargin)),
+                new Obstacle( // left
+                    new Vector2d(0, 0),
+                    new Vector2d(-borderMargin, 0),
+                    new Vector2d(-borderMargin, ArenaSize.Y),
+                    new Vector2d(0, ArenaSize.Y)),
                 new Obstacle(
                     new Vector2d(150, 200),
                     new Vector2d(200, 175),
                     new Vector2d(150, 100),
-                    new Vector2d(100, 125))
+                    new Vector2d(100, 125)),
             };
         }
 

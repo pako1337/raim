@@ -7,7 +7,7 @@ namespace PaCode.Raim.Model
 {
     public class Player : IGameObject, IDestroyable
     {
-        private const int MaxSpeed = 50;
+        private const int MaxSpeed = 100;
 
         public Guid Id { get; set; }
         public string Name { get; private set; }
@@ -26,7 +26,7 @@ namespace PaCode.Raim.Model
             {
                 Id = Guid.NewGuid(),
                 Name = name,
-                Position = new Vector2d(100, 100),//x, y),
+                Position = new Vector2d(100, 20),//x, y),
                 Speed = new Vector2d(0, 0),
                 Size = 20,
                 FacingDirection = new Vector2d(1, 0),

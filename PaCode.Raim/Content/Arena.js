@@ -54,12 +54,6 @@
         if (!lastFrameTime)
             lastFrameTime = timestamp;
 
-        var currentPlayer = getCurrentPlayer();
-        if (currentPlayer !== undefined) {
-            viewport.x = canvas.width / 2 - currentPlayer.Position.X;
-            viewport.y = -canvas.height / 2 - currentPlayer.Position.Y;
-        }
-
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
         for (var i = 0; i < gameObjects.length; i++) {
@@ -67,14 +61,20 @@
 
             if (!gameObject.IsDestroyed) {
                 var directionPoint = { x: gameObject.Position.X + gameObject.FacingDirection.X, y: gameObject.Position.Y + gameObject.FacingDirection.Y };
-                gameObject.Position.X += gameObject.Speed.X * timeDiff;
-                gameObject.Position.Y += gameObject.Speed.Y * timeDiff;
+                //gameObject.Position.X += gameObject.Speed.X * timeDiff;
+                //gameObject.Position.Y += gameObject.Speed.Y * timeDiff;
                 gameObject.FacingDirection = calculateFacingDirection(gameObject, directionPoint);
 
                 gameObject.TimeToLive -= timestamp - lastFrameTime;
                 if (gameObject.TimeToLive <= 0)
                     gameObject.IsDestroyed = true;
             }
+        }
+
+        var currentPlayer = getCurrentPlayer();
+        if (currentPlayer !== undefined) {
+            viewport.x = canvas.width / 2 - currentPlayer.Position.X;
+            viewport.y = -canvas.height / 2 - currentPlayer.Position.Y;
         }
 
         gameObjects = gameObjects.filter(function (g) { return !g.IsDestroyed });
