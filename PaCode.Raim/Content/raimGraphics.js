@@ -1,9 +1,15 @@
 ﻿var raimGraphics = function (args) {
-    var canvas = args.canvas;
-    var drawingContext = canvas.getContext("2d");
+    var drawingContext = args.canvas().getContext("2d");
+    var originalScale = { x: 1600, y: 861 };
+    var scale = { x: 1, y: 1 };
+    var canvas;
 
     var drawArena = function (gameObjects) {
+        canvas = args.canvas();
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        scale.x = canvas.width / originalScale.x;
+        scale.y = canvas.height / originalScale.y;
 
         drawObstacles();
 
@@ -85,12 +91,18 @@
 
         drawingContext.beginPath();
 
-        drawingContext.moveTo(points[0].X + args.viewport().x, -(points[0].Y + args.viewport().y));
+        var x = points[0].X + args.viewport().x;
+        var y = -(points[0].Y + args.viewport().y);
+        drawingContext.moveTo(x * scale.x, y * scale.y);
         for (var i = 1; i < points.length; i++) {
-            drawingContext.lineTo(points[i].X + args.viewport().x, -(points[i].Y + args.viewport().y));
+            x = points[i].X + args.viewport().x;
+            y = -(points[i].Y + args.viewport().y);
+            drawingContext.lineTo(x * scale.x, y * scale.y);
         }
 
-        drawingContext.lineTo(points[0].X + args.viewport().x, -(points[0].Y + args.viewport().y));
+        x = points[0].X + args.viewport().x;
+        y = -(points[0].Y + args.viewport().y);
+        drawingContext.lineTo(x * scale.x, y * scale.y);
 
         drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
         drawingContext.stroke();

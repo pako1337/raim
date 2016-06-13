@@ -101,8 +101,14 @@
         canvas.height = arenaElement.offsetHeight;
         document.getElementById(arenaHandler).appendChild(canvas);
 
+        window.addEventListener('resize', function () {
+            canvas.width = arenaElement.offsetWidth;
+            canvas.height = arenaElement.offsetHeight;
+            console.log("resize");
+        });
+
         gfx = new raimGraphics({
-            canvas: canvas,
+            canvas: function () { return canvas; },
             viewport: function () { return viewport; },
             arena: function () { return arena; }
         });
