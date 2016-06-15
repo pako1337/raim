@@ -19,9 +19,7 @@
         var newKeys = buildDirectionKey();
 
         keysPressed = newKeys;
-        var mouse = { x: 0, y: 0 };
-        mouse.x = mouseCoordinates.x - args.viewport().x;
-        mouse.y = -mouseCoordinates.y - args.viewport().y;
+        var mouse = { x: mouseCoordinates.x, y: mouseCoordinates.y };
 
         args.inputChanged({ direction: keysPressed, mouse: mouse });
     }

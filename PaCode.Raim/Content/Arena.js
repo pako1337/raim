@@ -44,6 +44,11 @@
         var player = getCurrentPlayer();
         if (player == undefined) return;
 
+        input.mouse.x /= scale;
+        input.mouse.y /= scale;
+        input.mouse.x = input.mouse.x - viewport.x;
+        input.mouse.y = -input.mouse.y - viewport.y;
+
         player.FacingDirection = calculateFacingDirection(player, input.mouse);
         playerMoving({ keysInput: input.direction, facingDirection: player.FacingDirection });
     };
@@ -135,7 +140,6 @@
 
         input = new userInput({
             inputChanged: inputChange,
-            viewport: function () { return viewport; }
         });
     })();
 
