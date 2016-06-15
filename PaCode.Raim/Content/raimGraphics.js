@@ -1,15 +1,13 @@
 ﻿var raimGraphics = function (args) {
     var drawingContext = args.canvas().getContext("2d");
-    var originalScale = args.originalScale;
-    var scale = { x: 1, y: 1 };
+    var scale = 1;
     var canvas;
 
     var drawArena = function (gameObjects) {
         canvas = args.canvas();
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
 
-        scale.x = canvas.width / originalScale.x;
-        scale.y = canvas.height / originalScale.y;
+        scale = args.scale();
 
         drawObstacles();
 
@@ -30,7 +28,7 @@
         x = bullet.Position.X + args.viewport().x;
         y = bullet.Position.Y + args.viewport().y;
 
-        drawingContext.arc(x * scale.x, -y * scale.y, bullet.Size, 0, 2 * Math.PI);
+        drawingContext.arc(x * scale, -y * scale, bullet.Size, 0, 2 * Math.PI);
         drawingContext.fill();
         drawingContext.closePath();
     }
@@ -44,7 +42,7 @@
 
         x = player.Position.X + args.viewport().x;
         y = player.Position.Y + args.viewport().y;
-        drawingContext.arc(x * scale.x, -y * scale.y, player.Size * scale.y, 0, 2 * Math.PI);
+        drawingContext.arc(x * scale, -y * scale, player.Size * scale, 0, 2 * Math.PI);
         drawingContext.fill();
 
         drawingContext.closePath();
@@ -64,13 +62,13 @@
         y = player.Position.Y + directionVector.Y * player.Size / 2;
         x += args.viewport().x;
         y += args.viewport().y;
-        drawingContext.moveTo(x * scale.x, -y * scale.y);
+        drawingContext.moveTo(x * scale, -y * scale);
 
         x = player.Position.X + directionVector.X * player.Size;
         y = player.Position.Y + directionVector.Y * player.Size;
         x += args.viewport().x;
         y += args.viewport().y;
-        drawingContext.lineTo(x * scale.x, -y * scale.y);
+        drawingContext.lineTo(x * scale, -y * scale);
         drawingContext.stroke();
         drawingContext.fill();
 
@@ -93,16 +91,16 @@
 
         var x = points[0].X + args.viewport().x;
         var y = -(points[0].Y + args.viewport().y);
-        drawingContext.moveTo(x * scale.x, y * scale.y);
+        drawingContext.moveTo(x * scale, y * scale);
         for (var i = 1; i < points.length; i++) {
             x = points[i].X + args.viewport().x;
             y = -(points[i].Y + args.viewport().y);
-            drawingContext.lineTo(x * scale.x, y * scale.y);
+            drawingContext.lineTo(x * scale, y * scale);
         }
 
         x = points[0].X + args.viewport().x;
         y = -(points[0].Y + args.viewport().y);
-        drawingContext.lineTo(x * scale.x, y * scale.y);
+        drawingContext.lineTo(x * scale, y * scale);
 
         drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
         drawingContext.stroke();

@@ -9,7 +9,8 @@
     var canvas;
     var lastFrameTime;
     var viewport = { x: 0, y: 0 };
-    var originalScale = { x: 1600, y: 861 };
+    var originalSize = { x: 1600, y: 861 };
+    var scale = 1;
     var arena;
 
     var gameObjects;
@@ -88,22 +89,24 @@
 
     var resizeCanvas = function () {
         var arenaElement = document.getElementById(arenaHandler);
-        var widthDiff = originalScale.x - arenaElement.offsetWidth;
-        var heightDiff = originalScale.y - arenaElement.offsetHeight;
+        var widthDiff = originalSize.x - arenaElement.offsetWidth;
+        var heightDiff = originalSize.y - arenaElement.offsetHeight;
 
-        var scale = originalScale.x / originalScale.y;
+        var aspectRatio = originalSize.x / originalSize.y;
         var w, h;
 
         if (Math.abs(widthDiff) > Math.abs(heightDiff)) {
             w = arenaElement.offsetWidth;
-            h = w / scale;
+            h = w / aspectRatio;
         } else {
             h = arenaElement.offsetHeight;
-            w = h * scale;
+            w = h * aspectRatio;
         }
 
         canvas.width = w;
         canvas.height = h;
+
+        scale = canvas.width / originalSize.x;
     };
 
     (function init() {
@@ -127,7 +130,7 @@
             canvas: function () { return canvas; },
             viewport: function () { return viewport; },
             arena: function () { return arena; },
-            originalScale: originalScale
+            scale: function () { return scale; }
         });
 
         requestAnimationFrame(processFrame);
