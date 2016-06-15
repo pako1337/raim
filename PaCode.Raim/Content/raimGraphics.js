@@ -28,7 +28,7 @@
         x = bullet.Position.X + args.viewport().x;
         y = bullet.Position.Y + args.viewport().y;
 
-        drawingContext.arc(x * scale, -y * scale, bullet.Size, 0, 2 * Math.PI);
+        drawingContext.arc(x * scale, -y * scale, bullet.Size * scale, 0, 2 * Math.PI);
         drawingContext.fill();
         drawingContext.closePath();
     }
