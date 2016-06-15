@@ -1,6 +1,6 @@
 ﻿var raimGraphics = function (args) {
     var drawingContext = args.canvas().getContext("2d");
-    var originalScale = { x: 1600, y: 861 };
+    var originalScale = args.originalScale;
     var scale = { x: 1, y: 1 };
     var canvas;
 
@@ -30,7 +30,7 @@
         x = bullet.Position.X + args.viewport().x;
         y = bullet.Position.Y + args.viewport().y;
 
-        drawingContext.arc(x, -y, bullet.Size, 0, 2 * Math.PI);
+        drawingContext.arc(x * scale.x, -y * scale.y, bullet.Size, 0, 2 * Math.PI);
         drawingContext.fill();
         drawingContext.closePath();
     }
@@ -44,7 +44,7 @@
 
         x = player.Position.X + args.viewport().x;
         y = player.Position.Y + args.viewport().y;
-        drawingContext.arc(x, -y, player.Size, 0, 2 * Math.PI);
+        drawingContext.arc(x * scale.x, -y * scale.y, player.Size * scale.y, 0, 2 * Math.PI);
         drawingContext.fill();
 
         drawingContext.closePath();
@@ -64,13 +64,13 @@
         y = player.Position.Y + directionVector.Y * player.Size / 2;
         x += args.viewport().x;
         y += args.viewport().y;
-        drawingContext.moveTo(x, -y);
+        drawingContext.moveTo(x * scale.x, -y * scale.y);
 
         x = player.Position.X + directionVector.X * player.Size;
         y = player.Position.Y + directionVector.Y * player.Size;
         x += args.viewport().x;
         y += args.viewport().y;
-        drawingContext.lineTo(x, -y);
+        drawingContext.lineTo(x * scale.x, -y * scale.y);
         drawingContext.stroke();
         drawingContext.fill();
 

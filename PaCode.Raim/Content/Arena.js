@@ -9,6 +9,7 @@
     var canvas;
     var lastFrameTime;
     var viewport = { x: 0, y: 0 };
+    var originalScale = { x: 1600, y: 861 };
     var arena;
 
     var gameObjects;
@@ -85,6 +86,26 @@
         requestAnimationFrame(processFrame);
     };
 
+    var resizeCanvas = function () {
+        var arenaElement = document.getElementById(arenaHandler);
+        var widthDiff = originalScale.x - arenaElement.offsetWidth;
+        var heightDiff = originalScale.y - arenaElement.offsetHeight;
+
+        var scale = originalScale.x / originalScale.y;
+        var w, h;
+
+        if (Math.abs(widthDiff) > Math.abs(heightDiff)) {
+            w = arenaElement.offsetWidth;
+            h = w / scale;
+        } else {
+            h = arenaElement.offsetHeight;
+            w = h * scale;
+        }
+
+        canvas.width = w;
+        canvas.height = h;
+    };
+
     (function init() {
         arenaHandler = args.arena || "arena";
         players = args.playersList || new playersList(args.playersListOptions);
@@ -97,20 +118,16 @@
         viewport.y = arenaElement.offsetHeight;
 
         canvas = document.createElement("canvas");
-        canvas.width = arenaElement.offsetWidth;
-        canvas.height = arenaElement.offsetHeight;
         document.getElementById(arenaHandler).appendChild(canvas);
+        resizeCanvas();
 
-        window.addEventListener('resize', function () {
-            canvas.width = arenaElement.offsetWidth;
-            canvas.height = arenaElement.offsetHeight;
-            console.log("resize");
-        });
+        window.addEventListener('resize', resizeCanvas);
 
         gfx = new raimGraphics({
             canvas: function () { return canvas; },
             viewport: function () { return viewport; },
-            arena: function () { return arena; }
+            arena: function () { return arena; },
+            originalScale: originalScale
         });
 
         requestAnimationFrame(processFrame);
