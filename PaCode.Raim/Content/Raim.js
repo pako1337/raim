@@ -6,10 +6,8 @@
         },
         signOut: function () {
             $.connection.hub.stop();
-            location.href = location.href;
             document.getElementById("registration").style.display = "block";
-            var arenaElement = document.getElementById("arena");
-            arenaElement.remove(arenaElement.firstChild);
+            var arenaElement = document.getElementById("arena").style.display = "none";
         }
     });
 
@@ -41,6 +39,7 @@
         $.connection.hub.start().done(function () {
             var nameInput = document.getElementById("playerName");
             document.getElementById("registration").style.display = "none";
+            var arenaElement = document.getElementById("arena").style.display = "block";
             var name = nameInput.value || "random player";
             raim.server.register(name);
 
