@@ -3,6 +3,13 @@
     var gameArena = new arena({
         playerMoving: function (e) {
             raim.server.playerMoving(e);
+        },
+        signOut: function () {
+            $.connection.hub.stop();
+            location.href = location.href;
+            document.getElementById("registration").style.display = "block";
+            var arenaElement = document.getElementById("arena");
+            arenaElement.remove(arenaElement.firstChild);
         }
     });
 
@@ -33,7 +40,7 @@
     document.getElementById("playButton").addEventListener("click", function () {
         $.connection.hub.start().done(function () {
             var nameInput = document.getElementById("playerName");
-            document.getElementById("registration").remove();
+            document.getElementById("registration").style.display = "none";
             var name = nameInput.value || "random player";
             raim.server.register(name);
 

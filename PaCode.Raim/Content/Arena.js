@@ -4,6 +4,7 @@
     var players;
     var arenaHandler;
     var playerMoving;
+    var singOut;
     var input;
     var gfx;
     var canvas;
@@ -33,6 +34,11 @@
 
     var playerMoved = function (gameObjectsFromServer) {
         gameObjects = gameObjectsFromServer;
+        if (playerId && !getCurrentPlayer()) {
+            playerId = null;
+            singOut();
+        }
+
         players.updateLeaderboard(gameObjects);
     };
 
@@ -116,6 +122,7 @@
         arenaHandler = args.arena || "arena";
         players = args.playersList || new playersList(args.playersListOptions);
         playerMoving = args.playerMoving || function () { };
+        singOut = args.signOut || function () { };
 
         gameObjects = [];
 
@@ -133,7 +140,7 @@
             canvas: function () { return canvas; },
             viewport: function () { return viewport; },
             arena: function () { return arena; },
-            scale: function () { return scale; }
+            scale: function () { return scale; },
         });
 
         requestAnimationFrame(processFrame);
