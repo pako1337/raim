@@ -5,17 +5,13 @@
 
     var addNewPlayer = function (player) {
         _players.push(player);
-
-        var players = document.getElementById(playersListElementId);
-        var playerNameElement = document.createElement('span');
-        playerNameElement.textContent = player.Name;
-        playerNameElement.id = player.Id;
-        players.appendChild(playerNameElement);
+        printPlayers();
     };
 
     var removePlayer = function (player) {
         var playerIndex = _players.findIndex(function (p) { return p.Name === player; });
         _players.splice(playerIndex, 1);
+        printPlayers();
     }
 
     var count = function () {
@@ -33,14 +29,26 @@
         var playersList = document.getElementById(playersListElementId);
         var playerListElements = playersList.getElementsByTagName("span");
         for (var i = 0; i < _players.length; i++) {
-            _players[i] = gameObjects.find(function (g) { return g.Id == _players[i].Id; });
-            var playerListElement = playerListElements[i];
-            playerListElement.textContent = _players[i].Name + " " + _players[i].Score;
-            playerListElement.id = _players[i].Id;
+            var player = gameObjects.find(function (g) { return _players[i] && g.Id == _players[i].Id; });
+            _players[i] = player;
+            printPlayers();
+        }
+    };
+
+    var printPlayers = function () {
+        var players = document.getElementById(playersListElementId);
+        while (players.firstChild) {
+            players.removeChild(players.firstChild);
         }
 
-        for (var i = _players.length; i < playerListElements.length; i++) {
-            playersList.removeChild(playerListElements[i]);
+        for (var i = 0; i < _players.length; i++) {
+            var player = _players[i];
+            if (!player) continue;
+
+            var playerNameElement = document.createElement('span');
+            playerNameElement.textContent = player.Name + " " + player.Score;
+            playerNameElement.id = player.Id;
+            players.appendChild(playerNameElement);
         }
     };
 
