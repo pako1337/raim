@@ -17,6 +17,7 @@ namespace PaCode.Raim.Model
         public Vector2d FacingDirection { get; set; }
         public bool IsDestroyed { get; set; }
         public int Score { get; private set; }
+        public string Color { get; private set; }
 
         private Player() { }
 
@@ -30,7 +31,23 @@ namespace PaCode.Raim.Model
                 Speed = new Vector2d(0, 0),
                 Size = 20,
                 FacingDirection = new Vector2d(1, 0),
+                Color = GetRandomColor()
             };
+        }
+
+        private static Random rnd = new Random();
+        private static List<string> colors = new List<string>
+        {
+            "rgba(245,85,26,1)",
+            "rgba(125,188,57,1)",
+            "rgba(7,92,191,1)",
+            "rgba(174,173,58,1)",
+            "rgba(54,201,240,1)",
+        };
+
+        private static string GetRandomColor()
+        {
+            return colors[rnd.Next() % colors.Count];
         }
 
         public IEnumerable<IGameObject> ProcessInput(PlayerInput input, DateTime updateTime)
@@ -59,7 +76,8 @@ namespace PaCode.Raim.Model
             if (shotTime - lastShot < TimeSpan.FromMilliseconds(500))
                 return;
 
-            var bullet = Bullet.Create(Position.Add(FacingDirection.Unit().Scale(Size+3)), FacingDirection);
+            var bulletStartPosition = Position.Add(FacingDirection.Unit().Scale(Size));
+            var bullet = Bullet.Create(bulletStartPosition, FacingDirection);
             bullet.Player = this;
             createdObjects.Add(bullet);
 

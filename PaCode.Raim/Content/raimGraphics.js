@@ -37,7 +37,7 @@
         var x, y;
         drawingContext.beginPath();
 
-        drawingContext.fillStyle = "rgba(255, 0, 0, 0.7)";
+        drawingContext.fillStyle = player.Color || "rgba(255, 0, 0, 0.7)";
         drawingContext.strokeStyle = "rgba(255, 0, 0, 0.7)";
 
         x = player.Position.X + args.viewport().x;
