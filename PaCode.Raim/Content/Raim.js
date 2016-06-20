@@ -30,10 +30,14 @@
         raim.server.signOff(_playerId);
     }
 
-    $.connection.hub.start().done(function () {
-        name = "test";
-        raim.server.register(name);
+    document.getElementById("playButton").addEventListener("click", function () {
+        $.connection.hub.start().done(function () {
+            var nameInput = document.getElementById("playerName");
+            document.getElementById("registration").remove();
+            var name = nameInput.value || "random player";
+            raim.server.register(name);
 
-        window.addEventListener("beforeunload", signOff);
+            window.addEventListener("beforeunload", signOff);
+        });
     });
 })();
