@@ -91,6 +91,9 @@ namespace PaCode.Raim.Model
 
         private void HandleCollision(Player o1, Bullet o2)
         {
+            if (o2.Player == o1)
+                return;
+
             o1.IsDestroyed = true;
             o2.IsDestroyed = true;
             o2.KilledPlayer();
