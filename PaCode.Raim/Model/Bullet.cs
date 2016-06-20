@@ -17,14 +17,14 @@ namespace PaCode.Raim.Model
 
         private Bullet() { }
 
-        public static Bullet Create(Vector2d position, Vector2d direction)
+        public static Bullet Create(Vector2d position, Vector2d directionUnit)
         {
             return new Bullet()
             {
                 Id = Guid.NewGuid(),
                 Position = position,
-                FacingDirection = direction,
-                Speed = direction.Unit().Scale(_speed),
+                FacingDirection = directionUnit,
+                Speed = directionUnit.Scale(_speed),
                 TimeToLive = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
             };
         }

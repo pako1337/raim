@@ -46,9 +46,9 @@ namespace PaCode.Raim.Model
             return new Vector2d(-Y, X);
         }
 
-        public double DotProduct(Vector2d sideVector)
+        public double DotProduct(Vector2d other)
         {
-            return X * sideVector.X + Y * sideVector.Y;
+            return X * other.X + Y * other.Y;
         }
     }
 }
