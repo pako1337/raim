@@ -27,7 +27,7 @@ namespace PaCode.Raim.Model
             {
                 Id = Guid.NewGuid(),
                 Name = name,
-                Position = new Vector2d(100, 20),//x, y),
+                Position = new Vector2d(x, y),
                 Speed = new Vector2d(0, 0),
                 Size = 20,
                 FacingDirection = new Vector2d(1, 0),

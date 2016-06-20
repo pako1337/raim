@@ -11,7 +11,7 @@ namespace PaCode.Raim.Model
         private static object _lock = new object();
         private CollisionEngine _collisionEngine;
 
-        public Vector2d ArenaSize { get { return new Vector2d(500, 300); } }
+        public Vector2d ArenaSize { get { return new Vector2d(1500, 1300); } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
         public List<Obstacle> Obstacles;
 
