@@ -4,7 +4,7 @@ namespace PaCode.Raim.Model
 {
     public class Bullet : IGameObject, IDestroyable, ILimitedTimelife
     {
-        private static int _speed = 60;
+        private static int _speed = 250;
 
         public Guid Id { get; private set; }
         public Vector2d Position { get; set; }
