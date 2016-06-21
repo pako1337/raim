@@ -13,6 +13,7 @@
     var originalSize = { x: 1600, y: 861 };
     var scale = 1;
     var arena;
+    var playerInput;
 
     var gameObjects;
 
@@ -56,7 +57,7 @@
         input.mouse.y = -input.mouse.y - viewport.y;
 
         player.FacingDirection = calculateFacingDirection(player, input.mouse);
-        playerMoving({ keysInput: input.direction, facingDirection: player.FacingDirection });
+        playerInput = { keysInput: input.direction, facingDirection: player.FacingDirection };
     };
 
     function calculateFacingDirection(player, mouse) {
@@ -66,6 +67,9 @@
     var processFrame = function (timestamp) {
         if (!lastFrameTime)
             lastFrameTime = timestamp;
+
+        if (playerInput)
+            playerMoving(playerInput);
 
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
