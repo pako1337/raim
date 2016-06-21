@@ -103,7 +103,9 @@
         drawingContext.lineTo(x * scale, y * scale);
 
         drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
+        drawingContext.fillStyle = "rgba(0, 0, 0, 0.25)";
         drawingContext.stroke();
+        drawingContext.fill();
         drawingContext.closePath();
     }
 
