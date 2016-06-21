@@ -1,4 +1,4 @@
-﻿function playersList(args) {
+﻿+function playersList(args) {
     args = args || {};
     var playersListElementId = args.playersList || 'playersList';
     var _players = [];
@@ -9,7 +9,7 @@
     };
 
     var removePlayer = function (player) {
-        var playerIndex = _players.findIndex(function (p) { return p.Name === player; });
+        var playerIndex = _players.findIndex(function (p) { return p && p.Name === player; });
         _players.splice(playerIndex, 1);
         printPlayers();
     }
@@ -22,7 +22,7 @@
         if (typeof i == 'number')
             return _players[i];
 
-        return _players.filter(function (p) { return p.Name === i; })[0];
+        return _players.filter(function (p) { return p && p.Name === i; })[0];
     };
 
     var updateLeaderboard = function (gameObjects) {
