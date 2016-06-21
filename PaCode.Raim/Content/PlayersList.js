@@ -1,4 +1,4 @@
-﻿+function playersList(args) {
+﻿function playersList(args) {
     args = args || {};
     var playersListElementId = args.playersList || 'playersList';
     var _players = [];
@@ -26,8 +26,8 @@
     };
 
     var updateLeaderboard = function (gameObjects) {
-        var playersList = document.getElementById(playersListElementId);
-        var playerListElements = playersList.getElementsByTagName("span");
+        var list = document.getElementById(playersListElementId);
+        var playerListElements = list.getElementsByTagName("span");
         for (var i = 0; i < _players.length; i++) {
             var player = gameObjects.find(function (g) { return _players[i] && g.Id == _players[i].Id; });
             _players[i] = player;
