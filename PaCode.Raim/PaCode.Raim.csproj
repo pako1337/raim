@@ -121,7 +121,6 @@
     <Content Include="package.json" />
     <Content Include="Bundles.json" />
     <None Include="packages.config" />
-    <Content Include="Content\DSP2016.png" />
     <Content Include="Content\playersList.js" />
     <Content Include="Content\raim.css" />
     <Content Include="Content\raim.js" />
