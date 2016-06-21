@@ -72,8 +72,8 @@
 
         if (playerInput &&
             (playerInput.keysInput != previousPlayerInput.keysInput ||
-             playerInput.facingDirection.x != previousPlayerInput.facingDirection.x ||
-             playerInput.facingDirection.y != previousPlayerInput.facingDirection.y)) {
+             playerInput.facingDirection.X != previousPlayerInput.facingDirection.X ||
+             playerInput.facingDirection.Y != previousPlayerInput.facingDirection.Y)) {
             previousPlayerInput = playerInput;
             playerMoving(playerInput);
         }
