@@ -19,7 +19,7 @@ namespace PaCode.Raim.Model
         {
             _collisionEngine = new CollisionEngine(this);
 
-            int borderMargin = 200;
+            int borderMargin = 700;
             Obstacles = new List<Obstacle>() {
                 new Obstacle( // top
                     new Vector2d(-borderMargin, ArenaSize.Y),
