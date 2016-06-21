@@ -13,7 +13,8 @@
     var originalSize = { x: 1600, y: 861 };
     var scale = 1;
     var arena;
-    var playerInput;
+    var playerInput,
+        previousPlayerInput = { keysInput: 0, facingDirection: { x: 0, y: 0 } };
 
     var gameObjects;
 
@@ -68,8 +69,11 @@
         if (!lastFrameTime)
             lastFrameTime = timestamp;
 
-        if (playerInput)
+        if (playerInput &&
+            (playerInput.keysInput != previousPlayerInput.keysInput || playerInput.facingDirection != previousPlayerInput.facingDirection)) {
+            previousPlayerInput = playerInput;
             playerMoving(playerInput);
+        }
 
         var timeDiff = (timestamp - lastFrameTime) / 1000;
 
