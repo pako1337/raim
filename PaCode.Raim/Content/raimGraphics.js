@@ -24,12 +24,14 @@
     function drawBullet(bullet) {
         drawingContext.beginPath();
 
+        drawingContext.strokeStyle = "rgba(0, 0, 0, 1)"
         drawingContext.fillStyle = bullet.Color || "rgba(0, 0, 0, 1)";
         x = bullet.Position.X + args.viewport().x;
         y = bullet.Position.Y + args.viewport().y;
 
         drawingContext.arc(x * scale, -y * scale, bullet.Size * scale, 0, 2 * Math.PI);
         drawingContext.fill();
+        drawingContext.stroke();
         drawingContext.closePath();
     }
 
