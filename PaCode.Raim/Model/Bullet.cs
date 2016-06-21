@@ -14,10 +14,11 @@ namespace PaCode.Raim.Model
         public int TimeToLive { get; set; }
         public int Size { get; } = 2;
         public Player Player { get; internal set; }
+        public string Color { get; private set;}
 
         private Bullet() { }
 
-        public static Bullet Create(Vector2d position, Vector2d directionUnit)
+        public static Bullet Create(Vector2d position, Vector2d directionUnit, string color)
         {
             return new Bullet()
             {
@@ -25,7 +26,8 @@ namespace PaCode.Raim.Model
                 Position = position,
                 FacingDirection = directionUnit,
                 Speed = directionUnit.Scale(_speed),
-                TimeToLive = (int)TimeSpan.FromSeconds(5).TotalMilliseconds,
+                TimeToLive = (int)TimeSpan.FromSeconds(3).TotalMilliseconds,
+                Color = color,
             };
         }
 

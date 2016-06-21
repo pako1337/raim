@@ -73,12 +73,12 @@ namespace PaCode.Raim.Model
         private DateTime lastShot = DateTime.Now;
         private void Shoot(List<IGameObject> createdObjects, DateTime shotTime)
         {
-            if (shotTime - lastShot < TimeSpan.FromMilliseconds(500))
+            if (shotTime - lastShot < TimeSpan.FromMilliseconds(1000))
                 return;
 
             var facingUnit = FacingDirection.Unit();
             var bulletStartPosition = Position.Add(facingUnit.Scale(Size));
-            var bullet = Bullet.Create(bulletStartPosition, facingUnit);
+            var bullet = Bullet.Create(bulletStartPosition, facingUnit, Color);
             bullet.Player = this;
             createdObjects.Add(bullet);
 
