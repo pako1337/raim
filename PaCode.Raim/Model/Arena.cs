@@ -22,20 +22,20 @@ namespace PaCode.Raim.Model
             int borderMargin = 200;
             Obstacles = new List<Obstacle>() {
                 new Obstacle( // top
-                    new Vector2d(0, ArenaSize.Y),
-                    new Vector2d(0, ArenaSize.Y + borderMargin),
-                    new Vector2d(ArenaSize.X, ArenaSize.Y + borderMargin),
-                    new Vector2d(ArenaSize.X, ArenaSize.Y)),
+                    new Vector2d(-borderMargin, ArenaSize.Y),
+                    new Vector2d(-borderMargin, ArenaSize.Y + borderMargin),
+                    new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y + borderMargin),
+                    new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y)),
                 new Obstacle( // right
                     new Vector2d(ArenaSize.X, 0),
                     new Vector2d(ArenaSize.X, ArenaSize.Y),
                     new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y),
                     new Vector2d(ArenaSize.X + borderMargin, 0)),
                 new Obstacle( // bottom
-                    new Vector2d(0, -borderMargin),
-                    new Vector2d(0, 0),
-                    new Vector2d(ArenaSize.X, 0),
-                    new Vector2d(ArenaSize.X, -borderMargin)),
+                    new Vector2d(-borderMargin, 0),
+                    new Vector2d(ArenaSize.X + borderMargin, 0),
+                    new Vector2d(ArenaSize.X + borderMargin, -borderMargin),
+                    new Vector2d(-borderMargin, -borderMargin)),
                 new Obstacle( // left
                     new Vector2d(0, 0),
                     new Vector2d(-borderMargin, 0),
