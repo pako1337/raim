@@ -19,10 +19,17 @@
 
     var drawArena = function (gameObjects) {
         canvas = args.canvas();
+
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        var backgroundX = args.viewport().x % 5;
+        var backgroundY = args.viewport().y % 5;
+        drawingContext.save();
+        drawingContext.translate(backgroundX, backgroundY);
         drawingContext.rect(0, 0, canvas.width, canvas.height);
         drawingContext.fillStyle = backgroundPattern;
         drawingContext.fill();
+        drawingContext.restore();
 
         scale = args.scale();
 
