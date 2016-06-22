@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 using Nancy.Helpers;
@@ -11,16 +12,31 @@ namespace PaCode.Raim.Home
     public class RaimHub : Hub
     {
         private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-        public static Arena arena = new Arena();
-        private readonly ArenaTicker _ticker;
+        public static Arena arena;
+        private static ArenaTicker _ticker;
+        private static SpinLock _lock = new SpinLock();
 
-        public RaimHub()
-        {
-            _ticker = ArenaTicker.Instance;
-        }
-        
         public void Register(string name)
         {
+            if (arena == null)
+            {
+                var gotLock = false;
+                try
+                {
+                    _lock.Enter(ref gotLock);
+                    if (arena == null)
+                    {
+                        arena = new Arena();
+                        _ticker = ArenaTicker.Instance;
+                    }
+
+                }
+                finally
+                {
+                    if (gotLock) _lock.Exit();
+                }
+            }
+
             name = HttpUtility.HtmlEncode(name);
 
             var player = arena.RegisterPlayer(name);
@@ -39,6 +55,25 @@ namespace PaCode.Raim.Home
 
             arena.UnregisterPlayer(player);
             Clients.All.SignedOff(player.Name);
+
+            if (players.Count == 0)
+            {
+                var gotLock = false;
+                try
+                {
+                    _lock.Enter(ref gotLock);
+                    if (players.Count == 0)
+                    {
+                        arena = null;
+                        _ticker = null;
+                    }
+
+                }
+                finally
+                {
+                    if (gotLock) _lock.Exit();
+                }
+            }
         }
 
         public override Task OnDisconnected(bool stopCalled)
