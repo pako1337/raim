@@ -84,9 +84,6 @@
             var gameObject = gameObjects[i];
 
             if (!gameObject.IsDestroyed) {
-                var directionPoint = { x: gameObject.Position.X + gameObject.FacingDirection.X, y: gameObject.Position.Y + gameObject.FacingDirection.Y };
-                gameObject.FacingDirection = calculateFacingDirection(gameObject, directionPoint);
-
                 gameObject.TimeToLive -= timestamp - lastFrameTime;
                 if (gameObject.TimeToLive <= 0)
                     gameObject.IsDestroyed = true;
