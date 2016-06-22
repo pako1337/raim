@@ -54,15 +54,20 @@
 
         input.mouse.x /= scale;
         input.mouse.y /= scale;
-        input.mouse.x = input.mouse.x - viewport.x;
-        input.mouse.y = -input.mouse.y - viewport.y;
+        input.mouse.x = Math.round(input.mouse.x - viewport.x);
+        input.mouse.y = Math.round(-input.mouse.y - viewport.y);
 
         player.FacingDirection = calculateFacingDirection(player, input.mouse);
         playerInput = { keysInput: input.direction, facingDirection: player.FacingDirection };
     };
 
     function calculateFacingDirection(player, mouse) {
-        return { X: mouse.x - player.Position.X, Y: mouse.y - player.Position.Y };
+        var facingDir = {
+            X: Math.round(mouse.x - player.Position.X),
+            Y: Math.round(mouse.y - player.Position.Y)
+        };
+
+        return facingDir;
     }
 
     var processFrame = function (timestamp) {
