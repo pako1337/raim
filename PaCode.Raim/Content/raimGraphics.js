@@ -3,9 +3,26 @@
     var scale = 1;
     var canvas;
 
+    var backgroundPattern = (function () {
+        var patternCanvas = document.createElement("canvas");
+        patternCanvas.width = 10;
+        patternCanvas.height = 10;
+        var patternContext = patternCanvas.getContext("2d");
+
+        patternContext.beginPath();
+        patternContext.arc(5, 5, 1, 0, 2 * Math.PI);
+        patternContext.strokeStyle = "rgba(0,0,0,0.2)";
+        patternContext.stroke();
+
+        return drawingContext.createPattern(patternCanvas, "repeat");
+    })();
+
     var drawArena = function (gameObjects) {
         canvas = args.canvas();
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
+        drawingContext.rect(0, 0, canvas.width, canvas.height);
+        drawingContext.fillStyle = backgroundPattern;
+        drawingContext.fill();
 
         scale = args.scale();
 
@@ -82,11 +99,11 @@
 
         var obstacles = args.arena().Obstacles;
         for (var i = 0; i < obstacles.length; i++) {
-            drawRectangle(obstacles[i].Points);
+            drawPolygon(obstacles[i].Points);
         }
     }
 
-    function drawRectangle(points) {
+    function drawPolygon(points) {
         if (points.length < 2) return;
 
         drawingContext.beginPath();
@@ -105,7 +122,7 @@
         drawingContext.lineTo(x * scale, y * scale);
 
         drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
-        drawingContext.fillStyle = "rgba(0, 0, 0, 0.25)";
+        drawingContext.fillStyle = "rgba(200, 200, 200, 1)";
         drawingContext.stroke();
         drawingContext.fill();
         drawingContext.closePath();
