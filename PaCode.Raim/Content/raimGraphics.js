@@ -3,14 +3,19 @@
     var scale = 1;
     var canvas;
 
+    var patternSize = { x: 30, y: 30 };
     var backgroundPattern = (function () {
         var patternCanvas = document.createElement("canvas");
-        patternCanvas.width = 10;
-        patternCanvas.height = 10;
+        patternCanvas.width  = patternSize.x;
+        patternCanvas.height = patternSize.y;
         var patternContext = patternCanvas.getContext("2d");
 
         patternContext.beginPath();
-        patternContext.arc(5, 5, 1, 0, 2 * Math.PI);
+        patternContext.moveTo(patternSize.x, 0);
+        patternContext.lineTo(0, 0);
+        patternContext.lineTo(patternSize.x / 2, patternSize.y);
+        patternContext.moveTo(patternSize.x, patternSize.y);
+        patternContext.lineTo(0, patternSize.y);
         patternContext.strokeStyle = "rgba(0,0,0,0.2)";
         patternContext.stroke();
 
@@ -21,17 +26,17 @@
         canvas = args.canvas();
 
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
-
-        var backgroundX = args.viewport().x % 5;
-        var backgroundY = args.viewport().y % 5;
+        scale = args.scale();
+        
+        var backgroundX = Math.round(args.viewport().x % patternSize.x);
+        var backgroundY = Math.round(args.viewport().y % patternSize.y);
         drawingContext.save();
-        drawingContext.translate(backgroundX, backgroundY);
-        drawingContext.rect(0, 0, canvas.width, canvas.height);
+        drawingContext.translate(backgroundX, -backgroundY);
+        drawingContext.rect(-100, -100, canvas.width+100, canvas.height+100);
         drawingContext.fillStyle = backgroundPattern;
+        drawingContext.scale(scale, scale);
         drawingContext.fill();
         drawingContext.restore();
-
-        scale = args.scale();
 
         drawObstacles();
 
