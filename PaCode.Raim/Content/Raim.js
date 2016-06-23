@@ -1,11 +1,18 @@
 ﻿(function () {
     var raim = $.connection.raimHub;
+    var connected = false;
+
     var gameArena = new arena({
         playerMoving: function (e) {
+            if (!connected) return;
+
             raim.server.playerMoving(e);
         },
         signOut: function () {
+            if (!connected) return;
+
             $.connection.hub.stop();
+            connected = false;
             document.getElementById("registration").style.display = "block";
             var arenaElement = document.getElementById("arena").style.display = "none";
         }
@@ -14,6 +21,7 @@
     var _playerId;
 
     raim.client.signedIn = function (id) {
+        connected = true;
         _playerId = id;
         gameArena.setPlayer(id);
     };
