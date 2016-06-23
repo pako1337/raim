@@ -28,8 +28,8 @@
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
         scale = args.scale();
         
-        var backgroundX = Math.round(args.viewport().x % patternSize.x);
-        var backgroundY = Math.round(args.viewport().y % patternSize.y);
+        var backgroundX = Math.round(args.viewport().x % patternSize.x) * scale;
+        var backgroundY = Math.round(args.viewport().y % patternSize.y) * scale;
         drawingContext.save();
         drawingContext.translate(backgroundX, -backgroundY);
         drawingContext.rect(-100, -100, canvas.width+100, canvas.height+100);
