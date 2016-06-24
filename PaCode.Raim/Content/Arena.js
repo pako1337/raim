@@ -20,6 +20,7 @@
 
     var setPlayer = function (p) {
         playerId = p;
+        resizeCanvas();
     };
 
     var addNewPlayer = function (who) {
