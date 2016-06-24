@@ -83,25 +83,11 @@
             playerMoving(playerInput);
         }
 
-        var timeDiff = (timestamp - lastFrameTime) / 1000;
-
-        for (var i = 0; i < gameObjects.length; i++) {
-            var gameObject = gameObjects[i];
-
-            if (!gameObject.IsDestroyed) {
-                gameObject.TimeToLive -= timestamp - lastFrameTime;
-                if (gameObject.TimeToLive <= 0)
-                    gameObject.IsDestroyed = true;
-            }
-        }
-
         var currentPlayer = getCurrentPlayer();
         if (currentPlayer !== undefined) {
             viewport.x = originalSize.x / 2 - currentPlayer.Position.X;
             viewport.y = -originalSize.y / 2 - currentPlayer.Position.Y;
         }
-
-        gameObjects = gameObjects.filter(function (g) { return !g.IsDestroyed });
 
         gfx.drawArena(gameObjects);
 
