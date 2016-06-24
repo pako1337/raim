@@ -32,7 +32,7 @@
         var backgroundY = Math.round(args.viewport().y % patternSize.y) * scale;
         drawingContext.save();
         drawingContext.translate(backgroundX, -backgroundY);
-        drawingContext.rect(-100, -100, canvas.width+100, canvas.height+100);
+        drawingContext.rect(0, 0, canvas.width, canvas.height);
         drawingContext.fillStyle = backgroundPattern;
         drawingContext.scale(scale, scale);
         drawingContext.fill();
