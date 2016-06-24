@@ -14,6 +14,7 @@
             $.connection.hub.stop();
             connected = false;
             document.getElementById("registration").style.display = "block";
+            document.getElementById("playerName").focus();
             var arenaElement = document.getElementById("arena").style.display = "none";
         }
     });
@@ -44,14 +45,22 @@
     }
 
     var playerName = document.getElementById("playerName");
+    var playButton = document.getElementById("playButton");
+
+    playerName.addEventListener("keyup", function () {
+        if (event.keyCode == 13) playButton.click();
+    });
     playerName.value = localStorage.getItem("playerName");
 
-    document.getElementById("playButton").addEventListener("click", function () {
+    playButton.addEventListener("click", function () {
         $.connection.hub.start().done(function () {
+
             document.getElementById("registration").style.display = "none";
             var arenaElement = document.getElementById("arena").style.display = "block";
+
             var name = playerName.value || "random player";
             localStorage.setItem("playerName", name);
+
             raim.server.register(name);
 
             window.addEventListener("beforeunload", signOff);
