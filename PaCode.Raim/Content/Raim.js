@@ -43,12 +43,15 @@
         raim.server.signOff(_playerId);
     }
 
+    var playerName = document.getElementById("playerName");
+    playerName.value = localStorage.getItem("playerName");
+
     document.getElementById("playButton").addEventListener("click", function () {
         $.connection.hub.start().done(function () {
-            var nameInput = document.getElementById("playerName");
             document.getElementById("registration").style.display = "none";
             var arenaElement = document.getElementById("arena").style.display = "block";
-            var name = nameInput.value || "random player";
+            var name = playerName.value || "random player";
+            localStorage.setItem("playerName", name);
             raim.server.register(name);
 
             window.addEventListener("beforeunload", signOff);
