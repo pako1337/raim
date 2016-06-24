@@ -72,10 +72,13 @@
         return facingDir;
     }
 
+    var lastTimestamp;
     var processFrame = function (timestamp) {
         if (!lastPlayerListUpdate) {
             lastPlayerListUpdate = timestamp;
         }
+
+        lastTimestamp = lastTimestamp || timestamp;
 
         if (playerInput &&
             (playerInput.keysInput != previousPlayerInput.keysInput ||
@@ -91,6 +94,9 @@
             viewport.y = -originalSize.y / 2 - currentPlayer.Position.Y;
         }
 
+        var timeDiff = (timestamp - lastTimestamp) / 1000;
+        updateObjectsPositions(timeDiff);
+
         gfx.drawArena(gameObjects);
 
         if (timestamp - lastPlayerListUpdate > 2000) {
@@ -98,9 +104,19 @@
             players.updateLeaderboard(gameObjects);
         }
 
+        lastTimestamp = timestamp;
+
         if (connected)
             requestAnimationFrame(processFrame);
     };
+
+    var updateObjectsPositions = function (timeDiff) {
+        for (var i = 0; i < gameObjects.length; i++) {
+            var gameObject = gameObjects[i];
+            gameObject.Position.X += gameObject.Speed.X * timeDiff;
+            gameObject.Position.Y += gameObject.Speed.Y * timeDiff;
+        }
+    }
 
     var resizeCanvas = function () {
         var arenaElement = document.getElementById(arenaHandler);
