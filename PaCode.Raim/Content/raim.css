@@ -1,4 +1,4 @@
-﻿.titleSection {
+.titleSection {
     position: fixed;
     left: 1em;
     bottom: 0.5em;
@@ -30,6 +30,7 @@
     }
 
 #arena {
+    display: none;
     z-index: -1;
     border: none;
     position: fixed;
@@ -38,3 +39,32 @@
     bottom: 0.3em;
     left: 0.3em;
 }
+
+body {
+    font-size: 13px;
+}
+
+#registration {
+    font-size: 3em;
+    width: 15em;
+    height: 4em;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+    #playerName {
+        font-size: 1em;
+        width: 100%;
+    }
+
+    #playButton {
+        display:block;
+        font-family: cursive;
+        font-size: 0.7em;
+        width: 4em;
+        height: 2em;
+        margin: auto;
+    }
