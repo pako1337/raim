@@ -55,10 +55,8 @@
 
         drawingContext.strokeStyle = "rgba(0, 0, 0, 1)"
         drawingContext.fillStyle = bullet.Color || "rgba(0, 0, 0, 1)";
-        x = bullet.Position.X + args.viewport().x;
-        y = bullet.Position.Y + args.viewport().y;
 
-        drawingContext.arc(x * scale, -y * scale, bullet.Size * scale, 0, 2 * Math.PI);
+        circle(bullet.Position.X, bullet.Position.Y, bullet.Size);
         drawingContext.fill();
         drawingContext.stroke();
         drawingContext.closePath();
@@ -71,9 +69,7 @@
         drawingContext.fillStyle = player.Color || "rgba(255, 0, 0, 0.7)";
         drawingContext.strokeStyle = "rgba(255, 0, 0, 0.7)";
 
-        x = player.Position.X + args.viewport().x;
-        y = player.Position.Y + args.viewport().y;
-        drawingContext.arc(x * scale, -y * scale, player.Size * scale, 0, 2 * Math.PI);
+        circle(player.Position.X, player.Position.Y, player.Size);
         drawingContext.fill();
 
         drawingContext.closePath();
@@ -91,15 +87,11 @@
 
         x = player.Position.X + directionVector.X * player.Size / 2;
         y = player.Position.Y + directionVector.Y * player.Size / 2;
-        x += args.viewport().x;
-        y += args.viewport().y;
-        drawingContext.moveTo(x * scale, -y * scale);
+        moveTo(x, y);
 
         x = player.Position.X + directionVector.X * player.Size;
         y = player.Position.Y + directionVector.Y * player.Size;
-        x += args.viewport().x;
-        y += args.viewport().y;
-        drawingContext.lineTo(x * scale, -y * scale);
+        lineTo(x, y);
         drawingContext.stroke();
         drawingContext.fill();
 
@@ -120,24 +112,39 @@
 
         drawingContext.beginPath();
 
-        var x = points[0].X + args.viewport().x;
-        var y = -(points[0].Y + args.viewport().y);
-        drawingContext.moveTo(x * scale, y * scale);
+        moveTo(points[0].X, points[0].Y);
         for (var i = 1; i < points.length; i++) {
-            x = points[i].X + args.viewport().x;
-            y = -(points[i].Y + args.viewport().y);
-            drawingContext.lineTo(x * scale, y * scale);
+            lineTo(points[i].X, points[i].Y);
         }
 
-        x = points[0].X + args.viewport().x;
-        y = -(points[0].Y + args.viewport().y);
-        drawingContext.lineTo(x * scale, y * scale);
+        lineTo(points[0].X, points[0].Y);
 
         drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
         drawingContext.fillStyle = "rgba(200, 200, 200, 1)";
         drawingContext.stroke();
         drawingContext.fill();
         drawingContext.closePath();
+    }
+
+    function moveTo(x, y) {
+        x = x + args.viewport().x;
+        y = -(y + args.viewport().y);
+
+        drawingContext.moveTo(x * scale, y * scale);
+    }
+
+    function lineTo(x, y) {
+        x = x + args.viewport().x;
+        y = -(y + args.viewport().y);
+
+        drawingContext.lineTo(x * scale, y * scale);
+    }
+
+    function circle(x, y, r) {
+        x = x + args.viewport().x;
+        y = -(y + args.viewport().y);
+
+        drawingContext.arc(x * scale, y * scale, r * scale, 0, Math.PI * 2);
     }
 
     return {
