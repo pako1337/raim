@@ -8,7 +8,7 @@
     var input;
     var gfx;
     var canvas;
-    var lastFrameTime;
+    var lastPlayerListUpdate;
     var viewport = { x: 0, y: 0 };
     var originalSize = { x: 1600, y: 861 };
     var scale = 1;
@@ -40,8 +40,6 @@
             playerId = null;
             singOut();
         }
-
-        players.updateLeaderboard(gameObjects);
     };
 
     var getCurrentPlayer = function () {
@@ -71,9 +69,9 @@
     }
 
     var processFrame = function (timestamp) {
-        if (!lastFrameTime)
-            lastFrameTime = timestamp;
-
+        if (!lastPlayerListUpdate) {
+            lastPlayerListUpdate = timestamp;
+        }
 
         if (playerInput &&
             (playerInput.keysInput != previousPlayerInput.keysInput ||
@@ -91,7 +89,11 @@
 
         gfx.drawArena(gameObjects);
 
-        lastFrameTime = timestamp;
+        if (timestamp - lastPlayerListUpdate > 2000) {
+            lastPlayerListUpdate = timestamp;
+            players.updateLeaderboard(gameObjects);
+        }
+
         requestAnimationFrame(processFrame);
     };
 
