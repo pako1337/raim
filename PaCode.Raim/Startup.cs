@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using System.IO;
 using System.Threading;
 using Owin;
 
@@ -10,6 +12,7 @@ namespace PaCode.Raim
         {
             builder.SanitizeThreadCulture();
             builder.MapSignalR();
+            Directory.SetCurrentDirectory(AppDomain.CurrentDomain.BaseDirectory);
         }
     }
 

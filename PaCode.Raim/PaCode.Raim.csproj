@@ -113,6 +113,9 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ArenaDefinitions\Arena51.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Content\arena.js" />
     <Content Include="Content\userInput.js" />
     <Content Include="Content\keysInput.js" />

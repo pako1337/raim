@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using PaCode.Raim.Home;
 
@@ -10,17 +11,38 @@ namespace PaCode.Raim.Model
         private static Random rnd = new Random();
         private static object _lock = new object();
         private CollisionEngine _collisionEngine;
+        private Vector2d _arenaSize;
 
-        public Vector2d ArenaSize { get { return new Vector2d(1500, 1300); } }
+        public Vector2d ArenaSize { get { return _arenaSize; } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
-        public List<Obstacle> Obstacles;
+        public List<Obstacle> Obstacles = new List<Obstacle>();
 
         public Arena()
         {
             _collisionEngine = new CollisionEngine(this);
 
+            using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "ArenaDefinitions/Arena51.txt")))
+            {
+                var size = reader.ReadLine()
+                                 .Split(new[] { ',' },  StringSplitOptions.RemoveEmptyEntries)
+                                 .Select(s => double.Parse(s))
+                                 .ToArray();
+                _arenaSize = new Vector2d(size[0], size[1]);
+
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    var obstaclePoints = line.Split(';')
+                                             .Select(s => s.Split(','))
+                                             .Select(s => new[] { double.Parse(s[0]), double.Parse(s[1]) })
+                                             .Select(s => new Vector2d(s[0], s[1]))
+                                             .ToArray();
+                    Obstacles.Add(new Obstacle(obstaclePoints));
+                }
+            }
+
             int borderMargin = 700;
-            Obstacles = new List<Obstacle>() {
+            Obstacles.AddRange(new List<Obstacle>() {
                 new Obstacle( // top
                     new Vector2d(-borderMargin, ArenaSize.Y),
                     new Vector2d(-borderMargin, ArenaSize.Y + borderMargin),
@@ -40,13 +62,8 @@ namespace PaCode.Raim.Model
                     new Vector2d(0, 0),
                     new Vector2d(-borderMargin, 0),
                     new Vector2d(-borderMargin, ArenaSize.Y),
-                    new Vector2d(0, ArenaSize.Y)),
-                new Obstacle(
-                    new Vector2d(150, 200),
-                    new Vector2d(200, 175),
-                    new Vector2d(150, 100),
-                    new Vector2d(100, 125)),
-            };
+                    new Vector2d(0, ArenaSize.Y))
+            });
         }
 
         public Player RegisterPlayer(string name)
