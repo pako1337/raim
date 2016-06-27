@@ -26,7 +26,7 @@ namespace PaCode.Raim.Model
                 Position = position,
                 FacingDirection = directionUnit,
                 Speed = directionUnit.Scale(_speed),
-                TimeToLive = (int)TimeSpan.FromSeconds(3).TotalMilliseconds,
+                TimeToLive = (int)TimeSpan.FromMilliseconds(2750).TotalMilliseconds,
                 Color = color,
             };
         }
