@@ -16,7 +16,7 @@
         patternContext.lineTo(patternSize.x / 2, patternSize.y);
         patternContext.moveTo(patternSize.x, patternSize.y);
         patternContext.lineTo(0, patternSize.y);
-        patternContext.strokeStyle = "rgba(0,0,0,0.2)";
+        patternContext.strokeStyle = "rgba(0,0,0,0.15)";
         patternContext.stroke();
 
         return drawingContext.createPattern(patternCanvas, "repeat");
