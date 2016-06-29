@@ -68,3 +68,12 @@ body {
         height: 2em;
         margin: auto;
     }
+
+    #help {
+        font-size: 0.6em;
+        margin-top: 2em;
+    }
+
+    #help span {
+        display: block;
+    }
