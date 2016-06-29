@@ -32,9 +32,15 @@ namespace PaCode.Raim.Model
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    var obstaclePoints = line.Split(';')
-                                             .Select(s => s.Split(','))
-                                             .Select(s => new[] { double.Parse(s[0]), double.Parse(s[1]) })
+                    if (string.IsNullOrWhiteSpace(line) ||
+                        line.StartsWith("--"))
+                        continue;
+
+                    var obstaclePoints = line.Split(',')
+                                             .Select(s => s.Trim())
+                                             .Select((s, i) => new { s, index = i / 2 })
+                                             .GroupBy(s => s.index)
+                                             .Select(s => new[] { double.Parse(s.First().s), double.Parse(s.Skip(1).First().s) })
                                              .Select(s => new Vector2d(s[0], s[1]))
                                              .ToArray();
                     Obstacles.Add(new Obstacle(obstaclePoints));
