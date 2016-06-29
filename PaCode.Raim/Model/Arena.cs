@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using PaCode.Raim.Home;
 
 namespace PaCode.Raim.Model
@@ -16,6 +17,7 @@ namespace PaCode.Raim.Model
         public Vector2d ArenaSize { get { return _arenaSize; } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
         public List<Obstacle> Obstacles = new List<Obstacle>();
+        Regex _commentRegex = new Regex("--.*", RegexOptions.Compiled | RegexOptions.Singleline);
 
         public Arena()
         {
@@ -32,8 +34,8 @@ namespace PaCode.Raim.Model
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    if (string.IsNullOrWhiteSpace(line) ||
-                        line.StartsWith("--"))
+                    line = _commentRegex.Replace(line, "");
+                    if (string.IsNullOrWhiteSpace(line))
                         continue;
 
                     var obstaclePoints = line.Split(',')
