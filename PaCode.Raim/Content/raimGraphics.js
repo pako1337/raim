@@ -127,24 +127,34 @@
     }
 
     function moveTo(x, y) {
-        x = x + args.viewport().x;
-        y = -(y + args.viewport().y);
+        var coord = applyViewportAndScale(x, y);
 
-        drawingContext.moveTo(x * scale, y * scale);
+        drawingContext.moveTo(coord.x, coord.y);
     }
 
     function lineTo(x, y) {
-        x = x + args.viewport().x;
-        y = -(y + args.viewport().y);
+        var coord = applyViewportAndScale(x, y);
 
-        drawingContext.lineTo(x * scale, y * scale);
+        drawingContext.lineTo(coord.x, coord.y);
     }
 
     function circle(x, y, r) {
+        var coord = applyViewportAndScale(x, y);
+
+        drawingContext.arc(coord.x, coord.y, r * scale, 0, Math.PI * 2);
+    }
+
+    function applyViewportAndScale(x, y) {
         x = x + args.viewport().x;
         y = -(y + args.viewport().y);
 
-        drawingContext.arc(x * scale, y * scale, r * scale, 0, Math.PI * 2);
+        x *= scale;
+        y *= scale;
+
+        return {
+            x: Math.floor(x),
+            y: Math.floor(y)
+        };
     }
 
     return {
