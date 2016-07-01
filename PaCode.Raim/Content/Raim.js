@@ -51,15 +51,23 @@
                 },
                 signOut: function () {
                     if (!connected) return;
+                    gameArena.stop();
 
                     $.connection.hub.stop();
                     connected = false;
                     document.getElementById("registration").style.display = "block";
                     document.getElementById("playerName").focus();
+
                     var arenaElement = document.getElementById("arena");
                     arenaElement.style.display = "none";
+
                     while (arenaElement.firstChild) {
                         arenaElement.removeChild(arenaElement.firstChild);
+                    }
+
+                    var playersList = document.getElementById("playersList");
+                    while (playersList.firstChild) {
+                        playersList.removeChild(playersList.firstChild);
                     }
                 }
             });

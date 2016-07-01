@@ -15,12 +15,15 @@
     var arena;
     var playerInput,
         previousPlayerInput = { keysInput: 0, facingDirection: { x: 0, y: 0 } };
+    var connected;
 
     var gameObjects;
 
     var setPlayer = function (p) {
         playerId = p;
         resizeCanvas();
+        connected = true;
+        requestAnimationFrame(processFrame);
     };
 
     var addNewPlayer = function (who) {
@@ -95,7 +98,8 @@
             players.updateLeaderboard(gameObjects);
         }
 
-        requestAnimationFrame(processFrame);
+        if (connected)
+            requestAnimationFrame(processFrame);
     };
 
     var resizeCanvas = function () {
@@ -145,18 +149,21 @@
             scale: function () { return scale; },
         });
 
-        requestAnimationFrame(processFrame);
-
         input = new userInput({
             inputChanged: inputChange,
         });
     })();
+
+    var stop = function () {
+        connected = false;
+    };
 
     return {
         addNewPlayer: addNewPlayer,
         removePlayer: removePlayer,
         playerMoved: playerMoved,
         setPlayer: setPlayer,
-        setupArena: setupArena
+        setupArena: setupArena,
+        stop: stop
     };
 };
