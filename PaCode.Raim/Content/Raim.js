@@ -2,22 +2,7 @@
     var raim = $.connection.raimHub;
     var connected = false;
 
-    var gameArena = new arena({
-        playerMoving: function (e) {
-            if (!connected) return;
-
-            raim.server.playerMoving(e);
-        },
-        signOut: function () {
-            if (!connected) return;
-
-            $.connection.hub.stop();
-            connected = false;
-            document.getElementById("registration").style.display = "block";
-            document.getElementById("playerName").focus();
-            var arenaElement = document.getElementById("arena").style.display = "none";
-        }
-    });
+    var gameArena;
 
     var _playerId;
 
@@ -27,17 +12,17 @@
         gameArena.setPlayer(id);
     };
 
-    raim.client.setupArena = gameArena.setupArena;
+    raim.client.setupArena = function (arenaData) { gameArena.setupArena(arenaData); };
 
-    raim.client.registered = gameArena.addNewPlayer;
-    raim.client.signedOff = gameArena.removePlayer;
+    raim.client.registered = function (player) { gameArena.addNewPlayer(player); }
+    raim.client.signedOff = function (player) { gameArena.removePlayer(player); }
     raim.client.otherPlayers = function (players) {
         for (var i = 0; i < players.length; i++) {
             gameArena.addNewPlayer(players[i]);
         }
     };
 
-    raim.client.playerMoved = gameArena.playerMoved;
+    raim.client.playerMoved = function (gameState) { gameArena.playerMoved(gameState); }
 
     function signOff() {
         console.log("unloading");
@@ -57,6 +42,27 @@
 
             document.getElementById("registration").style.display = "none";
             var arenaElement = document.getElementById("arena").style.display = "block";
+
+            gameArena = new arena({
+                playerMoving: function (e) {
+                    if (!connected) return;
+
+                    raim.server.playerMoving(e);
+                },
+                signOut: function () {
+                    if (!connected) return;
+
+                    $.connection.hub.stop();
+                    connected = false;
+                    document.getElementById("registration").style.display = "block";
+                    document.getElementById("playerName").focus();
+                    var arenaElement = document.getElementById("arena");
+                    arenaElement.style.display = "none";
+                    while (arenaElement.firstChild) {
+                        arenaElement.removeChild(arenaElement.firstChild);
+                    }
+                }
+            });
 
             var name = playerName.value || "random player";
             localStorage.setItem("playerName", name);
