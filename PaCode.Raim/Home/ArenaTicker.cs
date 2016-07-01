@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using PaCode.Raim.Model;
 
 namespace PaCode.Raim.Home
 {
@@ -57,6 +58,12 @@ namespace PaCode.Raim.Home
 
             var go = RaimHub.arena.UpdatePositions(DateTime.Now);
             _clients.All.PlayerMoved(go);
+
+            var removedPlayers = RaimHub.arena.RemoveDestroyedObjects().OfType<Player>();
+            foreach (var player in removedPlayers)
+            {
+                _clients.All.SignedOff(player.Name);
+            }
         }
     }
 }

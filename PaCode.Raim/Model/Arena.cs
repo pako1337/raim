@@ -114,10 +114,17 @@ namespace PaCode.Raim.Model
                 }
 
                 _lastUpdateTime = updateTime;
-                GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
 
                 return GameObjects.ToArray();
             }
+        }
+
+        public IEnumerable<IGameObject> RemoveDestroyedObjects()
+        {
+            var objectsToRemove = GameObjects.Where(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
+            GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
+
+            return objectsToRemove;
         }
 
         public void ProcessInput(PlayerInput input, Player player)
