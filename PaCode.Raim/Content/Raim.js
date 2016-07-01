@@ -56,7 +56,6 @@
                     $.connection.hub.stop();
                     connected = false;
                     document.getElementById("registration").style.display = "block";
-                    document.getElementById("playerName").focus();
 
                     var arenaElement = document.getElementById("arena");
                     arenaElement.style.display = "none";
