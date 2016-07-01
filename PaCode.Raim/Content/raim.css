@@ -58,15 +58,27 @@ body {
     #playerName {
         font-size: 1em;
         width: 100%;
+        border-radius: 0.5em;
+        border: solid #c24;
+        padding: 0.2em;
     }
 
     #playButton {
         display:block;
         font-family: cursive;
         font-size: 0.7em;
-        width: 4em;
-        height: 2em;
-        margin: auto;
+        border: solid #c24;
+        border-radius: 0.7em;
+        background-color: #c24;
+        color: #ffa;
+        width: 6em;
+        height: 3em;
+        margin: 0.5em auto auto auto;
+    }
+
+    #playerName:focus,
+    #playButton:focus {
+        outline: none;
     }
 
     #help {
