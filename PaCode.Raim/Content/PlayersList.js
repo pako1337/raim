@@ -41,6 +41,8 @@
             players.removeChild(players.firstChild);
         }
 
+        _players.sort(function (p1, p2) { return p1.Score - p2.Score; }).reverse();
+
         for (var i = 0; i < _players.length; i++) {
             var player = _players[i];
             if (!player) continue;
