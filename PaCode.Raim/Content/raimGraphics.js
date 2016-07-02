@@ -1,4 +1,4 @@
-﻿var raimGraphics = function (args) {
+var raimGraphics = function (args) {
     var drawingContext = args.canvas().getContext("2d");
     var scale = 1;
     var canvas;
@@ -84,24 +84,22 @@
 
     function drawPlayer(player) {
         var x, y;
-        //drawingContext.beginPath();
 
-        //drawingContext.fillStyle = player.Color || "rgba(255, 0, 0, 0.7)";
-        //drawingContext.strokeStyle = "rgba(255, 0, 0, 0.7)";
-
-        //circle(player.Position.X, player.Position.Y, player.Size);
-        //drawingContext.fill();
-
-        //drawingContext.closePath();
-
+        drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.rect(player.Position.X, player.Position.Y, player.Size * 2, player.Size * 2);
+        drawingContext.translate( (player.Position.X - player.Size + args.viewport().x) * scale,
+                                 -(player.Position.Y - player.Size + args.viewport().y) * scale);
+        drawingContext.scale(scale, -scale);
+
+        drawingContext.rect(0, 0, player.Size * 2, player.Size * 2);
+
 
         drawingContext.fillStyle = playerPattern;
         drawingContext.fill();
 
         drawingContext.closePath();
+        drawingContext.restore();
 
 
         drawingContext.beginPath();
