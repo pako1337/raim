@@ -22,6 +22,26 @@
         return drawingContext.createPattern(patternCanvas, "repeat");
     })();
 
+    var playerPattern = (function () {
+        var canvasPattern = document.createElement("canvas");
+        canvasPattern.width = 40;
+        canvasPattern.height = 40;
+        var context = canvasPattern.getContext("2d");
+
+        context.beginPath();
+
+        context.arc(20, 20, 20, 0, 2 * Math.PI);
+
+        context.fillStyle = "rgba(255, 0, 0, 1)";
+        context.strokeStyle = "rgba(255, 255, 0, 1)";
+        context.fill();
+        context.stroke();
+
+        context.closePath();
+
+        return drawingContext.createPattern(canvasPattern, "repeat");
+    })();
+
     var drawArena = function (gameObjects) {
         canvas = args.canvas();
 
@@ -64,15 +84,25 @@
 
     function drawPlayer(player) {
         var x, y;
+        //drawingContext.beginPath();
+
+        //drawingContext.fillStyle = player.Color || "rgba(255, 0, 0, 0.7)";
+        //drawingContext.strokeStyle = "rgba(255, 0, 0, 0.7)";
+
+        //circle(player.Position.X, player.Position.Y, player.Size);
+        //drawingContext.fill();
+
+        //drawingContext.closePath();
+
         drawingContext.beginPath();
 
-        drawingContext.fillStyle = player.Color || "rgba(255, 0, 0, 0.7)";
-        drawingContext.strokeStyle = "rgba(255, 0, 0, 0.7)";
+        drawingContext.rect(player.Position.X, player.Position.Y, player.Size * 2, player.Size * 2);
 
-        circle(player.Position.X, player.Position.Y, player.Size);
+        drawingContext.fillStyle = playerPattern;
         drawingContext.fill();
 
         drawingContext.closePath();
+
 
         drawingContext.beginPath();
 
