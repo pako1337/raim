@@ -50,7 +50,9 @@
                     raim.server.playerMoving(e);
                 },
                 signOut: function () {
-                    if (!connected) return;
+                    if (!connected)
+                        return;
+
                     gameArena.stop();
 
                     $.connection.hub.stop();
