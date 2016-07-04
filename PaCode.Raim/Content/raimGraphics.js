@@ -42,7 +42,7 @@
         backgroundContext = background.getContext("2d");
     })();
 
-    var playerPattern = (function () {
+    var playerPatternBuilder = function (fillStyle, strokeStyle) {
         var canvasPattern = document.createElement("canvas");
         canvasPattern.width = 40;
         canvasPattern.height = 40;
@@ -52,14 +52,32 @@
 
         context.arc(20, 20, 20, 0, 2 * Math.PI);
 
-        context.fillStyle = "rgba(255, 0, 0, 1)";
-        context.strokeStyle = "rgba(255, 255, 0, 1)";
+        context.fillStyle = fillStyle;
+        context.strokeStyle = strokeStyle;
         context.fill();
         context.stroke();
 
         context.closePath();
 
         return drawingContext.createPattern(canvasPattern, "repeat");
+    };
+
+    var playerPatterns = (function () {
+        var playerStyles = [
+            {name: "orange", style: "rgba(245,85,26,1)" },
+            {name: "green", style: "rgba(125,188,57,1)"},
+            {name: "blue", style: "rgba(7,92,191,1)"  },
+            {name: "darkyellow", style: "rgba(174,173,58,1)"},
+            {name: "aqua", style: "rgba(54,201,240,1)" }
+        ];
+
+        patterns = {};
+        for (var i = 0; i < playerStyles.length; i++) {
+            var playerStyle = playerStyles[i];
+            patterns[playerStyle.name] = playerPatternBuilder(playerStyle.style, playerStyle.style);
+        }
+
+        return patterns;
     })();
 
     var bulletPattern = (function () {
@@ -121,7 +139,7 @@
 
         drawingContext.rect(0, 0, player.Size * 2, player.Size * 2);
 
-        drawingContext.fillStyle = playerPattern;
+        drawingContext.fillStyle = playerPatterns[player.Style || 'orange'];
         drawingContext.fill();
 
         drawingContext.closePath();
