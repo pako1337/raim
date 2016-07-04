@@ -50,7 +50,7 @@
 
         context.beginPath();
 
-        context.arc(20, 20, 20, 0, 2 * Math.PI);
+        context.arc(20, 20, 19, 0, 2 * Math.PI);
 
         context.fillStyle = fillStyle;
         context.strokeStyle = strokeStyle;
