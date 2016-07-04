@@ -1,4 +1,4 @@
-var raimGraphics = function (args) {
+﻿var raimGraphics = function (args) {
     var drawingContext = args.canvas().getContext("2d");
     var scale = 1;
     var canvas;
@@ -42,6 +42,24 @@ var raimGraphics = function (args) {
         return drawingContext.createPattern(canvasPattern, "repeat");
     })();
 
+    var bulletPattern = (function () {
+        var canvasPattern = document.createElement("canvas");
+        canvasPattern.width = 4;
+        canvasPattern.height = 4;
+        var context = canvasPattern.getContext("2d");
+
+        context.beginPath();
+
+        context.arc(2, 2, 2, 0, 2 * Math.PI);
+
+        context.fillStyle = "rgba(0, 0, 0, 1)";
+        context.fill();
+
+        context.closePath();
+
+        return drawingContext.createPattern(canvasPattern, "repeat");
+    })();
+
     var drawArena = function (gameObjects) {
         canvas = args.canvas();
 
@@ -71,20 +89,22 @@ var raimGraphics = function (args) {
     };
 
     function drawBullet(bullet) {
+        drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.strokeStyle = "rgba(0, 0, 0, 1)"
-        drawingContext.fillStyle = bullet.Color || "rgba(0, 0, 0, 1)";
+        drawingContext.translate( (bullet.Position.X - bullet.Size + args.viewport().x) * scale,
+                                 -(bullet.Position.Y - bullet.Size + args.viewport().y) * scale);
+        drawingContext.scale(scale, -scale);
 
-        circle(bullet.Position.X, bullet.Position.Y, bullet.Size);
+        drawingContext.rect(0, 0, bullet.Size * 2, bullet.Size * 2);
+
+        drawingContext.fillStyle = bulletPattern;
         drawingContext.fill();
-        drawingContext.stroke();
         drawingContext.closePath();
+        drawingContext.restore();
     }
 
     function drawPlayer(player) {
-        var x, y;
-
         drawingContext.save();
         drawingContext.beginPath();
 
@@ -113,8 +133,8 @@ var raimGraphics = function (args) {
         directionVector.X /= length;
         directionVector.Y /= length;
 
-        x = player.Position.X + directionVector.X * player.Size / 2;
-        y = player.Position.Y + directionVector.Y * player.Size / 2;
+        var x = player.Position.X + directionVector.X * player.Size / 2;
+        var y = player.Position.Y + directionVector.Y * player.Size / 2;
         moveTo(x, y);
 
         x = player.Position.X + directionVector.X * player.Size;
