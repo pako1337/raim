@@ -1,11 +1,49 @@
 ﻿var raimGraphics = function (args) {
-    var drawingContext = args.canvas().getContext("2d");
-    var backgroundContext = args.background().getContext("2d");
+    var drawingContext, backgroundContext;
     var scale = 1;
-    var canvas = args.canvas();
-    var background = args.background();
+    var canvas, background;
+    var originalSize = { x: 1600, y: 861 };
 
     var patternSize = { x: 30, y: 30 };
+
+    var resizeCanvas = function () {
+        var arenaElement = document.getElementById(args.arenaHandler);
+        var widthDiff = originalSize.x - arenaElement.offsetWidth;
+        var heightDiff = originalSize.y - arenaElement.offsetHeight;
+
+        var aspectRatio = originalSize.x / originalSize.y;
+        var w, h;
+
+        if (Math.abs(widthDiff) > Math.abs(heightDiff)) {
+            w = arenaElement.offsetWidth;
+            h = w / aspectRatio;
+        } else {
+            h = arenaElement.offsetHeight;
+            w = h * aspectRatio;
+        }
+
+        canvas.width = w;
+        canvas.height = h;
+        background.width = w;
+        background.height = h;
+
+        scale = canvas.width / originalSize.x;
+    };
+
+    (function () {
+        background = document.createElement("canvas");
+        document.getElementById(args.arenaHandler).appendChild(background);
+
+        canvas = document.createElement("canvas");
+        document.getElementById(args.arenaHandler).appendChild(canvas);
+        resizeCanvas();
+
+        window.addEventListener('resize', resizeCanvas);
+
+        drawingContext = canvas.getContext("2d");
+        backgroundContext = background.getContext("2d");
+    })();
+
     var backgroundPattern = (function () {
         var patternCanvas = document.createElement("canvas");
         patternCanvas.width  = patternSize.x;
@@ -64,7 +102,6 @@
 
     var drawArena = function (gameObjects) {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
-        scale = args.scale();
         
         drawBackground();
 
@@ -182,6 +219,9 @@
     }
 
     return {
-        drawArena: drawArena
+        drawArena: drawArena,
+        originalSize: originalSize,
+        scale: function () { return scale; },
+        resizeCanvas: resizeCanvas
     };
 };
