@@ -13,7 +13,7 @@
 
 #playersList {
     opacity: 0.7;
-    font-size: smaller;
+    font-size: 1.4em;
     display: inline-block;
     position: absolute;
     bottom: 5em;
