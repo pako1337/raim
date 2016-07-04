@@ -39,6 +39,10 @@
     bottom: 0.3em;
     left: 0.3em;
 }
+    
+    #arena canvas {
+        position: fixed;
+    }
 
 body {
     font-size: 13px;

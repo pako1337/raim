@@ -7,11 +7,9 @@
     var singOut;
     var input;
     var gfx;
-    var canvas;
+    var canvas, backgroundCanvas;
     var lastPlayerListUpdate;
     var viewport = { x: 0, y: 0 };
-    var originalSize = { x: 1600, y: 861 };
-    var scale = 1;
     var arena;
     var playerInput,
         previousPlayerInput = { keysInput: 0, facingDirection: { x: 0, y: 0 } };
@@ -21,7 +19,7 @@
 
     var setPlayer = function (p) {
         playerId = p;
-        resizeCanvas();
+        gfx.resizeCanvas();
         connected = true;
         requestAnimationFrame(processFrame);
     };
@@ -54,8 +52,8 @@
         var player = getCurrentPlayer();
         if (player == undefined) return;
 
-        input.mouse.x /= scale;
-        input.mouse.y /= scale;
+        input.mouse.x /= gfx.scale();
+        input.mouse.y /= gfx.scale();
         input.mouse.x = Math.round(input.mouse.x - viewport.x);
         input.mouse.y = Math.round(-input.mouse.y - viewport.y);
 
@@ -87,8 +85,8 @@
 
         var currentPlayer = getCurrentPlayer();
         if (currentPlayer !== undefined) {
-            viewport.x = originalSize.x / 2 - currentPlayer.Position.X;
-            viewport.y = -originalSize.y / 2 - currentPlayer.Position.Y;
+            viewport.x = gfx.originalSize.x / 2 - currentPlayer.Position.X;
+            viewport.y = -gfx.originalSize.y / 2 - currentPlayer.Position.Y;
         }
 
         gfx.drawArena(gameObjects);
@@ -100,28 +98,6 @@
 
         if (connected)
             requestAnimationFrame(processFrame);
-    };
-
-    var resizeCanvas = function () {
-        var arenaElement = document.getElementById(arenaHandler);
-        var widthDiff = originalSize.x - arenaElement.offsetWidth;
-        var heightDiff = originalSize.y - arenaElement.offsetHeight;
-
-        var aspectRatio = originalSize.x / originalSize.y;
-        var w, h;
-
-        if (Math.abs(widthDiff) > Math.abs(heightDiff)) {
-            w = arenaElement.offsetWidth;
-            h = w / aspectRatio;
-        } else {
-            h = arenaElement.offsetHeight;
-            w = h * aspectRatio;
-        }
-
-        canvas.width = w;
-        canvas.height = h;
-
-        scale = canvas.width / originalSize.x;
     };
 
     (function init() {
@@ -136,17 +112,10 @@
         viewport.x = 0;
         viewport.y = arenaElement.offsetHeight;
 
-        canvas = document.createElement("canvas");
-        document.getElementById(arenaHandler).appendChild(canvas);
-        resizeCanvas();
-
-        window.addEventListener('resize', resizeCanvas);
-
         gfx = new raimGraphics({
-            canvas: function () { return canvas; },
+            arenaHandler: arenaHandler,
             viewport: function () { return viewport; },
             arena: function () { return arena; },
-            scale: function () { return scale; },
         });
 
         input = new userInput({
