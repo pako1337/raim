@@ -141,7 +141,6 @@
 
         drawingContext.rect(0, 0, player.Size * 2, player.Size * 2);
 
-
         drawingContext.fillStyle = playerPattern;
         drawingContext.fill();
 
