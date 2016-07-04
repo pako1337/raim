@@ -120,30 +120,6 @@
 
         drawingContext.closePath();
         drawingContext.restore();
-
-
-        drawingContext.beginPath();
-
-        drawingContext.strokeStyle = "rgba(0, 255, 0, 1)";
-        drawingContext.fillStyle = "rgba(0, 255, 0, 1)";
-
-        var directionVector = { X: player.FacingDirection.X, Y: player.FacingDirection.Y };
-        var length = directionVector.X * directionVector.X + directionVector.Y * directionVector.Y;
-        length = Math.sqrt(length);
-        directionVector.X /= length;
-        directionVector.Y /= length;
-
-        var x = player.Position.X + directionVector.X * player.Size / 2;
-        var y = player.Position.Y + directionVector.Y * player.Size / 2;
-        moveTo(x, y);
-
-        x = player.Position.X + directionVector.X * player.Size;
-        y = player.Position.Y + directionVector.Y * player.Size;
-        lineTo(x, y);
-        drawingContext.stroke();
-        drawingContext.fill();
-
-        drawingContext.closePath();
     }
 
     function drawObstacles() {
