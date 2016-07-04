@@ -1,7 +1,9 @@
 ﻿var raimGraphics = function (args) {
     var drawingContext = args.canvas().getContext("2d");
+    var backgroundContext = args.background().getContext("2d");
     var scale = 1;
-    var canvas;
+    var canvas = args.canvas();
+    var background = args.background();
 
     var patternSize = { x: 30, y: 30 };
     var backgroundPattern = (function () {
@@ -61,22 +63,10 @@
     })();
 
     var drawArena = function (gameObjects) {
-        canvas = args.canvas();
-
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
         scale = args.scale();
         
-        var backgroundX = Math.round(args.viewport().x % patternSize.x) * scale;
-        var backgroundY = Math.round(args.viewport().y % patternSize.y) * scale;
-        drawingContext.save();
-        drawingContext.translate(backgroundX, -backgroundY);
-        drawingContext.rect(0, 0, canvas.width, canvas.height);
-        drawingContext.fillStyle = backgroundPattern;
-        drawingContext.scale(scale, scale);
-        drawingContext.fill();
-        drawingContext.restore();
-
-        drawObstacles();
+        drawBackground();
 
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
@@ -122,50 +112,60 @@
         drawingContext.restore();
     }
 
+    function drawBackground() {
+        backgroundContext.clearRect(0, 0, background.width, background.height);
+
+        var backgroundX = Math.round(args.viewport().x % patternSize.x) * scale;
+        var backgroundY = Math.round(args.viewport().y % patternSize.y) * scale;
+        backgroundContext.save();
+        backgroundContext.translate(backgroundX, -backgroundY);
+        backgroundContext.rect(0, 0, canvas.width, canvas.height);
+        backgroundContext.fillStyle = backgroundPattern;
+        backgroundContext.scale(scale, scale);
+        backgroundContext.fill();
+        backgroundContext.restore();
+
+        drawObstacles();
+    }
+
     function drawObstacles() {
         if (args.arena() == undefined) return;
 
         var obstacles = args.arena().Obstacles;
         for (var i = 0; i < obstacles.length; i++) {
-            drawPolygon(obstacles[i].Points);
+            drawPolygon(obstacles[i].Points, backgroundContext);
         }
     }
 
-    function drawPolygon(points) {
+    function drawPolygon(points, context) {
         if (points.length < 2) return;
 
-        drawingContext.beginPath();
+        context.beginPath();
 
-        moveTo(points[0].X, points[0].Y);
+        moveTo(points[0].X, points[0].Y, context);
         for (var i = 1; i < points.length; i++) {
-            lineTo(points[i].X, points[i].Y);
+            lineTo(points[i].X, points[i].Y, context);
         }
 
-        lineTo(points[0].X, points[0].Y);
+        lineTo(points[0].X, points[0].Y, context);
 
-        drawingContext.strokeStyle = "rgba(0, 0, 0, 1)";
-        drawingContext.fillStyle = "rgba(200, 200, 200, 1)";
-        drawingContext.stroke();
-        drawingContext.fill();
-        drawingContext.closePath();
+        context.strokeStyle = "rgba(0, 0, 0, 1)";
+        context.fillStyle = "rgba(200, 200, 200, 1)";
+        context.stroke();
+        context.fill();
+        context.closePath();
     }
 
-    function moveTo(x, y) {
+    function moveTo(x, y, context) {
         var coord = applyViewportAndScale(x, y);
 
-        drawingContext.moveTo(coord.x, coord.y);
+        context.moveTo(coord.x, coord.y);
     }
 
-    function lineTo(x, y) {
+    function lineTo(x, y, context) {
         var coord = applyViewportAndScale(x, y);
 
-        drawingContext.lineTo(coord.x, coord.y);
-    }
-
-    function circle(x, y, r) {
-        var coord = applyViewportAndScale(x, y);
-
-        drawingContext.arc(coord.x, coord.y, r * scale, 0, Math.PI * 2);
+        context.lineTo(coord.x, coord.y);
     }
 
     function applyViewportAndScale(x, y) {

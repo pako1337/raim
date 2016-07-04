@@ -7,7 +7,7 @@
     var singOut;
     var input;
     var gfx;
-    var canvas;
+    var canvas, backgroundCanvas;
     var lastPlayerListUpdate;
     var viewport = { x: 0, y: 0 };
     var originalSize = { x: 1600, y: 861 };
@@ -120,6 +120,8 @@
 
         canvas.width = w;
         canvas.height = h;
+        backgroundCanvas.width = w;
+        backgroundCanvas.height = h;
 
         scale = canvas.width / originalSize.x;
     };
@@ -136,6 +138,9 @@
         viewport.x = 0;
         viewport.y = arenaElement.offsetHeight;
 
+        backgroundCanvas = document.createElement("canvas");
+        document.getElementById(arenaHandler).appendChild(backgroundCanvas);
+        
         canvas = document.createElement("canvas");
         document.getElementById(arenaHandler).appendChild(canvas);
         resizeCanvas();
@@ -144,6 +149,7 @@
 
         gfx = new raimGraphics({
             canvas: function () { return canvas; },
+            background: function() { return backgroundCanvas; },
             viewport: function () { return viewport; },
             arena: function () { return arena; },
             scale: function () { return scale; },
