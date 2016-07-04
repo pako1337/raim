@@ -4,8 +4,6 @@
     var canvas, background;
     var originalSize = { x: 1600, y: 861 };
 
-    var patternSize = { x: 30, y: 30 };
-
     var resizeCanvas = function () {
         var arenaElement = document.getElementById(args.arenaHandler);
         var widthDiff = originalSize.x - arenaElement.offsetWidth;
@@ -42,24 +40,6 @@
 
         drawingContext = canvas.getContext("2d");
         backgroundContext = background.getContext("2d");
-    })();
-
-    var backgroundPattern = (function () {
-        var patternCanvas = document.createElement("canvas");
-        patternCanvas.width  = patternSize.x;
-        patternCanvas.height = patternSize.y;
-        var patternContext = patternCanvas.getContext("2d");
-
-        patternContext.beginPath();
-        patternContext.moveTo(patternSize.x, 0);
-        patternContext.lineTo(0, 0);
-        patternContext.lineTo(patternSize.x / 2, patternSize.y);
-        patternContext.moveTo(patternSize.x, patternSize.y);
-        patternContext.lineTo(0, patternSize.y);
-        patternContext.strokeStyle = "rgba(0,0,0,0.15)";
-        patternContext.stroke();
-
-        return drawingContext.createPattern(patternCanvas, "repeat");
     })();
 
     var playerPattern = (function () {
@@ -148,20 +128,48 @@
         drawingContext.restore();
     }
 
+    var backgroundTileSize = { x: 30, y: 30 };
+    var backgroundPattern = (function () {
+        var patternCanvas = document.createElement("canvas");
+        patternCanvas.width = backgroundTileSize.x;
+        patternCanvas.height = backgroundTileSize.y;
+        var patternContext = patternCanvas.getContext("2d");
+
+        patternContext.beginPath();
+        patternContext.moveTo(backgroundTileSize.x, 0);
+        patternContext.lineTo(0, 0);
+        patternContext.lineTo(backgroundTileSize.x / 2, backgroundTileSize.y);
+        patternContext.moveTo(backgroundTileSize.x, backgroundTileSize.y);
+        patternContext.lineTo(0, backgroundTileSize.y);
+        patternContext.strokeStyle = "rgba(0,0,0,0.15)";
+        patternContext.stroke();
+
+        return drawingContext.createPattern(patternCanvas, "repeat");
+    })();
+
+    var prevScale = 0, prevViewportX = 0, prevViewportY = 0;
     function drawBackground() {
+        if (prevScale === scale && prevViewportX === args.viewport().x && prevViewportY === args.viewport().y)
+            return;
+
         backgroundContext.clearRect(0, 0, background.width, background.height);
 
-        var backgroundX = Math.round(args.viewport().x % patternSize.x) * scale;
-        var backgroundY = Math.round(args.viewport().y % patternSize.y) * scale;
+        var backgroundX = Math.round(args.viewport().x % backgroundTileSize.x) * scale;
+        var backgroundY = Math.round(args.viewport().y % backgroundTileSize.y) * scale;
+
         backgroundContext.save();
         backgroundContext.translate(backgroundX, -backgroundY);
-        backgroundContext.rect(0, 0, canvas.width, canvas.height);
+        backgroundContext.rect(0, 0, background.width, background.height);
         backgroundContext.fillStyle = backgroundPattern;
         backgroundContext.scale(scale, scale);
         backgroundContext.fill();
         backgroundContext.restore();
 
         drawObstacles();
+
+        prevScale = scale;
+        prevViewportX = args.viewport().x;
+        prevViewportY = args.viewport().y;
     }
 
     function drawObstacles() {
