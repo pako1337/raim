@@ -43,7 +43,7 @@
 
         _players.sort(function (p1, p2) { return p1.Score - p2.Score; }).reverse();
 
-        for (var i = 0; i < _players.length; i++) {
+        for (var i = 0; i < Math.min(_players.length, 10); i++) {
             var player = _players[i];
             if (!player) continue;
 
