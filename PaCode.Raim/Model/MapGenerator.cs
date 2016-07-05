@@ -136,24 +136,18 @@ namespace PaCode.Raim.Model
                     var current = _points[i % _points.Length];
                     var next = _points[(i + 1) % _points.Length];
 
-                    int xThickness = 0, yThickness = 0;
-
-                    if (current.X == next.X)
-                    {
+                    int xThickness = 0,
                         yThickness = 0;
-                        if (current.Y > next.Y)
-                            xThickness = -_thickness;
-                        else
-                            xThickness = _thickness;
-                    }
-                    else
-                    {
-                        xThickness = 0;
-                        if (current.X < next.X)
-                            yThickness = -_thickness;
-                        else
-                            yThickness = _thickness;
-                    }
+
+                    if (current.Y > next.Y)
+                        xThickness = -_thickness;
+                    else if (current.Y < next.Y)
+                        xThickness = _thickness;
+
+                    if (current.X < next.X)
+                        yThickness = -_thickness;
+                    else if (current.X > next.X)
+                        yThickness = _thickness;
 
                     yield return new Obstacle(
                         new Vector2d(current.X + xThickness, current.Y + yThickness),
