@@ -13,6 +13,7 @@ namespace PaCode.Raim.Model
         private static object _lock = new object();
         private CollisionEngine _collisionEngine;
         private Vector2d _arenaSize;
+        private const int MaxTimeBetweenFrames = 1000 / 20;
 
         public Vector2d ArenaSize { get { return _arenaSize; } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
@@ -96,18 +97,20 @@ namespace PaCode.Raim.Model
         {
             var updateTime = updateTimestamp ?? DateTime.Now;
 
-            var timeBetweenEvents = updateTime - _lastUpdateTime;
+            var timeBetweenEvents = (updateTime - _lastUpdateTime).TotalMilliseconds;
+            if (timeBetweenEvents > MaxTimeBetweenFrames)
+                timeBetweenEvents = MaxTimeBetweenFrames;
 
             lock (_lock)
             {
                 foreach (var gameObject in GameObjects)
                 {
-                    gameObject.Position = gameObject.Position.Add(gameObject.Speed.Scale(timeBetweenEvents.TotalSeconds));
+                    gameObject.Position = gameObject.Position.Add(gameObject.Speed.Scale(timeBetweenEvents / 1000));
 
                     if (gameObject is ILimitedTimelife)
                     {
                         var destroyable = ((ILimitedTimelife)gameObject);
-                        destroyable.RecordTimePassed((int)timeBetweenEvents.TotalMilliseconds);
+                        destroyable.RecordTimePassed((int)timeBetweenEvents);
                     }
 
                     _collisionEngine.CalculateCollisions(gameObject);
