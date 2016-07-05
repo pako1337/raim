@@ -105,6 +105,7 @@
     <Compile Include="Model\IDestroyable.cs" />
     <Compile Include="Model\IGameObject.cs" />
     <Compile Include="Model\ILimitedTimelife.cs" />
+    <Compile Include="Model\MapGenerator.cs" />
     <Compile Include="Model\Obstacle.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Range.cs" />

@@ -23,56 +23,57 @@ namespace PaCode.Raim.Model
         public Arena()
         {
             _collisionEngine = new CollisionEngine(this);
+            _arenaSize = new Vector2d(1600, 1000);
+            Obstacles.AddRange(new MapGenerator().Generate(ArenaSize));
+            //using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "ArenaDefinitions/Arena51.txt")))
+            //{
+            //    var size = reader.ReadLine()
+            //                     .Split(new[] { ',' },  StringSplitOptions.RemoveEmptyEntries)
+            //                     .Select(s => double.Parse(s))
+            //                     .ToArray();
+            //    _arenaSize = new Vector2d(size[0], size[1]);
 
-            using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "ArenaDefinitions/Arena51.txt")))
-            {
-                var size = reader.ReadLine()
-                                 .Split(new[] { ',' },  StringSplitOptions.RemoveEmptyEntries)
-                                 .Select(s => double.Parse(s))
-                                 .ToArray();
-                _arenaSize = new Vector2d(size[0], size[1]);
+            //    string line;
+            //    while ((line = reader.ReadLine()) != null)
+            //    {
+            //        line = _commentRegex.Replace(line, "");
+            //        if (string.IsNullOrWhiteSpace(line))
+            //            continue;
 
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    line = _commentRegex.Replace(line, "");
-                    if (string.IsNullOrWhiteSpace(line))
-                        continue;
+            //        var obstaclePoints = line.Split(',')
+            //                                 .Select(s => s.Trim())
+            //                                 .Select((s, i) => new { s, index = i / 2 })
+            //                                 .GroupBy(s => s.index)
+            //                                 .Select(s => new[] { double.Parse(s.First().s), double.Parse(s.Skip(1).First().s) })
+            //                                 .Select(s => new Vector2d(s[0], s[1]))
+            //                                 .ToArray();
+            //        Obstacles.Add(new Obstacle(obstaclePoints));
+            //    }
+            //}
 
-                    var obstaclePoints = line.Split(',')
-                                             .Select(s => s.Trim())
-                                             .Select((s, i) => new { s, index = i / 2 })
-                                             .GroupBy(s => s.index)
-                                             .Select(s => new[] { double.Parse(s.First().s), double.Parse(s.Skip(1).First().s) })
-                                             .Select(s => new Vector2d(s[0], s[1]))
-                                             .ToArray();
-                    Obstacles.Add(new Obstacle(obstaclePoints));
-                }
-            }
-
-            int borderMargin = 700;
-            Obstacles.AddRange(new List<Obstacle>() {
-                new Obstacle( // top
-                    new Vector2d(-borderMargin, ArenaSize.Y),
-                    new Vector2d(-borderMargin, ArenaSize.Y + borderMargin),
-                    new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y + borderMargin),
-                    new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y)),
-                new Obstacle( // right
-                    new Vector2d(ArenaSize.X, 0),
-                    new Vector2d(ArenaSize.X, ArenaSize.Y),
-                    new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y),
-                    new Vector2d(ArenaSize.X + borderMargin, 0)),
-                new Obstacle( // bottom
-                    new Vector2d(-borderMargin, 0),
-                    new Vector2d(ArenaSize.X + borderMargin, 0),
-                    new Vector2d(ArenaSize.X + borderMargin, -borderMargin),
-                    new Vector2d(-borderMargin, -borderMargin)),
-                new Obstacle( // left
-                    new Vector2d(0, 0),
-                    new Vector2d(-borderMargin, 0),
-                    new Vector2d(-borderMargin, ArenaSize.Y),
-                    new Vector2d(0, ArenaSize.Y))
-            });
+            //int borderMargin = 700;
+            //Obstacles.AddRange(new List<Obstacle>() {
+            //    new Obstacle( // top
+            //        new Vector2d(-borderMargin, ArenaSize.Y),
+            //        new Vector2d(-borderMargin, ArenaSize.Y + borderMargin),
+            //        new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y + borderMargin),
+            //        new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y)),
+            //    new Obstacle( // right
+            //        new Vector2d(ArenaSize.X, 0),
+            //        new Vector2d(ArenaSize.X, ArenaSize.Y),
+            //        new Vector2d(ArenaSize.X + borderMargin, ArenaSize.Y),
+            //        new Vector2d(ArenaSize.X + borderMargin, 0)),
+            //    new Obstacle( // bottom
+            //        new Vector2d(-borderMargin, 0),
+            //        new Vector2d(ArenaSize.X + borderMargin, 0),
+            //        new Vector2d(ArenaSize.X + borderMargin, -borderMargin),
+            //        new Vector2d(-borderMargin, -borderMargin)),
+            //    new Obstacle( // left
+            //        new Vector2d(0, 0),
+            //        new Vector2d(-borderMargin, 0),
+            //        new Vector2d(-borderMargin, ArenaSize.Y),
+            //        new Vector2d(0, ArenaSize.Y))
+            //});
         }
 
         public Player RegisterPlayer(string name)
