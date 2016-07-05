@@ -66,16 +66,26 @@
         notifyKeysChanged();
     }
 
-    (function () {
+    var startListening = function () {
         document.addEventListener("keydown", keyDown);
         document.addEventListener("keyup", keyUp);
         document.addEventListener("mousemove", mouseMove);
         document.addEventListener("mousedown", mouseDown);
         document.addEventListener("mouseup", mouseUp);
-    })();
+    };
+
+    var stopListening = function () {
+        document.removeEventListener("keydown", keyDown);
+        document.removeEventListener("keyup", keyUp);
+        document.removeEventListener("mousemove", mouseMove);
+        document.removeEventListener("mousedown", mouseDown);
+        document.removeEventListener("mouseup", mouseUp);
+    }
 
     return {
         keys: keysPressed,
-        mouse: function () { return mouseCoordinates; }
+        mouse: function () { return mouseCoordinates; },
+        startListening: startListening,
+        stopListening: stopListening
     };
 };

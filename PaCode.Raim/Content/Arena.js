@@ -22,6 +22,7 @@
         gfx.resizeCanvas();
         connected = true;
         requestAnimationFrame(processFrame);
+        input.startListening();
     };
 
     var addNewPlayer = function (who) {
@@ -125,6 +126,7 @@
 
     var stop = function () {
         connected = false;
+        input.stopListening();
     };
 
     return {
