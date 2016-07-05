@@ -108,37 +108,61 @@ namespace PaCode.Raim.Model
             var position = new Vector2d(rnd.Next(50, (int)(arenaSize.X - size.X - 50)), rnd.Next(50, (int)(arenaSize.Y - size.Y - 50)));
             int borderThickness = rnd.Next(10, 20);
 
-            // coordinates in TRouBLe
-            var topBorder = new Obstacle(
-                new Vector2d(position.X, position.Y + size.Y),
-                new Vector2d(position.X + size.X, position.Y + size.Y),
-                new Vector2d(position.X + size.X, position.Y + size.Y - borderThickness),
-                new Vector2d(position.X, position.Y + size.Y - borderThickness)
-                );
+            var rectangle = new Rectangle(position, size, borderThickness);
 
-            var rightBorder = new Obstacle(
-                new Vector2d(position.X + size.X - borderThickness, position.Y + size.Y),
-                new Vector2d(position.X + size.X, position.Y + size.Y),
-                new Vector2d(position.X + size.X, position.Y),
-                new Vector2d(position.X + size.X - borderThickness, position.Y)
-                );
+            return rectangle.ToObstacles();
+        }
 
-            var bottomBorder = new Obstacle(
-                new Vector2d(position.X, position.Y + borderThickness),
-                new Vector2d(position.X + size.X, position.Y + borderThickness),
-                new Vector2d(position.X + size.X, position.Y),
-                new Vector2d(position.X, position.Y));
+        private class Rectangle
+        {
+            private Vector2d[] _points;
+            private int _thickness;
 
-            var leftBorder = new Obstacle(
-                new Vector2d(position.X, position.Y + size.Y),
-                new Vector2d(position.X + borderThickness, position.Y + size.Y),
-                new Vector2d(position.X + borderThickness, position.Y),
-                new Vector2d(position.X, position.Y));
+            public Rectangle(Vector2d position, Vector2d size, int thickness)
+            {
+                _points = new[] {
+                    new Vector2d(position.X, position.Y + size.Y),
+                    new Vector2d(position.X + size.X, position.Y + size.Y),
+                    new Vector2d(position.X + size.X, position.Y),
+                    new Vector2d(position.X, position.Y)
+                };
+                _thickness = thickness;
+            }
 
-            yield return topBorder;
-            yield return rightBorder;
-            yield return bottomBorder;
-            yield return leftBorder;
+            public IEnumerable<Obstacle> ToObstacles()
+            {
+                for (int i = 0; i <= _points.Length; i++)
+                {
+                    var current = _points[i % _points.Length];
+                    var next = _points[(i + 1) % _points.Length];
+
+                    int xThickness = 0, yThickness = 0;
+
+                    if (current.X == next.X)
+                    {
+                        yThickness = 0;
+                        if (current.Y > next.Y)
+                            xThickness = -_thickness;
+                        else
+                            xThickness = _thickness;
+                    }
+                    else
+                    {
+                        xThickness = 0;
+                        if (current.X < next.X)
+                            yThickness = -_thickness;
+                        else
+                            yThickness = _thickness;
+                    }
+
+                    yield return new Obstacle(
+                        new Vector2d(current.X + xThickness, current.Y + yThickness),
+                        new Vector2d(current.X, current.Y),
+                        new Vector2d(next.X, next.Y),
+                        new Vector2d(next.X + xThickness, next.Y + yThickness)
+                        );
+                }
+            }
         }
     }
 }
