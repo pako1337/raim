@@ -109,45 +109,45 @@ namespace PaCode.Raim.Model
             int borderThickness = rnd.Next(10, 20);
 
             var rectangle = new Rectangle(position, size, borderThickness);
+            rectangle.AddDoors(rnd);
 
-            return rectangle.ToObstacles();
+            return rectangle.Obstacles;
         }
 
         private class Rectangle
         {
-            private Vector2d[] _points;
-            private int _thickness;
+            public List<Obstacle> Obstacles { get; private set; }
 
             public Rectangle(Vector2d position, Vector2d size, int thickness)
             {
-                _points = new[] {
+                var points = new Vector2d[] {
                     new Vector2d(position.X, position.Y + size.Y),
                     new Vector2d(position.X + size.X, position.Y + size.Y),
                     new Vector2d(position.X + size.X, position.Y),
                     new Vector2d(position.X, position.Y)
                 };
-                _thickness = thickness;
+                Obstacles = ToObstacles(points, thickness).ToList();
             }
 
-            public IEnumerable<Obstacle> ToObstacles()
+            public IEnumerable<Obstacle> ToObstacles(Vector2d[] points, int thickness)
             {
-                for (int i = 0; i <= _points.Length; i++)
+                for (int i = 0; i < points.Length; i++)
                 {
-                    var current = _points[i % _points.Length];
-                    var next = _points[(i + 1) % _points.Length];
+                    var current = points[i % points.Length];
+                    var next = points[(i + 1) % points.Length];
 
                     int xThickness = 0,
                         yThickness = 0;
 
                     if (current.Y > next.Y)
-                        xThickness = -_thickness;
+                        xThickness = -thickness;
                     else if (current.Y < next.Y)
-                        xThickness = _thickness;
+                        xThickness = thickness;
 
                     if (current.X < next.X)
-                        yThickness = -_thickness;
+                        yThickness = -thickness;
                     else if (current.X > next.X)
-                        yThickness = _thickness;
+                        yThickness = thickness;
 
                     yield return new Obstacle(
                         new Vector2d(current.X + xThickness, current.Y + yThickness),
@@ -156,6 +156,51 @@ namespace PaCode.Raim.Model
                         new Vector2d(next.X + xThickness, next.Y + yThickness)
                         );
                 }
+            }
+
+            public void AddDoors(Random rnd)
+            {
+                var doorSize = rnd.Next(40, 80);
+                var obstacle = Obstacles[0];
+                var distance = rnd.Next(0, (int)(obstacle.Points[2].X - obstacle.Points[1].X));
+
+                var newObstacles = obstacle.SplitWithSpace(doorSize, distance);
+
+                Obstacles.RemoveAt(0);
+                Obstacles.InsertRange(0, newObstacles);
+            }
+        }
+    }
+
+    internal static class ObstacleExtensions
+    {
+        internal static IEnumerable<Obstacle> SplitWithSpace(this Obstacle obstacle, int spaceSize, int spaceDistance)
+        {
+            var topLeft = obstacle.Points.OrderBy(p => p.X).Take(2).OrderByDescending(p => p.Y).First();
+            var bottomRight = obstacle.Points.OrderByDescending(p => p.X).Take(2).OrderBy(p => p.Y).First();
+
+            double width = bottomRight.X - topLeft.X;
+            double height = topLeft.Y - bottomRight.Y;
+
+            if (width > height)
+            {
+                yield return new Obstacle(
+                    topLeft,
+                    new Vector2d(topLeft.X + spaceDistance, topLeft.Y),
+                    new Vector2d(topLeft.X + spaceDistance, topLeft.Y - height),
+                    new Vector2d(topLeft.X, topLeft.Y - height)
+                    );
+
+                yield return new Obstacle(
+                    new Vector2d(topLeft.X + spaceDistance + spaceSize, topLeft.Y),
+                    new Vector2d(bottomRight.X, topLeft.Y),
+                    new Vector2d(bottomRight.X, topLeft.Y - height),
+                    new Vector2d(topLeft.X + spaceDistance + spaceSize, topLeft.Y - height)
+                    );
+            }
+            else
+            {
+                yield break;
             }
         }
     }
