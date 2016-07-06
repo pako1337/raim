@@ -109,7 +109,12 @@ namespace PaCode.Raim.Model
             int borderThickness = rnd.Next(10, 20);
 
             var rectangle = new Rectangle(position, size, borderThickness);
-            rectangle.AddDoors(rnd);
+
+            var doorCount = rnd.Next(1, 5);
+            for (int i = 0; i < doorCount; i++)
+            {
+                rectangle.AddDoors(rnd);
+            }
 
             return rectangle.Obstacles;
         }
@@ -161,16 +166,23 @@ namespace PaCode.Raim.Model
             public void AddDoors(Random rnd)
             {
                 var doorSize = rnd.Next(40, 80);
+                int obstacleIndex;
+                Obstacle obstacle;
+                int maxDistance;
 
-                var obstacleIndex = rnd.Next(0, Obstacles.Count);
-                var obstacle = Obstacles[obstacleIndex];
+                do
+                {
+                    obstacleIndex = rnd.Next(0, Obstacles.Count);
+                    obstacle = Obstacles[obstacleIndex];
 
-                var topLeft = obstacle.Points.OrderBy(p => p.X).Take(2).OrderByDescending(p => p.Y).First();
-                var bottomRight = obstacle.Points.OrderByDescending(p => p.X).Take(2).OrderBy(p => p.Y).First();
+                    var topLeft = obstacle.Points.OrderBy(p => p.X).Take(2).OrderByDescending(p => p.Y).First();
+                    var bottomRight = obstacle.Points.OrderByDescending(p => p.X).Take(2).OrderBy(p => p.Y).First();
 
-                double width = bottomRight.X - topLeft.X;
-                double height = topLeft.Y - bottomRight.Y;
-                int maxDistance = (int)Math.Max(width, height) - doorSize;
+                    double width = bottomRight.X - topLeft.X;
+                    double height = topLeft.Y - bottomRight.Y;
+                    maxDistance = (int)Math.Max(width, height) - doorSize;
+                }
+                while (maxDistance < 0);
 
                 var distance = rnd.Next(1, maxDistance);
                 var newObstacles = obstacle.SplitWithSpace(doorSize, distance);
