@@ -22,7 +22,7 @@ namespace PaCode.Raim.Model
         public Arena()
         {
             _collisionEngine = new CollisionEngine(this);
-            _arenaSize = new Vector2d(1600, 1000);
+            _arenaSize = new Vector2d(1600, 1200);
             Obstacles.AddRange(new MapGenerator().Generate(ArenaSize));
         }
 

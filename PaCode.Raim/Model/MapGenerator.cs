@@ -99,10 +99,23 @@ namespace PaCode.Raim.Model
 
             var rectangles = new List<Rectangle>();
 
-            var obstaclesCount = rnd.Next(2, 4);
+            var obstaclesCount = rnd.Next(3, 8);
             for (int i = 0; i < obstaclesCount; i++)
             {
-                rectangles.Add(GenerateObstacle(arenaSize));
+                Rectangle rectangle = null;
+                int tries = 0;
+                const int maxTries = 100;
+
+                do
+                {
+                    rectangle = GenerateObstacle(arenaSize);
+                    tries++;
+                }
+                while (rectangles.Any(r => r.Collide(rectangle) && tries <= maxTries));
+
+                if (tries > maxTries) continue;
+
+                rectangles.Add(rectangle);
             }
 
             obstacles.AddRange(rectangles.SelectMany(r => r.Obstacles));
@@ -131,6 +144,11 @@ namespace PaCode.Raim.Model
         {
             public List<Obstacle> Obstacles { get; private set; }
 
+            public double Top { get; private set; }
+            public double Right { get; private set; }
+            public double Bottom { get; private set; }
+            public double Left { get; private set; }
+
             public Rectangle(Vector2d position, Vector2d size, int thickness)
             {
                 var points = new Vector2d[] {
@@ -140,6 +158,11 @@ namespace PaCode.Raim.Model
                     new Vector2d(position.X, position.Y)
                 };
                 Obstacles = ToObstacles(points, thickness).ToList();
+
+                Top = points.Max(p => p.Y) + 20;
+                Bottom = points.Min(p => p.Y) - 20;
+                Left = points.Min(p => p.X) - 20;
+                Right = points.Max(p => p.X) + 20;
             }
 
             public IEnumerable<Obstacle> ToObstacles(Vector2d[] points, int thickness)
@@ -197,6 +220,14 @@ namespace PaCode.Raim.Model
 
                 Obstacles.RemoveAt(obstacleIndex);
                 Obstacles.InsertRange(obstacleIndex, newObstacles);
+            }
+
+            public bool Collide(Rectangle other)
+            {
+                return !(other.Left > Right ||
+                         other.Right < Left ||
+                         other.Top < Bottom ||
+                         other.Bottom > Top);
             }
         }
     }
