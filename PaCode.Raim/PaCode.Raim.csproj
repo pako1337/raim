@@ -100,6 +100,7 @@
     <Compile Include="Home\PlayerInput.cs" />
     <Compile Include="Home\RaimHub.cs" />
     <Compile Include="Model\Arena.cs" />
+    <Compile Include="Model\BoundingBox.cs" />
     <Compile Include="Model\Bullet.cs" />
     <Compile Include="Model\CollisionEngine.cs" />
     <Compile Include="Model\IDestroyable.cs" />

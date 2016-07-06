@@ -9,5 +9,6 @@ namespace PaCode.Raim.Model
         Vector2d Speed { get; }
         Vector2d FacingDirection { get; }
         int Size { get; }
+        BoundingBox BoundingBox { get; }
     }
 }

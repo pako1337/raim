@@ -15,6 +15,7 @@ namespace PaCode.Raim.Model
         public int Size { get; } = 2;
         public Player Player { get; internal set; }
         public string Color { get; private set;}
+        public BoundingBox BoundingBox { get { return new BoundingBox(Position.Y + Size, Position.X + Size, Position.Y - Size, Position.X - Size); } }
 
         private Bullet() { }
 

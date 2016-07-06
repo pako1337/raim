@@ -18,6 +18,7 @@ namespace PaCode.Raim.Model
         public bool IsDestroyed { get; set; }
         public int Score { get; private set; }
         public string Style { get; private set; }
+        public BoundingBox BoundingBox { get { return new BoundingBox(Position.Y + Size, Position.X + Size, Position.Y - Size, Position.X - Size); } }
 
         private Player() { }
 
