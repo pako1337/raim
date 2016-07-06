@@ -97,12 +97,20 @@ namespace PaCode.Raim.Model
                     new Vector2d(0, arenaSize.Y))
             });
 
-            obstacles.AddRange(GenerateObstacle(arenaSize));
+            var rectangles = new List<Rectangle>();
+
+            var obstaclesCount = rnd.Next(2, 4);
+            for (int i = 0; i < obstaclesCount; i++)
+            {
+                rectangles.Add(GenerateObstacle(arenaSize));
+            }
+
+            obstacles.AddRange(rectangles.SelectMany(r => r.Obstacles));
 
             return obstacles;
         }
 
-        private IEnumerable<Obstacle> GenerateObstacle(Vector2d arenaSize)
+        private Rectangle GenerateObstacle(Vector2d arenaSize)
         {
             var size = new Vector2d(rnd.Next(290, 290 * 2), rnd.Next(290, 290 * 2));
             var position = new Vector2d(rnd.Next(50, (int)(arenaSize.X - size.X - 50)), rnd.Next(50, (int)(arenaSize.Y - size.Y - 50)));
@@ -116,7 +124,7 @@ namespace PaCode.Raim.Model
                 rectangle.AddDoors(rnd);
             }
 
-            return rectangle.Obstacles;
+            return rectangle;
         }
 
         private class Rectangle
