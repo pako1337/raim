@@ -161,13 +161,22 @@ namespace PaCode.Raim.Model
             public void AddDoors(Random rnd)
             {
                 var doorSize = rnd.Next(40, 80);
-                var obstacle = Obstacles[0];
-                var distance = rnd.Next(0, (int)(obstacle.Points[2].X - obstacle.Points[1].X));
 
+                var obstacleIndex = rnd.Next(0, Obstacles.Count);
+                var obstacle = Obstacles[obstacleIndex];
+
+                var topLeft = obstacle.Points.OrderBy(p => p.X).Take(2).OrderByDescending(p => p.Y).First();
+                var bottomRight = obstacle.Points.OrderByDescending(p => p.X).Take(2).OrderBy(p => p.Y).First();
+
+                double width = bottomRight.X - topLeft.X;
+                double height = topLeft.Y - bottomRight.Y;
+                int maxDistance = (int)Math.Max(width, height) - doorSize;
+
+                var distance = rnd.Next(1, maxDistance);
                 var newObstacles = obstacle.SplitWithSpace(doorSize, distance);
 
-                Obstacles.RemoveAt(0);
-                Obstacles.InsertRange(0, newObstacles);
+                Obstacles.RemoveAt(obstacleIndex);
+                Obstacles.InsertRange(obstacleIndex, newObstacles);
             }
         }
     }
