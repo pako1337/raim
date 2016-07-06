@@ -187,20 +187,32 @@ namespace PaCode.Raim.Model
                 yield return new Obstacle(
                     topLeft,
                     new Vector2d(topLeft.X + spaceDistance, topLeft.Y),
-                    new Vector2d(topLeft.X + spaceDistance, topLeft.Y - height),
-                    new Vector2d(topLeft.X, topLeft.Y - height)
+                    new Vector2d(topLeft.X + spaceDistance, bottomRight.Y),
+                    new Vector2d(topLeft.X, bottomRight.Y)
                     );
 
                 yield return new Obstacle(
                     new Vector2d(topLeft.X + spaceDistance + spaceSize, topLeft.Y),
                     new Vector2d(bottomRight.X, topLeft.Y),
-                    new Vector2d(bottomRight.X, topLeft.Y - height),
-                    new Vector2d(topLeft.X + spaceDistance + spaceSize, topLeft.Y - height)
+                    bottomRight,
+                    new Vector2d(topLeft.X + spaceDistance + spaceSize, bottomRight.Y)
                     );
             }
             else
             {
-                yield break;
+                yield return new Obstacle(
+                    topLeft,
+                    new Vector2d(bottomRight.X, topLeft.Y),
+                    new Vector2d(bottomRight.X, topLeft.Y - spaceDistance),
+                    new Vector2d(topLeft.X, topLeft.Y - spaceDistance)
+                    );
+
+                yield return new Obstacle(
+                    new Vector2d(topLeft.X, topLeft.Y - spaceDistance - spaceSize),
+                    new Vector2d(bottomRight.X, topLeft.Y - spaceDistance - spaceSize),
+                    bottomRight,
+                    new Vector2d(topLeft.X, bottomRight.Y)
+                    );
             }
         }
     }
