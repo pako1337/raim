@@ -201,6 +201,9 @@ namespace PaCode.Raim.Model
                 Obstacle obstacle;
                 int maxDistance;
 
+                int tries = 0;
+                int maxTries = 100;
+
                 do
                 {
                     obstacleIndex = rnd.Next(0, Obstacles.Count);
@@ -212,8 +215,11 @@ namespace PaCode.Raim.Model
                     double width = bottomRight.X - topLeft.X;
                     double height = topLeft.Y - bottomRight.Y;
                     maxDistance = (int)Math.Max(width, height) - doorSize;
+                    tries++;
                 }
-                while (maxDistance < 0);
+                while (maxDistance <= 0 && tries <= maxTries);
+
+                if (tries > maxTries) return;
 
                 var distance = rnd.Next(1, maxDistance);
                 var newObstacles = obstacle.SplitWithSpace(doorSize, distance);
