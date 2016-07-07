@@ -60,11 +60,11 @@ namespace PaCode.Raim.Model
             {
                 Rectangle rectangle = null;
                 int tries = 0;
-                const int maxTries = 100;
+                const int maxTries = 150;
 
                 do
                 {
-                    rectangle = GenerateObstacle(arenaSize);
+                    rectangle = GenerateObstacle(arenaSize, new Vector2d(290 - tries, 290 - tries));
                     tries++;
                 }
                 while (rectangles.Any(r => r.Collide(rectangle) && tries <= maxTries));
@@ -79,15 +79,15 @@ namespace PaCode.Raim.Model
             return obstacles;
         }
 
-        private Rectangle GenerateObstacle(Vector2d arenaSize)
+        private Rectangle GenerateObstacle(Vector2d arenaSize, Vector2d minSize)
         {
-            var size = new Vector2d(rnd.Next(290, 290 * 2), rnd.Next(290, 290 * 2));
+            var size = new Vector2d(rnd.Next((int)minSize.X, (int)minSize.X * 2), rnd.Next((int)minSize.Y, (int)minSize.Y * 2));
             var position = new Vector2d(rnd.Next(50, (int)(arenaSize.X - size.X - 50)), rnd.Next(50, (int)(arenaSize.Y - size.Y - 50)));
             int borderThickness = rnd.Next(10, 20);
 
             var rectangle = new Rectangle(position, size, borderThickness);
 
-            var doorCount = rnd.Next(1, 5);
+            var doorCount = rnd.Next(2, 6);
             rectangle.AddDoors(rnd, doorCount);
 
             return rectangle;
