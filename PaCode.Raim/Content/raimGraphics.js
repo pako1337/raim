@@ -1,4 +1,4 @@
-﻿var raimGraphics = function (args) {
+var raimGraphics = function (args) {
     var drawingContext, backgroundContext;
     var scale = 1;
     var canvas, background;
@@ -177,7 +177,7 @@
 
         backgroundContext.save();
         backgroundContext.translate(backgroundX, -backgroundY);
-        backgroundContext.rect(0, 0, background.width, background.height);
+        backgroundContext.rect(backgroundX, backgroundY, background.width, background.height);
         backgroundContext.fillStyle = backgroundPattern;
         backgroundContext.scale(scale, scale);
         backgroundContext.fill();
