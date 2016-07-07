@@ -174,38 +174,43 @@ namespace PaCode.Raim.Model
                 }
             }
 
-            public void AddDoors(Random rnd)
+            public void AddDoors(Random rnd, int doorCount)
             {
-                var doorSize = rnd.Next(40, 80);
-                int obstacleIndex;
-                Obstacle obstacle;
-                int maxDistance;
+                const int minDistance = 20;
 
-                int tries = 0;
-                int maxTries = 100;
-
-                do
+                for (int i = 0; i < doorCount; i++)
                 {
-                    obstacleIndex = rnd.Next(0, Obstacles.Count);
-                    obstacle = Obstacles[obstacleIndex];
+                    var doorSize = rnd.Next(40, 80);
+                    int obstacleIndex;
+                    Obstacle obstacle;
+                    int maxDistance;
 
-                    var topLeft = obstacle.Points.OrderBy(p => p.X).Take(2).OrderByDescending(p => p.Y).First();
-                    var bottomRight = obstacle.Points.OrderByDescending(p => p.X).Take(2).OrderBy(p => p.Y).First();
+                    int tries = 0;
+                    int maxTries = 100;
 
-                    double width = bottomRight.X - topLeft.X;
-                    double height = topLeft.Y - bottomRight.Y;
-                    maxDistance = (int)Math.Max(width, height) - doorSize;
-                    tries++;
+                    do
+                    {
+                        obstacleIndex = rnd.Next(0, Obstacles.Count);
+                        obstacle = Obstacles[obstacleIndex];
+
+                        var topLeft = obstacle.Points.OrderBy(p => p.X).Take(2).OrderByDescending(p => p.Y).First();
+                        var bottomRight = obstacle.Points.OrderByDescending(p => p.X).Take(2).OrderBy(p => p.Y).First();
+
+                        double width = bottomRight.X - topLeft.X;
+                        double height = topLeft.Y - bottomRight.Y;
+                        maxDistance = (int)Math.Max(width, height) - minDistance - doorSize;
+                        tries++;
+                    }
+                    while (maxDistance <= minDistance && tries <= maxTries);
+
+                    if (tries > maxTries) continue;
+
+                    var distance = rnd.Next(minDistance, maxDistance);
+                    var newObstacles = obstacle.SplitWithSpace(doorSize, distance);
+
+                    Obstacles.RemoveAt(obstacleIndex);
+                    Obstacles.InsertRange(obstacleIndex, newObstacles);
                 }
-                while (maxDistance <= 0 && tries <= maxTries);
-
-                if (tries > maxTries) return;
-
-                var distance = rnd.Next(1, maxDistance);
-                var newObstacles = obstacle.SplitWithSpace(doorSize, distance);
-
-                Obstacles.RemoveAt(obstacleIndex);
-                Obstacles.InsertRange(obstacleIndex, newObstacles);
             }
 
             public bool Collide(Rectangle other)
