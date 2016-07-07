@@ -25,8 +25,8 @@
     raim.client.playerMoved = function (gameState) { gameArena.playerMoved(gameState); }
 
     function signOff() {
-        console.log("unloading");
         raim.server.signOff(_playerId);
+        $.connection.hub.stop();
     }
 
     var playerName = document.getElementById("playerName");
