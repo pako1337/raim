@@ -74,6 +74,28 @@ namespace PaCode.Raim.Model
                 rectangles.Add(rectangle);
             }
 
+            var smallObstacles = rnd.Next(10, 20);
+            Vector2d minSize = new Vector2d(15, 15);
+            for (int i = 0; i < smallObstacles; i++)
+            {
+                int tries = 0;
+                const int maxTries = 100;
+                Rectangle rectangle = null;
+
+                do
+                {
+                    var size = new Vector2d(rnd.Next((int)minSize.X, (int)minSize.X * 5), rnd.Next((int)minSize.Y, (int)minSize.Y * 5));
+                    var position = new Vector2d(rnd.Next(50, (int)(arenaSize.X - size.X - 50)), rnd.Next(50, (int)(arenaSize.Y - size.Y - 50)));
+
+                    rectangle = new Rectangle(position, size);
+                    tries++;
+                }
+                while (rectangles.Any(r => r.Collide(rectangle)) && tries < maxTries);
+                
+                if (rectangle != null)
+                    rectangles.Add(rectangle);
+            }
+
             obstacles.AddRange(rectangles.SelectMany(r => r.Obstacles));
 
             return obstacles;
@@ -122,6 +144,8 @@ namespace PaCode.Raim.Model
 
         private class Rectangle
         {
+            private const int margin = 20;
+
             public List<Obstacle> Obstacles { get; private set; }
 
             public double Top { get; private set; }
@@ -139,10 +163,25 @@ namespace PaCode.Raim.Model
                 };
                 Obstacles = ToObstacles(points, thickness).ToList();
 
-                Top = points.Max(p => p.Y) + 20;
-                Bottom = points.Min(p => p.Y) - 20;
-                Left = points.Min(p => p.X) - 20;
-                Right = points.Max(p => p.X) + 20;
+                Top = points.Max(p => p.Y) + margin;
+                Bottom = points.Min(p => p.Y) - margin;
+                Left = points.Min(p => p.X) - margin;
+                Right = points.Max(p => p.X) + margin;
+            }
+
+            public Rectangle(Vector2d position, Vector2d size)
+            {
+                Obstacles = new List<Obstacle>() { new Obstacle(
+                    position,
+                    new Vector2d(position.X, position.Y  +size.Y),
+                    new Vector2d(position.X + size.X, position.Y + size.Y),
+                    new Vector2d(position.X  +size.X, position.Y)
+                    )};
+
+                Top = position.Y + size.Y + margin;
+                Bottom = position.Y - margin;
+                Left = position.X - margin;
+                Right = position.X + size.X + margin;
             }
 
             public IEnumerable<Obstacle> ToObstacles(Vector2d[] points, int thickness)
@@ -176,7 +215,7 @@ namespace PaCode.Raim.Model
 
             public void AddDoors(Random rnd, int doorCount)
             {
-                const int minDistance = 20;
+                const int minDistance = margin;
 
                 for (int i = 0; i < doorCount; i++)
                 {
