@@ -43,29 +43,7 @@ namespace PaCode.Raim.Model
                 }
             }
 
-            int borderMargin = 700;
-            obstacles.AddRange(new List<Obstacle>() {
-                new Obstacle( // top
-                    new Vector2d(-borderMargin, arenaSize.Y),
-                    new Vector2d(-borderMargin, arenaSize.Y + borderMargin),
-                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y + borderMargin),
-                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y)),
-                new Obstacle( // right
-                    new Vector2d(arenaSize.X, 0),
-                    new Vector2d(arenaSize.X, arenaSize.Y),
-                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y),
-                    new Vector2d(arenaSize.X + borderMargin, 0)),
-                new Obstacle( // bottom
-                    new Vector2d(-borderMargin, 0),
-                    new Vector2d(arenaSize.X + borderMargin, 0),
-                    new Vector2d(arenaSize.X + borderMargin, -borderMargin),
-                    new Vector2d(-borderMargin, -borderMargin)),
-                new Obstacle( // left
-                    new Vector2d(0, 0),
-                    new Vector2d(-borderMargin, 0),
-                    new Vector2d(-borderMargin, arenaSize.Y),
-                    new Vector2d(0, arenaSize.Y))
-            });
+            obstacles.AddRange(GetBorder(arenaSize));
 
             return obstacles;
         }
@@ -73,29 +51,7 @@ namespace PaCode.Raim.Model
         public IEnumerable<Obstacle> Generate(Vector2d arenaSize)
         {
             var obstacles = new List<Obstacle>(8);
-            int borderMargin = 700;
-            obstacles.AddRange(new List<Obstacle>() {
-                new Obstacle( // top
-                    new Vector2d(-borderMargin, arenaSize.Y),
-                    new Vector2d(-borderMargin, arenaSize.Y + borderMargin),
-                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y + borderMargin),
-                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y)),
-                new Obstacle( // right
-                    new Vector2d(arenaSize.X, 0),
-                    new Vector2d(arenaSize.X, arenaSize.Y),
-                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y),
-                    new Vector2d(arenaSize.X + borderMargin, 0)),
-                new Obstacle( // bottom
-                    new Vector2d(-borderMargin, 0),
-                    new Vector2d(arenaSize.X + borderMargin, 0),
-                    new Vector2d(arenaSize.X + borderMargin, -borderMargin),
-                    new Vector2d(-borderMargin, -borderMargin)),
-                new Obstacle( // left
-                    new Vector2d(0, 0),
-                    new Vector2d(-borderMargin, 0),
-                    new Vector2d(-borderMargin, arenaSize.Y),
-                    new Vector2d(0, arenaSize.Y))
-            });
+            obstacles.AddRange(GetBorder(arenaSize));
 
             var rectangles = new List<Rectangle>();
 
@@ -132,12 +88,36 @@ namespace PaCode.Raim.Model
             var rectangle = new Rectangle(position, size, borderThickness);
 
             var doorCount = rnd.Next(1, 5);
-            for (int i = 0; i < doorCount; i++)
-            {
-                rectangle.AddDoors(rnd);
-            }
+            rectangle.AddDoors(rnd, doorCount);
 
             return rectangle;
+        }
+
+        private static List<Obstacle> GetBorder(Vector2d arenaSize)
+        {
+            int borderMargin = 700;
+            return new List<Obstacle>() {
+                new Obstacle( // top
+                    new Vector2d(-borderMargin, arenaSize.Y),
+                    new Vector2d(-borderMargin, arenaSize.Y + borderMargin),
+                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y + borderMargin),
+                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y)),
+                new Obstacle( // right
+                    new Vector2d(arenaSize.X, 0),
+                    new Vector2d(arenaSize.X, arenaSize.Y),
+                    new Vector2d(arenaSize.X + borderMargin, arenaSize.Y),
+                    new Vector2d(arenaSize.X + borderMargin, 0)),
+                new Obstacle( // bottom
+                    new Vector2d(-borderMargin, 0),
+                    new Vector2d(arenaSize.X + borderMargin, 0),
+                    new Vector2d(arenaSize.X + borderMargin, -borderMargin),
+                    new Vector2d(-borderMargin, -borderMargin)),
+                new Obstacle( // left
+                    new Vector2d(0, 0),
+                    new Vector2d(-borderMargin, 0),
+                    new Vector2d(-borderMargin, arenaSize.Y),
+                    new Vector2d(0, arenaSize.Y))
+            };
         }
 
         private class Rectangle
