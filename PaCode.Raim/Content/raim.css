@@ -34,10 +34,10 @@
     z-index: -1;
     border: none;
     position: fixed;
-    top: 0.3em;
-    right: 0.3em;
-    bottom: 0.3em;
-    left: 0.3em;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
     
     #arena canvas {
