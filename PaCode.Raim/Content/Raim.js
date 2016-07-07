@@ -22,7 +22,7 @@
         }
     };
 
-    raim.client.playerMoved = function (gameState) { gameArena.playerMoved(gameState); }
+    raim.client.playerMoved = function (gameState) { gameArena && gameArena.playerMoved(gameState); }
 
     function signOff() {
         raim.server.signOff(_playerId);
