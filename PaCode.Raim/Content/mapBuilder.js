@@ -2,11 +2,13 @@
 var objects = document.getElementById("objects");
 var xSize = document.getElementById("x");
 var ySize = document.getElementById("y");
+var map = document.getElementById("map");
 var ctx = arena.getContext("2d");
 
 arena.addEventListener("mousedown", mouseDown);
 arena.addEventListener("mouseup", mouseUp);
 arena.addEventListener("mousemove", mouseMove);
+arena.addEventListener("dblclick", mouseDoubleClick);
 
 xSize.addEventListener("change", sizeChanged);
 ySize.addEventListener("change", sizeChanged);
@@ -14,6 +16,7 @@ ySize.addEventListener("change", sizeChanged);
 function sizeChanged() {
     arena.width = parseInt(x.value);
     arena.height = parseInt(y.value);
+    map.textContent = writeMap();
 }
 
 var startPoint;
@@ -23,19 +26,31 @@ var coordinates = [];
 var selected;
 var selectedOrigCoord;
 
+sizeChanged();
+
 function mouseDown(e) {
     var mouseCoordinates = getMouseCoordinates(e);
-    console.log(mouseCoordinates);
-    selected = coordinates.find(function (c) {
+    selected = getSelectedElement(mouseCoordinates);
+
+    if (selected)
+        selectedOrigCoord = { start: { x: selected.start.x, y: selected.start.y }, end: { x: selected.end.x, y: selected.end.y } };
+    startPoint = { x: mouseCoordinates.x, y: mouseCoordinates.y };
+}
+
+function mouseDoubleClick(e) {
+    var mouseCoordinates = getMouseCoordinates(e);
+    var clickedElement = getSelectedElement(mouseCoordinates);
+    var elementIndex = coordinates.indexOf(clickedElement);
+    removeCoordinates(elementIndex);
+}
+
+function getSelectedElement(mouseCoordinates) {
+    return coordinates.find(function (c) {
         return mouseCoordinates.x > c.start.x &&
                mouseCoordinates.x < c.end.x &&
                mouseCoordinates.y > c.start.y &&
                mouseCoordinates.y < c.end.y;
     });
-
-    if (selected)
-        selectedOrigCoord = { start: { x: selected.start.x, y: selected.start.y }, end: { x: selected.end.x, y: selected.end.y } };
-    startPoint = { x: mouseCoordinates.x, y: mouseCoordinates.y };
 }
 
 function mouseMove(e) {
@@ -124,6 +139,8 @@ function printObjectsList() {
         }
         objects.appendChild(li);
     }
+
+    map.textContent = writeMap();
 }
 
 function writeMap() {
