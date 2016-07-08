@@ -17,7 +17,7 @@ namespace PaCode.Raim.Model
             var obstacles = new List<Obstacle>(10);
             Vector2d arenaSize = null;
 
-            using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "ArenaDefinitions/Arena51.txt")))
+            using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "ArenaDefinitions/build1.txt")))
             {
                 var size = reader.ReadLine()
                                  .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)

@@ -40,6 +40,8 @@ function mouseDown(e) {
 function mouseDoubleClick(e) {
     var mouseCoordinates = getMouseCoordinates(e);
     var clickedElement = getSelectedElement(mouseCoordinates);
+    if (!clickedElement) return;
+
     var elementIndex = coordinates.indexOf(clickedElement);
     removeCoordinates(elementIndex);
 }
@@ -159,7 +161,7 @@ function writeMap() {
 
         map += x + ", " + y + ", " + x + ", " + (y + heigh) + ", " + (x + width) + ", " + (y + heigh) + ", " + (x + width) + ", " + y;
 
-        map += "\n\n";
+        map += "\n";
     }
 
     return map;

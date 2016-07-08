@@ -116,6 +116,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ArenaDefinitions\Arena51.txt" />
+    <Content Include="ArenaDefinitions\build1.txt" />
     <Content Include="Content\arena.js" />
     <Content Include="Content\favicon.png" />
     <Content Include="Content\mapBuilder.js" />
