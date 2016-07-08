@@ -12,6 +12,7 @@ namespace PaCode.Raim
         public HomeModule()
         {
             Get["/"] = parameters => View["Index.html"];
+            Get["/mapBuilder"] = parameters => View["MapBuilder.html"];
         }
     }
 }

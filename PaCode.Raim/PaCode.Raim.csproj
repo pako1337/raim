@@ -118,10 +118,12 @@
     <Content Include="ArenaDefinitions\Arena51.txt" />
     <Content Include="Content\arena.js" />
     <Content Include="Content\favicon.png" />
+    <Content Include="Content\mapBuilder.js" />
     <Content Include="Content\userInput.js" />
     <Content Include="Content\keysInput.js" />
     <Content Include="Content\raimGraphics.js" />
     <Content Include="gulpfile.js" />
+    <Content Include="Home\MapBuilder.html" />
     <Content Include="package.json" />
     <Content Include="Bundles.json" />
     <None Include="packages.config" />
