@@ -13,6 +13,8 @@ arena.addEventListener("dblclick", mouseDoubleClick);
 xSize.addEventListener("change", sizeChanged);
 ySize.addEventListener("change", sizeChanged);
 
+document.getElementById("applyMap").addEventListener("click", readMap);
+
 function sizeChanged() {
     arena.width = parseInt(x.value);
     arena.height = parseInt(y.value);
@@ -144,7 +146,7 @@ function printObjectsList() {
         objects.appendChild(li);
     }
 
-    map.textContent = writeMap();
+    map.value = writeMap();
 }
 
 function writeMap() {
@@ -167,4 +169,26 @@ function writeMap() {
     }
 
     return map;
+}
+
+function readMap() {
+    coordinates = [];
+    var lines = map.value.split("\n");
+    var size = lines[0].split(",");
+
+    xSize.value = size[0];
+    ySize.value = size[1];
+    sizeChanged();
+
+    for (var i = 1; i < lines.length; i++) {
+        var coords = lines[i].split(",");
+
+        if (coords.length <= 1) continue;
+
+        var start = { x: parseInt(coords[0]), y: parseInt(coords[1]) };
+        var end = { x: parseInt(coords[4]), y: parseInt(coords[3]) };
+        coordinates.push({ start, end });
+    }
+
+    printObjectsList();
 }
