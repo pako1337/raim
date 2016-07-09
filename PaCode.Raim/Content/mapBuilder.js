@@ -75,7 +75,9 @@ function mouseMove(e) {
 function mouseUp(e) {
     if (selected) {
     } else if (startPoint && endPoint) {
-        coordinates.push({ start: startPoint, end: endPoint });
+        var start = { x: Math.min(startPoint.x, endPoint.x), y: Math.min(startPoint.y, endPoint.y) };
+        var end = { x: Math.max(startPoint.x, endPoint.x), y: Math.max(startPoint.y, endPoint.y) };
+        coordinates.push({ start: start, end: end });
         printObjectsList();
     }
 
