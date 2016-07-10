@@ -158,12 +158,10 @@ function writeMap() {
     for (var i = 0; i < coordinates.length; i++) {
         var c = coordinates[i];
         
-        var x = Math.min(c.start.x, c.end.x);
-        var y = arena.height - Math.min(c.start.y, c.end.y);
-        var width = Math.abs(c.end.x - c.start.x);
-        var heigh = Math.abs(c.end.y - c.start.y);
-
-        map += x + ", " + y + ", " + x + ", " + (y - heigh) + ", " + (x + width) + ", " + (y - heigh) + ", " + (x + width) + ", " + y;
+        map += c.start.x + ", " + (height - c.start.y) + ", "
+             + c.start.x + ", " + (height - c.end.y) + ", "
+             + c.end.x + ", " + (height - c.end.y) + ", "
+             + c.end.x + ", " + (height - c.start.y);
 
         map += "\n";
     }
