@@ -69,6 +69,8 @@
     var mainTouch = null;
     function touchStart(e) {
         if (mainTouch) return;
+
+        e.preventDefault();
         var touch = e.changedTouches[0];
         mainTouch = copyTouch(touch);
     }
@@ -77,6 +79,7 @@
         for (var i = 0; i < e.changedTouches.length; i++) {
             var touch = e.changedTouches[i];
             if (mainTouch && mainTouch.identifier === touch.identifier) {
+                e.preventDefault();
                 mainTouch = null;
                 keys.splice(keys.indexOf(2));
                 keys.splice(keys.indexOf(3));
@@ -95,6 +98,7 @@
     function touchMove(e) {
         if (!mainTouch) return;
 
+        e.preventDefault();
         var ongoingTouch = null;
         for (var i = 0; i < e.changedTouches.length; i++) {
             var t = e.changedTouches[i];
