@@ -159,11 +159,11 @@ function writeMap() {
         var c = coordinates[i];
         
         var x = Math.min(c.start.x, c.end.x);
-        var y = Math.min(c.start.y, c.end.y);
+        var y = arena.height - Math.min(c.start.y, c.end.y);
         var width = Math.abs(c.end.x - c.start.x);
         var heigh = Math.abs(c.end.y - c.start.y);
 
-        map += x + ", " + y + ", " + x + ", " + (y + heigh) + ", " + (x + width) + ", " + (y + heigh) + ", " + (x + width) + ", " + y;
+        map += x + ", " + y + ", " + x + ", " + (y - heigh) + ", " + (x + width) + ", " + (y - heigh) + ", " + (x + width) + ", " + y;
 
         map += "\n";
     }
@@ -176,8 +176,11 @@ function readMap() {
     var lines = map.value.split("\n");
     var size = lines[0].split(",");
 
-    xSize.value = size[0];
-    ySize.value = size[1];
+    width = parseInt(size[0]);
+    height = parseInt(size[1]);
+
+    xSize.value = width;
+    ySize.value = height;
     sizeChanged();
 
     for (var i = 1; i < lines.length; i++) {
@@ -185,8 +188,8 @@ function readMap() {
 
         if (coords.length <= 1) continue;
 
-        var start = { x: parseInt(coords[0]), y: parseInt(coords[1]) };
-        var end = { x: parseInt(coords[4]), y: parseInt(coords[3]) };
+        var start = { x: parseInt(coords[0]), y: height - parseInt(coords[1]) };
+        var end = { x: parseInt(coords[4]), y: height - parseInt(coords[3]) };
         coordinates.push({ start, end });
     }
 
