@@ -1,4 +1,6 @@
 ﻿function userInput(args) {
+    var touchMargin = 30;
+
     var keys = [];
     var keysPressed = 0;
     var mouseCoordinates = { x: 0, y: 0 };
@@ -46,10 +48,13 @@
     }
 
     function mouseMove(e) {
-        var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
-        mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
 
         notifyKeysChanged();
+    }
+
+    function getMouseCoordinates(e) {
+        var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
+        mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
     }
 
     function mouseDown(e) {
@@ -67,26 +72,45 @@
     }
 
     var mainTouch = null;
+    var fireTouch = null;
     function touchStart(e) {
-        if (mainTouch) return;
-
         e.preventDefault();
-        var touch = e.changedTouches[0];
-        mainTouch = copyTouch(touch);
+
+        if (mainTouch && fireTouch)
+            return;
+
+        for (var i = 0; i < e.changedTouches.length; i++) {
+            var touch = e.changedTouches[i];
+
+            if (!mainTouch && (!fireTouch || fireTouch.identifier != touch.identifier)) {
+                mainTouch = copyTouch(touch);
+            }
+            if (!fireTouch && (mainTouch.identifier != touch.identifier)) {
+                fireTouch = copyTouch(touch);
+                getMouseCoordinates(touch);
+                keys.push(1);
+                notifyKeysChanged();
+            }
+        }
     }
 
     function touchEnd(e) {
+        e.preventDefault();
         for (var i = 0; i < e.changedTouches.length; i++) {
             var touch = e.changedTouches[i];
             if (mainTouch && mainTouch.identifier === touch.identifier) {
-                e.preventDefault();
                 mainTouch = null;
                 keys.splice(keys.indexOf(2));
                 keys.splice(keys.indexOf(3));
                 keys.splice(keys.indexOf(4));
                 keys.splice(keys.indexOf(5));
                 notifyKeysChanged();
-                return;
+            }
+
+            if (fireTouch && fireTouch.identifier === touch.identifier) {
+                fireTouch = null;
+                keys.splice(keys.indexOf(1));
+                notifyKeysChanged();
             }
         }
     }
@@ -96,36 +120,37 @@
     }
 
     function touchMove(e) {
+        e.preventDefault();
         if (!mainTouch) return;
 
-        e.preventDefault();
         var ongoingTouch = null;
         for (var i = 0; i < e.changedTouches.length; i++) {
             var t = e.changedTouches[i];
             if (mainTouch.identifier === t.identifier) {
                 ongoingTouch = t;
-                break;
+
+                keys.splice(keys.indexOf(2));
+                keys.splice(keys.indexOf(3));
+                keys.splice(keys.indexOf(4));
+                keys.splice(keys.indexOf(5));
+
+                if (ongoingTouch.pageY > mainTouch.pageY + touchMargin) {
+                    keys.push(2);
+                }
+                if (ongoingTouch.pageY < mainTouch.pageY - touchMargin) {
+                    keys.push(3);
+                }
+                if (ongoingTouch.pageX > mainTouch.pageX + touchMargin) {
+                    keys.push(4);
+                }
+                if (ongoingTouch.pageX < mainTouch.pageX - touchMargin) {
+                    keys.push(5);
+                }
+                notifyKeysChanged();
+            } else if (fireTouch && fireTouch.identifier == t.identifier) {
+                getMouseCoordinates(ongoingTouch);
             }
         }
-
-        keys.splice(keys.indexOf(2));
-        keys.splice(keys.indexOf(3));
-        keys.splice(keys.indexOf(4));
-        keys.splice(keys.indexOf(5));
-
-        if (ongoingTouch.pageY > mainTouch.pageY + 10) {
-            keys.push(2);
-        }
-        if (ongoingTouch.pageY < mainTouch.pageY - 10) {
-            keys.push(3);
-        }
-        if (ongoingTouch.pageX > mainTouch.pageX + 10) {
-            keys.push(4);
-        }
-        if (ongoingTouch.pageX < mainTouch.pageX - 10) {
-            keys.push(5);
-        }
-        notifyKeysChanged();
     }
 
     function copyTouch(touch) {
