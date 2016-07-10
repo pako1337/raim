@@ -159,9 +159,9 @@ function writeMap() {
         var c = coordinates[i];
         
         map += c.start.x + ", " + (height - c.start.y) + ", "
-             + c.start.x + ", " + (height - c.end.y) + ", "
+             + c.end.x + ", " + (height - c.start.y) + ", "
              + c.end.x + ", " + (height - c.end.y) + ", "
-             + c.end.x + ", " + (height - c.start.y);
+             + c.start.x + ", " + (height - c.end.y);
 
         map += "\n";
     }
@@ -187,7 +187,7 @@ function readMap() {
         if (coords.length <= 1) continue;
 
         var start = { x: parseInt(coords[0]), y: height - parseInt(coords[1]) };
-        var end = { x: parseInt(coords[4]), y: height - parseInt(coords[3]) };
+        var end = { x: parseInt(coords[4]), y: height - parseInt(coords[5]) };
         coordinates.push({ start, end });
     }
 
