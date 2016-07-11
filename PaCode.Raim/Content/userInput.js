@@ -47,11 +47,6 @@
         return keyPressed;
     }
 
-    function mouseMove(e) {
-        getMouseCoordinates(e);
-        notifyKeysChanged();
-    }
-
     function getMouseCoordinates(e) {
         var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
         mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
@@ -61,6 +56,7 @@
         if ((e.buttons && 1) && (keys.indexOf(1) === -1)) {
             keys.push(1);
         }
+        getMouseCoordinates(e);
         notifyKeysChanged();
     }
 
@@ -160,7 +156,6 @@
     var startListening = function () {
         document.addEventListener("keydown", keyDown);
         document.addEventListener("keyup", keyUp);
-        document.addEventListener("mousemove", mouseMove);
         document.addEventListener("mousedown", mouseDown);
         document.addEventListener("mouseup", mouseUp);
         document.addEventListener("touchstart", touchStart);
@@ -172,7 +167,6 @@
     var stopListening = function () {
         document.removeEventListener("keydown", keyDown);
         document.removeEventListener("keyup", keyUp);
-        document.removeEventListener("mousemove", mouseMove);
         document.removeEventListener("mousedown", mouseDown);
         document.removeEventListener("mouseup", mouseUp);
         document.removeEventListener("touchstart", touchStart);
