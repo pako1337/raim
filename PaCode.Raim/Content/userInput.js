@@ -48,7 +48,7 @@
     }
 
     function mouseMove(e) {
-
+        getMouseCoordinates(e);
         notifyKeysChanged();
     }
 
