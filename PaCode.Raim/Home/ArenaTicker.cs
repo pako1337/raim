@@ -57,13 +57,13 @@ namespace PaCode.Raim.Home
             }
 
             var go = RaimHub.arena.UpdatePositions(DateTime.Now);
+            _clients.All.PlayerMoved(go);
 
             var removedPlayers = RaimHub.arena.RemoveDestroyedObjects().OfType<Player>();
             foreach (var player in removedPlayers)
             {
                 _clients.All.SignedOff(player);
             }
-            _clients.All.PlayerMoved(go);
         }
     }
 }

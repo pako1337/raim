@@ -65,9 +65,12 @@
 
                     raim.server.playerMoving(e);
                 },
-                signOut: function () {
+                signOut: function (player) {
                     if (!connected)
                         return;
+
+                    player = player || { Score: 0 };
+                    updateHighestScore(player.Score);
 
                     gameArena.stop();
 

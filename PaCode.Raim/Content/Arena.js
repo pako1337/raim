@@ -38,10 +38,11 @@
     };
 
     var playerMoved = function (gameObjectsFromServer) {
+        var currentPlayer = getCurrentPlayer();
         gameObjects = gameObjectsFromServer;
         if (playerId && !getCurrentPlayer()) {
             playerId = null;
-            singOut();
+            singOut(currentPlayer);
         }
     };
 
