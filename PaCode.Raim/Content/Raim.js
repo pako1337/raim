@@ -3,42 +3,7 @@
     var connected = false;
 
     var gameArena;
-
     var _playerId;
-
-    raim.client.signedIn = function (id) {
-        connected = true;
-        _playerId = id;
-        gameArena.setPlayer(id);
-    };
-
-    raim.client.setupArena = function (arenaData) { gameArena.setupArena(arenaData); };
-
-    raim.client.registered = function (player) { gameArena.addNewPlayer(player); }
-    raim.client.signedOff = function (player) {
-        if (player.Id == _playerId) {
-            updateHighestScore(player.Score)
-        }
-
-        gameArena.removePlayer(player.Id);
-    }
-    raim.client.otherPlayers = function (players) {
-        for (var i = 0; i < players.length; i++) {
-            gameArena.addNewPlayer(players[i]);
-        }
-    };
-
-    raim.client.playerMoved = function (gameState) { gameArena && gameArena.playerMoved(gameState); }
-
-    function signOff() {
-        var player = gameArena.getCurrentPlayer();
-        if (player) {
-            updateHighestScore(player.Score);
-        }
-
-        raim.server.signOff(_playerId);
-        $.connection.hub.stop();
-    }
 
     function updateHighestScore(playerScore) {
         var highestScore = parseInt(localStorage.getItem("highestScore")) || 0;
@@ -54,7 +19,41 @@
     });
     playerName.value = localStorage.getItem("playerName");
 
-    score.innerText = localStorage.getItem("highestScore") || 0;
+    function printHighestScore() {
+        score.innerText = localStorage.getItem("highestScore") || 0;
+    }
+
+    printHighestScore();
+
+    raim.client.signedIn = function (id) {
+        connected = true;
+        _playerId = id;
+        gameArena.setPlayer(id);
+    };
+
+    raim.client.setupArena = function (arenaData) {
+        gameArena.setupArena(arenaData);
+    };
+
+    raim.client.registered = function (player) {
+        gameArena.addNewPlayer(player);
+    };
+
+    raim.client.signedOff = function (player) {
+        if (player.Id == _playerId) {
+            updateHighestScore(player.Score)
+        }
+
+        gameArena.removePlayer(player.Id);
+    };
+
+    raim.client.otherPlayers = function (players) {
+        for (var i = 0; i < players.length; i++) {
+            gameArena.addNewPlayer(players[i]);
+        }
+    };
+
+    raim.client.playerMoved = function (gameState) { gameArena && gameArena.playerMoved(gameState); }
 
     playButton.addEventListener("click", function () {
         $.connection.hub.start().done(function () {
@@ -80,7 +79,7 @@
                     $.connection.hub.stop();
                     connected = false;
                     document.getElementById("registration").style.display = "block";
-                    score.innerText = localStorage.getItem("highestScore") || 0;
+                    printHighestScore();
 
                     var arenaElement = document.getElementById("arena");
                     arenaElement.style.display = "none";
@@ -101,7 +100,15 @@
 
             raim.server.register(name);
 
-            window.addEventListener("beforeunload", signOff);
+            window.addEventListener("beforeunload", function () {
+                var player = gameArena.getCurrentPlayer();
+                if (player) {
+                    updateHighestScore(player.Score);
+                }
+
+                raim.server.signOff(_playerId);
+                $.connection.hub.stop();
+            });
         });
     });
 })();
