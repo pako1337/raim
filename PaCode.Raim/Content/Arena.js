@@ -15,7 +15,7 @@
         previousPlayerInput = { keysInput: 0, facingDirection: { x: 0, y: 0 } };
     var connected;
 
-    var gameObjects;
+    var gameObjects = [];
 
     var setPlayer = function (p) {
         playerId = p;
@@ -88,14 +88,14 @@
             playerMoving(playerInput);
         }
 
+        var timeDiff = (timestamp - lastTimestamp) / 1000;
+        updateObjectsPositions(timeDiff);
+
         var currentPlayer = getCurrentPlayer();
         if (currentPlayer !== undefined) {
             viewport.x = gfx.originalSize.x / 2 - currentPlayer.Position.X;
             viewport.y = -gfx.originalSize.y / 2 - currentPlayer.Position.Y;
         }
-
-        var timeDiff = (timestamp - lastTimestamp) / 1000;
-        updateObjectsPositions(timeDiff);
 
         gfx.drawArena(gameObjects);
 
@@ -113,10 +113,51 @@
     var updateObjectsPositions = function (timeDiff) {
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
-            gameObject.Position.X += gameObject.Speed.X * timeDiff;
-            gameObject.Position.Y += gameObject.Speed.Y * timeDiff;
+            var diffX = gameObject.Speed.X * timeDiff;
+            var diffY = gameObject.Speed.Y * timeDiff;
+
+            var boundingBox = {
+                Top: gameObject.BoundingBox.Top + diffY,
+                Right: gameObject.BoundingBox.Right + diffX,
+                Bottom: gameObject.BoundingBox.Bottom + diffY,
+                Left: gameObject.BoundingBox.Left + diffX
+            };
+
+            var collisionDetected = false;
+            for (var j = 0; j < gameObjects.length; j++) {
+                if (i === j) continue;
+
+                var other = gameObjects[j];
+
+                if (isColliding(boundingBox, other.BoundingBox)) {
+                    collisionDetected = true;
+                    break;
+                }
+            }
+
+            if (!collisionDetected) {
+                for (var j = 0; j < arena.Obstacles.length; j++) {
+                    if (isColliding(boundingBox, arena.Obstacles[j].BoundingBox)) {
+                        collisionDetected = true;
+                        break;
+                    }
+                }
+            }
+            
+            if (collisionDetected)
+                continue;
+
+            gameObject.Position.X += diffX;
+            gameObject.Position.Y += diffY;
         }
-    }
+    };
+
+    var isColliding = function (a, b) {
+            return a.Right >= b.Left &&
+                   a.Left <= b.Right &&
+                   a.Bottom <= b.Top &&
+                   a.Top >= b.Bottom;
+    };
 
     (function init() {
         arenaHandler = args.arena || "arena";
