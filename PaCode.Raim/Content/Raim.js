@@ -15,7 +15,13 @@
     raim.client.setupArena = function (arenaData) { gameArena.setupArena(arenaData); };
 
     raim.client.registered = function (player) { gameArena.addNewPlayer(player); }
-    raim.client.signedOff = function (player) { gameArena.removePlayer(player); }
+    raim.client.signedOff = function (player) {
+        if (player.Id == _playerId) {
+            updateHighestScore(player.Score)
+        }
+
+        gameArena.removePlayer(player.id);
+    }
     raim.client.otherPlayers = function (players) {
         for (var i = 0; i < players.length; i++) {
             gameArena.addNewPlayer(players[i]);
@@ -25,8 +31,18 @@
     raim.client.playerMoved = function (gameState) { gameArena && gameArena.playerMoved(gameState); }
 
     function signOff() {
+        var player = gameArena.getCurrentPlayer();
+        if (player) {
+            updateHighestScore(player.Score);
+        }
+
         raim.server.signOff(_playerId);
         $.connection.hub.stop();
+    }
+
+    function updateHighestScore(playerScore) {
+        var highestScore = parseInt(localStorage.getItem("highestScore")) || 0;
+        localStorage.setItem("highestScore", Math.max(highestScore, playerScore));
     }
 
     var playerName = document.getElementById("playerName");

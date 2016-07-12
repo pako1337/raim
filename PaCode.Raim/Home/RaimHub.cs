@@ -54,7 +54,7 @@ namespace PaCode.Raim.Home
             players.Remove(Context.ConnectionId);
 
             arena.UnregisterPlayer(player);
-            Clients.All.SignedOff(player.Name);
+            Clients.All.SignedOff(player);
 
             if (players.Count == 0)
             {

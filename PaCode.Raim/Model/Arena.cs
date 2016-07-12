@@ -42,8 +42,6 @@ namespace PaCode.Raim.Model
                 if (lockTaken)
                     _lock.Exit();
             }
-
-            return null;
         }
 
         public void UnregisterPlayer(Player player)
@@ -101,7 +99,7 @@ namespace PaCode.Raim.Model
 
         public IEnumerable<IGameObject> RemoveDestroyedObjects()
         {
-            var objectsToRemove = GameObjects.Where(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
+            var objectsToRemove = GameObjects.Where(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed).ToList();
             GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
 
             return objectsToRemove;

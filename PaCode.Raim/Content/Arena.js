@@ -135,6 +135,7 @@
         playerMoved: playerMoved,
         setPlayer: setPlayer,
         setupArena: setupArena,
+        getCurrentPlayer: getCurrentPlayer,
         stop: stop
     };
 };
