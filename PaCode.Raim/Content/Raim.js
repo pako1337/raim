@@ -56,6 +56,12 @@
     raim.client.playerMoved = function (gameState) { gameArena && gameArena.playerMoved(gameState); }
 
     playButton.addEventListener("click", function () {
+
+        playButton.setAttribute("disabled", true);
+        setTimeout(function () {
+            playButton.removeAttribute("disabled");
+        }, 1000);
+
         $.connection.hub.start().done(function () {
 
             document.getElementById("registration").style.display = "none";
