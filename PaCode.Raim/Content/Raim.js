@@ -20,7 +20,7 @@
             updateHighestScore(player.Score)
         }
 
-        gameArena.removePlayer(player.id);
+        gameArena.removePlayer(player.Id);
     }
     raim.client.otherPlayers = function (players) {
         for (var i = 0; i < players.length; i++) {

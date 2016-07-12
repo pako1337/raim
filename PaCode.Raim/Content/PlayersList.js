@@ -9,20 +9,15 @@
     };
 
     var removePlayer = function (player) {
-        var playerIndex = _players.findIndex(function (p) { return p && p.Name === player; });
-        _players.splice(playerIndex, 1);
+        var playerIndex = _players.findIndex(function (p) { return p && p.Id === player; });
+        if (playerIndex >= 0)
+            _players.splice(playerIndex, 1);
+
         printPlayers();
     }
 
     var count = function () {
         return _players.length;
-    };
-
-    var get = function (i) {
-        if (typeof i == 'number')
-            return _players[i];
-
-        return _players.filter(function (p) { return p && p.Name === i; })[0];
     };
 
     var updateLeaderboard = function (gameObjects) {
@@ -58,7 +53,6 @@
         addNewPlayer: addNewPlayer,
         removePlayer: removePlayer,
         count: count,
-        get: get,
         updateLeaderboard: updateLeaderboard
     };
 }
