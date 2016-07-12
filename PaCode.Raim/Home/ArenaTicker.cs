@@ -56,10 +56,10 @@ namespace PaCode.Raim.Home
                 return;
             }
 
-            var go = RaimHub.arena.UpdatePositions(DateTime.Now);
-            _clients.All.PlayerMoved(go);
-
+            RaimHub.arena.UpdatePositions(DateTime.Now);
             var removedPlayers = RaimHub.arena.RemoveDestroyedObjects().OfType<Player>();
+            _clients.All.PlayerMoved(RaimHub.arena.GetGameStateCopy());
+
             foreach (var player in removedPlayers)
             {
                 _clients.All.SignedOff(player);

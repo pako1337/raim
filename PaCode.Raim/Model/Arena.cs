@@ -59,7 +59,7 @@ namespace PaCode.Raim.Model
         }
 
         private DateTime _lastUpdateTime = DateTime.Now;
-        public IEnumerable<IGameObject> UpdatePositions(DateTime? updateTimestamp)
+        public void UpdatePositions(DateTime? updateTimestamp)
         {
             var updateTime = updateTimestamp ?? DateTime.Now;
 
@@ -85,7 +85,20 @@ namespace PaCode.Raim.Model
                 }
 
                 _lastUpdateTime = updateTime;
+            }
+            finally
+            {
+                if (lockTaken)
+                    _lock.Exit();
+            }
+        }
 
+        public IEnumerable<IGameObject> GetGameStateCopy()
+        {
+            var lockTaken = false;
+            try
+            {
+                _lock.Enter(ref lockTaken);
                 return GameObjects.ToArray();
             }
             finally
@@ -97,10 +110,20 @@ namespace PaCode.Raim.Model
 
         public IEnumerable<IGameObject> RemoveDestroyedObjects()
         {
-            var objectsToRemove = GameObjects.Where(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed).ToList();
-            GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
+            bool lockTaken = false;
+            try
+            {
+                _lock.Enter(ref lockTaken);
+                var objectsToRemove = GameObjects.Where(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed).ToList();
+                GameObjects.RemoveAll(g => g is IDestroyable && ((IDestroyable)g).IsDestroyed);
 
-            return objectsToRemove;
+                return objectsToRemove;
+            }
+            finally
+            {
+                if (lockTaken)
+                    _lock.Exit();
+            }
         }
 
         public void ProcessInput(PlayerInput input, Player player)
