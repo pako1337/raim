@@ -47,11 +47,14 @@
 
     var playerName = document.getElementById("playerName");
     var playButton = document.getElementById("playButton");
+    var score = document.getElementById("score");
 
     playerName.addEventListener("keyup", function () {
         if (event.keyCode == 13) playButton.click();
     });
     playerName.value = localStorage.getItem("playerName");
+
+    score.innerText = localStorage.getItem("highestScore") || 0;
 
     playButton.addEventListener("click", function () {
         $.connection.hub.start().done(function () {

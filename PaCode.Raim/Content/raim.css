@@ -86,10 +86,32 @@ body {
     }
 
     #help {
-        font-size: 0.6em;
+        font-size: 0.5em;
         margin-top: 2em;
+    }
+
+    #help > div {
+        display: inline-block;
+    }
+
+    #help-keyboard {
+        float: left;
+    }
+
+    #help-touch {
+        float:right;
     }
 
     #help span {
         display: block;
     }
+
+#registration #highestScore {
+    font-size: 0.7em;
+    font-weight: lighter;
+    float: right;
+}
+
+#registration #highestScore #score {
+    font-weight: bold;
+}
