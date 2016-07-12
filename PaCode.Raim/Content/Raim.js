@@ -80,6 +80,7 @@
                     $.connection.hub.stop();
                     connected = false;
                     document.getElementById("registration").style.display = "block";
+                    score.innerText = localStorage.getItem("highestScore") || 0;
 
                     var arenaElement = document.getElementById("arena");
                     arenaElement.style.display = "none";
