@@ -79,19 +79,22 @@
         }
 
         lastTimestamp = lastTimestamp || timestamp;
-
+        var currentPlayer = getCurrentPlayer();
+        
         if (playerInput &&
             (playerInput.keysInput != previousPlayerInput.keysInput ||
              playerInput.facingDirection.X != previousPlayerInput.facingDirection.X ||
              playerInput.facingDirection.Y != previousPlayerInput.facingDirection.Y)) {
             previousPlayerInput = playerInput;
             playerMoving(playerInput);
+
+            if (currentPlayer)
+                updatePlayerSpeed(currentPlayer, playerInput.keysInput);
         }
 
         var timeDiff = (timestamp - lastTimestamp) / 1000;
         updateObjectsPositions(timeDiff);
 
-        var currentPlayer = getCurrentPlayer();
         if (currentPlayer !== undefined) {
             viewport.x = gfx.originalSize.x / 2 - currentPlayer.Position.X;
             viewport.y = -gfx.originalSize.y / 2 - currentPlayer.Position.Y;
@@ -108,6 +111,27 @@
 
         if (connected)
             requestAnimationFrame(processFrame);
+    };
+
+    var updatePlayerSpeed = function (player, keys) {
+        var speed = { X: 0, Y: 0 };
+
+        if (keys & keysInput.Up)
+            speed.Y = 1;
+        if (keys & keysInput.Down)
+            speed.Y = -1;
+        if (keys & keysInput.Right)
+            speed.X = 1;
+        if (keys & keysInput.Left)
+            speed.X = -1;
+
+        if (speed.X != 0 || speed.Y != 0) {
+            var speedLength = Math.sqrt(speed.X * speed.X + speed.Y * speed.Y)
+            speed.X = (speed.X / speedLength) * player.MaxSpeed;
+            speed.Y = (speed.Y / speedLength) * player.MaxSpeed;
+        }
+
+        player.Speed = speed;
     };
 
     var updateObjectsPositions = function (timeDiff) {
@@ -143,7 +167,7 @@
                     }
                 }
             }
-            
+
             if (collisionDetected)
                 continue;
 
@@ -153,10 +177,10 @@
     };
 
     var isColliding = function (a, b) {
-            return a.Right >= b.Left &&
-                   a.Left <= b.Right &&
-                   a.Bottom <= b.Top &&
-                   a.Top >= b.Bottom;
+        return a.Right >= b.Left &&
+               a.Left <= b.Right &&
+               a.Bottom <= b.Top &&
+               a.Top >= b.Bottom;
     };
 
     (function init() {
