@@ -17,9 +17,6 @@ namespace PaCode.Raim.Model
 
         public void CalculateCollisions(IGameObject o1)
         {
-            Stopwatch watch = new Stopwatch();
-            watch.Start();
-
             foreach (var obstacle in _arena.Obstacles)
             {
                 var collisionResult = ObstacleCollide(obstacle, o1);
@@ -39,9 +36,6 @@ namespace PaCode.Raim.Model
                     HandleCollision(o1, o2, collisionResult);
                 }
             }
-
-            watch.Stop();
-            Debug.Print(watch.ElapsedTicks.ToString());
         }
 
         private Tuple<Vector2d, double> ObjectsCollide(IGameObject o1, IGameObject o2)
