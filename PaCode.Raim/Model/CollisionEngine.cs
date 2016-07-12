@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 
@@ -39,6 +40,9 @@ namespace PaCode.Raim.Model
 
         private Tuple<Vector2d, double> ObjectsCollide(IGameObject o1, IGameObject o2)
         {
+            if (!o1.BoundingBox.Intersects(o2.BoundingBox))
+                return null;
+
             var distanceVector = new Vector2d(o2.Position.X - o1.Position.X, o2.Position.Y - o1.Position.Y);
             var collisionDistance = (o1.Size + o2.Size) - distanceVector.Length();
 
@@ -51,6 +55,9 @@ namespace PaCode.Raim.Model
 
         private Tuple<Vector2d, double> ObstacleCollide(Obstacle obstacle, IGameObject gameObject)
         {
+            if (!obstacle.BoundingBox.Intersects(gameObject.BoundingBox))
+                return null;
+
             var smallestDisplacement = Tuple.Create(new Vector2d(0, 0), new Range(double.MinValue, double.MaxValue));
 
             foreach (var axisVector in GetAxisVectors(obstacle, gameObject))

@@ -100,11 +100,13 @@
     <Compile Include="Home\PlayerInput.cs" />
     <Compile Include="Home\RaimHub.cs" />
     <Compile Include="Model\Arena.cs" />
+    <Compile Include="Model\BoundingBox.cs" />
     <Compile Include="Model\Bullet.cs" />
     <Compile Include="Model\CollisionEngine.cs" />
     <Compile Include="Model\IDestroyable.cs" />
     <Compile Include="Model\IGameObject.cs" />
     <Compile Include="Model\ILimitedTimelife.cs" />
+    <Compile Include="Model\MapGenerator.cs" />
     <Compile Include="Model\Obstacle.cs" />
     <Compile Include="Model\Player.cs" />
     <Compile Include="Model\Range.cs" />
@@ -114,11 +116,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ArenaDefinitions\Arena51.txt" />
+    <Content Include="ArenaDefinitions\build1.txt" />
     <Content Include="Content\arena.js" />
+    <Content Include="Content\favicon.png" />
+    <Content Include="Content\mapBuilder.js" />
     <Content Include="Content\userInput.js" />
     <Content Include="Content\keysInput.js" />
     <Content Include="Content\raimGraphics.js" />
     <Content Include="gulpfile.js" />
+    <Content Include="Home\MapBuilder.html" />
     <Content Include="package.json" />
     <Content Include="Bundles.json" />
     <None Include="packages.config" />
@@ -126,6 +132,7 @@
     <Content Include="Content\raim.css" />
     <Content Include="Content\raim.js" />
     <Content Include="Home\Index.html" />
+    <Content Include="Scripts\helpers.js" />
     <Content Include="Scripts\jquery-2.2.1.js" />
     <Content Include="Scripts\jquery-2.2.1.min.js" />
     <Content Include="Scripts\jquery.signalR-2.2.0.js" />

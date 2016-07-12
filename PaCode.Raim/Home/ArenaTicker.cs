@@ -62,7 +62,7 @@ namespace PaCode.Raim.Home
             var removedPlayers = RaimHub.arena.RemoveDestroyedObjects().OfType<Player>();
             foreach (var player in removedPlayers)
             {
-                _clients.All.SignedOff(player.Name);
+                _clients.All.SignedOff(player);
             }
         }
     }

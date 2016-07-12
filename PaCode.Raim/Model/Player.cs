@@ -7,7 +7,7 @@ namespace PaCode.Raim.Model
 {
     public class Player : IGameObject, IDestroyable
     {
-        private const int MaxSpeed = 100;
+        private const int MaxSpeed = 150;
 
         public Guid Id { get; set; }
         public string Name { get; private set; }
@@ -17,7 +17,8 @@ namespace PaCode.Raim.Model
         public Vector2d FacingDirection { get; set; }
         public bool IsDestroyed { get; set; }
         public int Score { get; private set; }
-        public string Color { get; private set; }
+        public string Style { get; private set; }
+        public BoundingBox BoundingBox { get { return new BoundingBox(Position.Y + Size, Position.X + Size, Position.Y - Size, Position.X - Size); } }
 
         private Player() { }
 
@@ -31,18 +32,18 @@ namespace PaCode.Raim.Model
                 Speed = new Vector2d(0, 0),
                 Size = 20,
                 FacingDirection = new Vector2d(1, 0),
-                Color = GetRandomColor()
+                Style = GetRandomColor()
             };
         }
 
         private static Random rnd = new Random();
         private static List<string> colors = new List<string>
         {
-            "rgba(245,85,26,1)",
-            "rgba(125,188,57,1)",
-            "rgba(7,92,191,1)",
-            "rgba(174,173,58,1)",
-            "rgba(54,201,240,1)",
+            "orange",
+            "green",
+            "blue",
+            "darkyellow",
+            "aqua",
         };
 
         private static string GetRandomColor()
@@ -78,7 +79,7 @@ namespace PaCode.Raim.Model
 
             var facingUnit = FacingDirection.Unit();
             var bulletStartPosition = Position.Add(facingUnit.Scale(Size));
-            var bullet = Bullet.Create(bulletStartPosition, facingUnit, Color);
+            var bullet = Bullet.Create(bulletStartPosition, facingUnit, Style);
             bullet.Player = this;
             createdObjects.Add(bullet);
 
