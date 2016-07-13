@@ -193,16 +193,22 @@ var raimGraphics = function (args) {
     function drawObstacles() {
         if (args.arena() == undefined) return;
 
+        backgroundContext.beginPath();
+
         var obstacles = args.arena().Obstacles;
         for (var i = 0; i < obstacles.length; i++) {
             drawPolygon(obstacles[i].Points, backgroundContext);
         }
+
+        backgroundContext.strokeStyle = "rgba(0, 0, 0, 1)";
+        backgroundContext.fillStyle = "rgba(200, 200, 200, 1)";
+        backgroundContext.stroke();
+        backgroundContext.fill();
+        backgroundContext.closePath();
     }
 
     function drawPolygon(points, context) {
         if (points.length < 2) return;
-
-        context.beginPath();
 
         moveTo(points[0].X, points[0].Y, context);
         for (var i = 1; i < points.length; i++) {
@@ -210,12 +216,6 @@ var raimGraphics = function (args) {
         }
 
         lineTo(points[0].X, points[0].Y, context);
-
-        context.strokeStyle = "rgba(0, 0, 0, 1)";
-        context.fillStyle = "rgba(200, 200, 200, 1)";
-        context.stroke();
-        context.fill();
-        context.closePath();
     }
 
     function moveTo(x, y, context) {
