@@ -22,10 +22,10 @@ namespace PaCode.Raim.Model
 
         public bool Intersects(BoundingBox b)
         {
-            return Right >= b.Left &&
-                   Left <= b.Right &&
-                   Bottom <= b.Top &&
-                   Top >= b.Bottom;
+            return !(Right < b.Left &&
+                     Left > b.Right &&
+                     Bottom > b.Top &&
+                     Top < b.Bottom);
         }
     }
 }
