@@ -195,9 +195,18 @@ var raimGraphics = function (args) {
 
         backgroundContext.beginPath();
 
+        var box = {
+            Top: originalSize.y - args.viewport().y,
+            Right: originalSize.x + args.viewport().x,
+            Bottom: args.viewport().y,
+            Left: -args.viewport().x,
+        };
+
         var obstacles = args.arena().Obstacles;
         for (var i = 0; i < obstacles.length; i++) {
-            drawPolygon(obstacles[i].Points, backgroundContext);
+            var obstacle = obstacles[i];
+            if (isColliding(obstacle.BoundingBox, box))
+                drawPolygon(obstacle.Points, backgroundContext);
         }
 
         backgroundContext.strokeStyle = "rgba(0, 0, 0, 1)";

@@ -15,3 +15,10 @@ if (!Array.prototype.findIndex) {
         }
     }
 }
+
+var isColliding = function (a, b) {
+    return a.Right >= b.Left &&
+           a.Left <= b.Right &&
+           a.Bottom <= b.Top &&
+           a.Top >= b.Bottom;
+};

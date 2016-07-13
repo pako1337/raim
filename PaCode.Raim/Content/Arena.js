@@ -176,13 +176,6 @@
         }
     };
 
-    var isColliding = function (a, b) {
-        return a.Right >= b.Left &&
-               a.Left <= b.Right &&
-               a.Bottom <= b.Top &&
-               a.Top >= b.Bottom;
-    };
-
     (function init() {
         arenaHandler = args.arena || "arena";
         players = args.playersList || new playersList(args.playersListOptions);
