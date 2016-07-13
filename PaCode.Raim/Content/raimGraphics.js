@@ -3,6 +3,7 @@ var raimGraphics = function (args) {
     var scale = 1;
     var canvas, background;
     var originalSize = { x: 1600, y: 861 };
+    var viewport;
 
     var resizeCanvas = function () {
         var arenaElement = document.getElementById(args.arenaHandler);
@@ -100,6 +101,8 @@ var raimGraphics = function (args) {
 
     var drawArena = function (gameObjects) {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        viewport = args.viewport();
         
         drawBackground();
 
@@ -117,8 +120,8 @@ var raimGraphics = function (args) {
         drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.translate( (bullet.Position.X - bullet.Size + args.viewport().x) * scale,
-                                 -(bullet.Position.Y - bullet.Size + args.viewport().y) * scale);
+        drawingContext.translate( (bullet.Position.X - bullet.Size + viewport.x) * scale,
+                                 -(bullet.Position.Y - bullet.Size + viewport.y) * scale);
         drawingContext.scale(scale, -scale);
 
         drawingContext.rect(0, 0, bullet.Size * 2, bullet.Size * 2);
@@ -133,8 +136,8 @@ var raimGraphics = function (args) {
         drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.translate( (player.Position.X - player.Size + args.viewport().x) * scale,
-                                 -(player.Position.Y - player.Size + args.viewport().y) * scale);
+        drawingContext.translate( (player.Position.X - player.Size + viewport.x) * scale,
+                                 -(player.Position.Y - player.Size + viewport.y) * scale);
         drawingContext.scale(scale, -scale);
 
         drawingContext.rect(0, 0, player.Size * 2, player.Size * 2);
@@ -167,13 +170,13 @@ var raimGraphics = function (args) {
 
     var prevScale = 0, prevViewportX = 0, prevViewportY = 0;
     function drawBackground() {
-        if (prevScale === scale && prevViewportX === args.viewport().x && prevViewportY === args.viewport().y)
+        if (prevScale === scale && prevViewportX === viewport.x && prevViewportY === viewport.y)
             return;
 
         backgroundContext.clearRect(0, 0, background.width, background.height);
 
-        var backgroundX = Math.round(args.viewport().x % backgroundTileSize.x) * scale;
-        var backgroundY = Math.round(args.viewport().y % backgroundTileSize.y) * scale;
+        var backgroundX = Math.round(viewport.x % backgroundTileSize.x) * scale;
+        var backgroundY = Math.round(viewport.y % backgroundTileSize.y) * scale;
 
         backgroundContext.save();
         backgroundContext.translate(backgroundX, -backgroundY);
@@ -186,8 +189,8 @@ var raimGraphics = function (args) {
         drawObstacles();
 
         prevScale = scale;
-        prevViewportX = args.viewport().x;
-        prevViewportY = args.viewport().y;
+        prevViewportX = viewport.x;
+        prevViewportY = viewport.y;
     }
 
     function drawObstacles() {
@@ -196,10 +199,10 @@ var raimGraphics = function (args) {
         backgroundContext.beginPath();
 
         var box = {
-            Top: originalSize.y - args.viewport().y,
-            Right: originalSize.x + args.viewport().x,
-            Bottom: args.viewport().y,
-            Left: -args.viewport().x,
+            Top: originalSize.y - viewport.y,
+            Right: originalSize.x + viewport.x,
+            Bottom: viewport.y,
+            Left: -viewport.x,
         };
 
         var obstacles = args.arena().Obstacles;
@@ -228,28 +231,19 @@ var raimGraphics = function (args) {
     }
 
     function moveTo(x, y, context) {
-        var coord = applyViewportAndScale(x, y);
-
-        context.moveTo(coord.x, coord.y);
+        context.moveTo(applyXViewportAndScale(x), applyYViewportAndScale(y));
     }
 
     function lineTo(x, y, context) {
-        var coord = applyViewportAndScale(x, y);
-
-        context.lineTo(coord.x, coord.y);
+        context.lineTo(applyXViewportAndScale(x), applyYViewportAndScale(y));
     }
 
-    function applyViewportAndScale(x, y) {
-        x = x + args.viewport().x;
-        y = -(y + args.viewport().y);
+    function applyXViewportAndScale(x) {
+        return Math.floor((x + viewport.x) * scale);
+    }
 
-        x *= scale;
-        y *= scale;
-
-        return {
-            x: Math.floor(x),
-            y: Math.floor(y)
-        };
+    function applyYViewportAndScale(y) {
+        return Math.floor(-(y + viewport.y) * scale);
     }
 
     return {
