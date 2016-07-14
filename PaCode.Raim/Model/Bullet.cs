@@ -4,7 +4,7 @@ namespace PaCode.Raim.Model
 {
     public class Bullet : IGameObject, IDestroyable, ILimitedTimelife
     {
-        private static int _speed = 250;
+        private static int _speed = 350;
 
         public Guid Id { get; private set; }
         public Vector2d Position { get; set; }
@@ -27,7 +27,7 @@ namespace PaCode.Raim.Model
                 Position = position,
                 FacingDirection = directionUnit,
                 Speed = directionUnit.Scale(_speed),
-                TimeToLive = (int)TimeSpan.FromMilliseconds(2000).TotalMilliseconds,
+                TimeToLive = (int)TimeSpan.FromMilliseconds(1750).TotalMilliseconds,
                 Color = color,
             };
         }
