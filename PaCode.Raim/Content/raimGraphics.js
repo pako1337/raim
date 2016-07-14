@@ -65,11 +65,11 @@ var raimGraphics = function (args) {
 
     var playerPatterns = (function () {
         var playerStyles = [
-            {name: "orange", style: "rgba(245,85,26,1)" },
-            {name: "green", style: "rgba(125,188,57,1)"},
-            {name: "blue", style: "rgba(7,92,191,1)"  },
-            {name: "darkyellow", style: "rgba(174,173,58,1)"},
-            {name: "aqua", style: "rgba(54,201,240,1)" }
+            { name: "orange", style: "rgba(245,85,26,1)" },
+            { name: "green", style: "rgba(125,188,57,1)" },
+            { name: "blue", style: "rgba(7,92,191,1)" },
+            { name: "darkyellow", style: "rgba(174,173,58,1)" },
+            { name: "aqua", style: "rgba(54,201,240,1)" }
         ];
 
         patterns = {};
@@ -103,7 +103,7 @@ var raimGraphics = function (args) {
         drawingContext.clearRect(0, 0, canvas.width, canvas.height);
 
         viewport = args.viewport();
-        
+
         drawBackground();
 
         for (var i = 0; i < gameObjects.length; i++) {
@@ -120,7 +120,7 @@ var raimGraphics = function (args) {
         drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.translate( (bullet.Position.X - bullet.Size + viewport.x) * scale,
+        drawingContext.translate((bullet.Position.X - bullet.Size + viewport.x) * scale,
                                  -(bullet.Position.Y - bullet.Size + viewport.y) * scale);
         drawingContext.scale(scale, -scale);
 
@@ -136,7 +136,7 @@ var raimGraphics = function (args) {
         drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.translate( (player.Position.X - player.Size + viewport.x) * scale,
+        drawingContext.translate((player.Position.X - player.Size + viewport.x) * scale,
                                  -(player.Position.Y - player.Size + viewport.y) * scale);
         drawingContext.scale(scale, -scale);
 
@@ -193,17 +193,16 @@ var raimGraphics = function (args) {
         prevViewportY = viewport.y;
     }
 
+    var box = { Top: 0, Right: 0, Bottom: 0, Left: 0, };
     function drawObstacles() {
         if (args.arena() == undefined) return;
 
         backgroundContext.beginPath();
 
-        var box = {
-            Top: originalSize.y - viewport.y,
-            Right: originalSize.x + viewport.x,
-            Bottom: viewport.y,
-            Left: -viewport.x,
-        };
+        box.Top = originalSize.y - viewport.y;
+        box.Right = originalSize.x + viewport.x;
+        box.Bottom = viewport.y;
+        box.Left = -viewport.x;
 
         var obstacles = args.arena().Obstacles;
         for (var i = 0; i < obstacles.length; i++) {
