@@ -4,6 +4,7 @@ var raimGraphics = function (args) {
     var canvas, background;
     var originalSize = { x: 1600, y: 861 };
     var viewport;
+    var box = { Top: 0, Right: 0, Bottom: 0, Left: 0, };
 
     var resizeCanvas = function () {
         var arenaElement = document.getElementById(args.arenaHandler);
@@ -104,14 +105,21 @@ var raimGraphics = function (args) {
 
         viewport = args.viewport();
 
+        box.Top = originalSize.y - viewport.y;
+        box.Right = originalSize.x + viewport.x;
+        box.Bottom = viewport.y;
+        box.Left = -viewport.x;
+
         drawBackground();
 
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
-            if (gameObject.Name === undefined) {
-                drawBullet(gameObject);
-            } else {
-                drawPlayer(gameObject);
+            if (isColliding(gameObject.BoundingBox, box)) {
+                if (gameObject.Name === undefined) {
+                    drawBullet(gameObject);
+                } else {
+                    drawPlayer(gameObject);
+                }
             }
         }
     };
@@ -193,16 +201,10 @@ var raimGraphics = function (args) {
         prevViewportY = viewport.y;
     }
 
-    var box = { Top: 0, Right: 0, Bottom: 0, Left: 0, };
     function drawObstacles() {
         if (args.arena() == undefined) return;
 
         backgroundContext.beginPath();
-
-        box.Top = originalSize.y - viewport.y;
-        box.Right = originalSize.x + viewport.x;
-        box.Bottom = viewport.y;
-        box.Left = -viewport.x;
 
         var obstacles = args.arena().Obstacles;
         for (var i = 0; i < obstacles.length; i++) {
