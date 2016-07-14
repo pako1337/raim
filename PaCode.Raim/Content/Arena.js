@@ -46,8 +46,10 @@
         }
     };
 
+    var isCurrentPlayerPredicate = function (g) { return g.Id == playerId; };
+
     var getCurrentPlayer = function () {
-        return gameObjects.find(function (g) { return g.Id == playerId; });
+        return gameObjects.find(isCurrentPlayerPredicate);
     }
 
     var inputChange = function (input) {
