@@ -17,13 +17,13 @@
         notifyKeysChanged();
     };
 
+    var mouse = { x: 0, y: 0 };
     function notifyKeysChanged() {
         var newKeys = buildDirectionKey();
 
         keysPressed = newKeys;
-        var mouse = { x: mouseCoordinates.x, y: mouseCoordinates.y };
 
-        args.inputChanged({ direction: keysPressed, mouse: mouse });
+        args.inputChanged({ direction: keysPressed, mouse: mouseCoordinates });
     }
 
     function buildDirectionKey() {
@@ -49,7 +49,8 @@
 
     function getMouseCoordinates(e) {
         var targetRect = document.getElementById("arena").children[0].getBoundingClientRect();
-        mouseCoordinates = { x: e.clientX - targetRect.left, y: e.clientY - targetRect.top };
+        mouseCoordinates.x = e.clientX - targetRect.left;
+        mouseCoordinates.y = e.clientY - targetRect.top;
     }
 
     function mouseDown(e) {

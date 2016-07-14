@@ -11,8 +11,8 @@
     var lastPlayerListUpdate;
     var viewport = { x: 0, y: 0 };
     var arena;
-    var playerInput,
-        previousPlayerInput = { keysInput: 0, facingDirection: { x: 0, y: 0 } };
+    var playerInput = { keysInput: 0, facingDirection: { X: 0, Y: 0 } },
+        previousPlayerInput = { keysInput: 0, facingDirection: { X: 0, Y: 0 } };
     var connected;
 
     var gameObjects = [];
@@ -56,22 +56,18 @@
         var player = getCurrentPlayer();
         if (player == undefined) return;
 
-        input.mouse.x /= gfx.scale();
-        input.mouse.y /= gfx.scale();
-        input.mouse.x = Math.round(input.mouse.x - viewport.x);
-        input.mouse.y = Math.round(-input.mouse.y - viewport.y);
+        var mouseX = Math.round(input.mouse.x / gfx.scale() - viewport.x);
+        var mouseY = Math.round(-input.mouse.y / gfx.scale() - viewport.y);
 
-        player.FacingDirection = calculateFacingDirection(player, input.mouse);
-        playerInput = { keysInput: input.direction, facingDirection: player.FacingDirection };
+        calculateFacingDirection(player, mouseX, mouseY);
+
+        playerInput.keysInput = input.direction;
+        playerInput.facingDirection = player.FacingDirection;
     };
 
-    function calculateFacingDirection(player, mouse) {
-        var facingDir = {
-            X: Math.round(mouse.x - player.Position.X),
-            Y: Math.round(mouse.y - player.Position.Y)
-        };
-
-        return facingDir;
+    function calculateFacingDirection(player, mouseX, mouseY) {
+        player.FacingDirection.X = Math.round(mouseX - player.Position.X);
+        player.FacingDirection.Y = Math.round(mouseY - player.Position.Y);
     }
 
     var lastTimestamp;
@@ -87,7 +83,8 @@
             (playerInput.keysInput != previousPlayerInput.keysInput ||
              playerInput.facingDirection.X != previousPlayerInput.facingDirection.X ||
              playerInput.facingDirection.Y != previousPlayerInput.facingDirection.Y)) {
-            previousPlayerInput = playerInput;
+            previousPlayerInput.keysInput = playerInput.keysInput;
+            previousPlayerInput.facingDirection = playerInput.facingDirection;
             playerMoving(playerInput);
 
             if (currentPlayer)
@@ -98,7 +95,7 @@
         updateObjectsPositions(timeDiff);
 
         if (currentPlayer !== undefined) {
-            viewport.x = gfx.originalSize.x / 2 - currentPlayer.Position.X;
+            viewport.x =  gfx.originalSize.x / 2 - currentPlayer.Position.X;
             viewport.y = -gfx.originalSize.y / 2 - currentPlayer.Position.Y;
         }
 
@@ -116,38 +113,39 @@
     };
 
     var updatePlayerSpeed = function (player, keys) {
-        var speed = { X: 0, Y: 0 };
+        var speedX = 0,
+            speedY = 0;
 
         if (keys & keysInput.Up)
-            speed.Y = 1;
+            speedY = 1;
         if (keys & keysInput.Down)
-            speed.Y = -1;
+            speedY = -1;
         if (keys & keysInput.Right)
-            speed.X = 1;
+            speedX = 1;
         if (keys & keysInput.Left)
-            speed.X = -1;
+            speedX = -1;
 
-        if (speed.X != 0 || speed.Y != 0) {
-            var speedLength = Math.sqrt(speed.X * speed.X + speed.Y * speed.Y)
-            speed.X = (speed.X / speedLength) * player.MaxSpeed;
-            speed.Y = (speed.Y / speedLength) * player.MaxSpeed;
+        if (speedX != 0 || speedY != 0) {
+            var speedLength = Math.sqrt(speedX * speedX + speedY * speedY)
+            speedX = (speedX / speedLength) * player.MaxSpeed;
+            speedY = (speedY / speedLength) * player.MaxSpeed;
         }
 
-        player.Speed = speed;
+        player.Speed.X = speedX;
+        player.Speed.Y = speedY;
     };
 
+    var boundingBox = { Top: 0, Right: 0, Bottom: 0, Left: 0 };
     var updateObjectsPositions = function (timeDiff) {
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
             var diffX = gameObject.Speed.X * timeDiff;
             var diffY = gameObject.Speed.Y * timeDiff;
-
-            var boundingBox = {
-                Top: gameObject.BoundingBox.Top + diffY,
-                Right: gameObject.BoundingBox.Right + diffX,
-                Bottom: gameObject.BoundingBox.Bottom + diffY,
-                Left: gameObject.BoundingBox.Left + diffX
-            };
+            
+            boundingBox.Top = gameObject.BoundingBox.Top + diffY;
+            boundingBox.Right = gameObject.BoundingBox.Right + diffX;
+            boundingBox.Bottom = gameObject.BoundingBox.Bottom + diffY;
+            boundingBox.Left = gameObject.BoundingBox.Left + diffX;
 
             var collisionDetected = false;
             for (var j = 0; j < gameObjects.length; j++) {
