@@ -128,18 +128,18 @@ var raimGraphics = function (args) {
     };
 
     function drawBullet(bullet) {
-        drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.translate((bullet.Position.X - bullet.Size + viewport.x),
-                                 (bullet.Position.Y - bullet.Size + viewport.y));
+        var translateX = bullet.Position.X - bullet.Size + viewport.x;
+        var translateY = bullet.Position.Y - bullet.Size + viewport.y;
+        drawingContext.translate(translateX, translateY);
 
         drawingContext.rect(0, 0, bullet.Size * 2, bullet.Size * 2);
-
         drawingContext.fillStyle = bulletPattern;
         drawingContext.fill();
+
+        drawingContext.translate(-translateX, -translateY);
         drawingContext.closePath();
-        drawingContext.restore();
     }
 
     function drawPlayer(player) {
