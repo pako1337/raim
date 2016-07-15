@@ -206,18 +206,18 @@ var raimGraphics = function (args) {
     }
 
     function moveTo(x, y, context) {
-        context.moveTo(applyXViewportAndScale(x), applyYViewportAndScale(y));
+        context.moveTo(applyXViewport(x), applyYViewport(y));
     }
 
     function lineTo(x, y, context) {
-        context.lineTo(applyXViewportAndScale(x), applyYViewportAndScale(y));
+        context.lineTo(applyXViewport(x), applyYViewport(y));
     }
 
-    function applyXViewportAndScale(x) {
+    function applyXViewport(x) {
         return Math.floor((x + viewport.x));
     }
 
-    function applyYViewportAndScale(y) {
+    function applyYViewport(y) {
         return Math.floor((y + viewport.y));
     }
 

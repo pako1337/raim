@@ -142,10 +142,10 @@
             var diffX = gameObject.Speed.X * timeDiff;
             var diffY = gameObject.Speed.Y * timeDiff;
             
-            boundingBox.Top = gameObject.BoundingBox.Top + diffY;
-            boundingBox.Right = gameObject.BoundingBox.Right + diffX;
-            boundingBox.Bottom = gameObject.BoundingBox.Bottom + diffY;
-            boundingBox.Left = gameObject.BoundingBox.Left + diffX;
+            boundingBox.Top    = Math.floor(gameObject.BoundingBox.Top + diffY);
+            boundingBox.Right  = Math.floor(gameObject.BoundingBox.Right + diffX);
+            boundingBox.Bottom = Math.floor(gameObject.BoundingBox.Bottom + diffY);
+            boundingBox.Left   = Math.floor(gameObject.BoundingBox.Left + diffX);
 
             var collisionDetected = false;
             for (var j = 0; j < gameObjects.length; j++) {
