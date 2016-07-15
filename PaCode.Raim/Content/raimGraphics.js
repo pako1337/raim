@@ -112,6 +112,8 @@ var raimGraphics = function (args) {
 
         drawBackground();
 
+        drawingContext.save();
+        drawingContext.scale(scale, -scale);
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
             if (isColliding(gameObject.BoundingBox, box)) {
@@ -122,15 +124,15 @@ var raimGraphics = function (args) {
                 }
             }
         }
+        drawingContext.restore();
     };
 
     function drawBullet(bullet) {
         drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.translate((bullet.Position.X - bullet.Size + viewport.x) * scale,
-                                 -(bullet.Position.Y - bullet.Size + viewport.y) * scale);
-        drawingContext.scale(scale, -scale);
+        drawingContext.translate((bullet.Position.X - bullet.Size + viewport.x),
+                                 (bullet.Position.Y - bullet.Size + viewport.y));
 
         drawingContext.rect(0, 0, bullet.Size * 2, bullet.Size * 2);
 
@@ -141,40 +143,19 @@ var raimGraphics = function (args) {
     }
 
     function drawPlayer(player) {
-        drawingContext.save();
         drawingContext.beginPath();
 
-        drawingContext.translate((player.Position.X - player.Size + viewport.x) * scale,
-                                 -(player.Position.Y - player.Size + viewport.y) * scale);
-        drawingContext.scale(scale, -scale);
+        var translateX = player.Position.X - player.Size + viewport.x;
+        var translateY = player.Position.Y - player.Size + viewport.y;
+        drawingContext.translate(translateX, translateY);
 
         drawingContext.rect(0, 0, player.Size * 2, player.Size * 2);
-
         drawingContext.fillStyle = playerPatterns[player.Style || 'orange'];
         drawingContext.fill();
 
+        drawingContext.translate(-translateX, -translateY);
         drawingContext.closePath();
-        drawingContext.restore();
     }
-
-    var backgroundTileSize = { x: 30, y: 30 };
-    var backgroundPattern = (function () {
-        var patternCanvas = document.createElement("canvas");
-        patternCanvas.width = backgroundTileSize.x;
-        patternCanvas.height = backgroundTileSize.y;
-        var patternContext = patternCanvas.getContext("2d");
-
-        patternContext.beginPath();
-        patternContext.moveTo(backgroundTileSize.x, 0);
-        patternContext.lineTo(0, 0);
-        patternContext.lineTo(backgroundTileSize.x / 2, backgroundTileSize.y);
-        patternContext.moveTo(backgroundTileSize.x, backgroundTileSize.y);
-        patternContext.lineTo(0, backgroundTileSize.y);
-        patternContext.strokeStyle = "rgba(0,0,0,0.15)";
-        patternContext.stroke();
-
-        return drawingContext.createPattern(patternCanvas, "repeat");
-    })();
 
     var prevScale = 0, prevViewportX = 0, prevViewportY = 0;
     function drawBackground() {
@@ -182,19 +163,12 @@ var raimGraphics = function (args) {
             return;
 
         backgroundContext.clearRect(0, 0, background.width, background.height);
-
-        var backgroundX = Math.round(viewport.x % backgroundTileSize.x) * scale;
-        var backgroundY = Math.round(viewport.y % backgroundTileSize.y) * scale;
-
         backgroundContext.save();
-        backgroundContext.translate(backgroundX, -backgroundY);
-        backgroundContext.rect(backgroundX, backgroundY, background.width, background.height);
-        backgroundContext.fillStyle = backgroundPattern;
-        backgroundContext.scale(scale, scale);
-        backgroundContext.fill();
-        backgroundContext.restore();
+        backgroundContext.scale(scale, -scale);
 
         drawObstacles();
+
+        backgroundContext.restore();
 
         prevScale = scale;
         prevViewportX = viewport.x;
@@ -240,11 +214,11 @@ var raimGraphics = function (args) {
     }
 
     function applyXViewportAndScale(x) {
-        return Math.floor((x + viewport.x) * scale);
+        return Math.floor((x + viewport.x));
     }
 
     function applyYViewportAndScale(y) {
-        return Math.floor(-(y + viewport.y) * scale);
+        return Math.floor((y + viewport.y));
     }
 
     return {
