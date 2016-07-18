@@ -12,32 +12,14 @@ namespace PaCode.Raim.Home
     public class RaimHub : Hub
     {
         private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-        public static Arena arena;
-        private static ArenaTicker _ticker;
+        public static List<Tuple<Arena, ArenaTicker>> arenas = new List<Tuple<Arena, ArenaTicker>>(10);
         private static SpinLock _lock = new SpinLock();
 
         public void Register(string name)
         {
-            if (arena == null)
-            {
-                var gotLock = false;
-                try
-                {
-                    _lock.Enter(ref gotLock);
-                    if (arena == null)
-                    {
-                        arena = new Arena();
-                        _ticker = ArenaTicker.Instance;
-                    }
-
-                }
-                finally
-                {
-                    if (gotLock) _lock.Exit();
-                }
-            }
-
             name = HttpUtility.HtmlEncode(name);
+
+            var arena = GetArena();
 
             var player = arena.RegisterPlayer(name);
             players.Add(Context.ConnectionId, player);
@@ -53,7 +35,7 @@ namespace PaCode.Raim.Home
             var player = players[Context.ConnectionId];
             players.Remove(Context.ConnectionId);
 
-            arena.UnregisterPlayer(player);
+            GetArena().UnregisterPlayer(player);
             Clients.All.SignedOff(player);
 
             if (players.Count == 0)
@@ -64,8 +46,9 @@ namespace PaCode.Raim.Home
                     _lock.Enter(ref gotLock);
                     if (players.Count == 0)
                     {
-                        arena = null;
-                        _ticker = null;
+                        var arenaTuple = arenas[0];
+                        arenaTuple.Item2.Dispose();
+                        arenas.RemoveAt(0);
                     }
 
                 }
@@ -84,7 +67,29 @@ namespace PaCode.Raim.Home
 
         public void PlayerMoving(PlayerInput input)
         {
-            arena.ProcessInput(input, players[Context.ConnectionId]);
+            GetArena().ProcessInput(input, players[Context.ConnectionId]);
+        }
+
+        private Arena GetArena()
+        {
+            if (arenas.Count == 0)
+            {
+                var gotLock = false;
+                try
+                {
+                    if (arenas.Count == 0)
+                    {
+                        var arena = new Arena();
+                        arenas.Add(Tuple.Create(arena, ArenaTicker.Create(arena)));
+                    }
+                }
+                finally
+                {
+                    if (gotLock) _lock.Exit();
+                }
+            }
+
+            return arenas[0].Item1;
         }
     }
 }

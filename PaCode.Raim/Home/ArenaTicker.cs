@@ -8,62 +8,52 @@ using PaCode.Raim.Model;
 
 namespace PaCode.Raim.Home
 {
-    public class ArenaTicker
+    public class ArenaTicker : IDisposable
     {
-        private static ArenaTicker _instance = new ArenaTicker(GlobalHost.ConnectionManager.GetHubContext<RaimHub>().Clients);
         private const int _updateInterval = 1000 / 30;
 
         private readonly IHubConnectionContext<dynamic> _clients;
         private static SpinLock _lock = new SpinLock();
         private Timer _timer;
+        private Arena _arena;
 
-        public static ArenaTicker Instance
+        public static ArenaTicker Create(Arena arena)
         {
-            get
-            {
-                if (_instance == null)
-                {
-                    bool gotLock = false;
-                    try
-                    {
-                        _lock.Enter(ref gotLock);
-                        if (_instance == null)
-                            _instance = new ArenaTicker(GlobalHost.ConnectionManager.GetHubContext<RaimHub>().Clients);
-                    }
-                    finally
-                    {
-                        if (gotLock) _lock.Exit();
-                    }
-                }
-
-                return _instance;
-            }
+            return new ArenaTicker(GlobalHost.ConnectionManager.GetHubContext<RaimHub>().Clients, arena);
         }
 
-        private ArenaTicker(IHubConnectionContext<dynamic> clients)
+        private ArenaTicker(IHubConnectionContext<dynamic> clients, Arena arena)
         {
             _clients = clients;
+            _arena = arena;
+
             _timer = new Timer(UpdateArena, null, _updateInterval, _updateInterval);
         }
 
         private void UpdateArena(object state)
         {
-            if (RaimHub.arena == null)
+            if (_arena == null)
             {
-                _instance = null;
                 _timer.Dispose();
                 _timer = null;
                 return;
             }
 
-            RaimHub.arena.UpdatePositions(DateTime.Now);
-            var removedPlayers = RaimHub.arena.RemoveDestroyedObjects().OfType<Player>();
-            _clients.All.PlayerMoved(RaimHub.arena.GetGameStateCopy());
+            _arena.UpdatePositions(DateTime.Now);
+            var removedPlayers = _arena.RemoveDestroyedObjects().OfType<Player>();
+            _clients.All.PlayerMoved(_arena.GetGameStateCopy());
 
             foreach (var player in removedPlayers)
             {
                 _clients.All.SignedOff(player);
             }
+        }
+
+        public void Dispose()
+        {
+            _timer.Dispose();
+            _timer = null;
+            GC.SuppressFinalize(this);
         }
     }
 }

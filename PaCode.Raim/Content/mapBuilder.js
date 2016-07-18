@@ -104,6 +104,7 @@ function draw() {
         var coord = coordinates[i];
         ctx.rect(coord.start.x, coord.start.y, coord.end.x - coord.start.x, coord.end.y - coord.start.y);
     }
+
     ctx.strokeStyle = "rgba(0, 0, 0, 1)";
     ctx.fillStyle = "rgba(200, 200, 200, 1)";
     ctx.stroke();
