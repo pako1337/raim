@@ -72,6 +72,9 @@
 
     var lastTimestamp;
     var processFrame = function (timestamp) {
+        if (!connected)
+            return;
+
         if (!lastPlayerListUpdate) {
             lastPlayerListUpdate = timestamp;
         }
@@ -159,7 +162,7 @@
                 }
             }
 
-            if (!collisionDetected) {
+            if (!collisionDetected && arena) {
                 for (var j = 0; j < arena.Obstacles.length; j++) {
                     if (isColliding(boundingBox, arena.Obstacles[j].BoundingBox)) {
                         collisionDetected = true;

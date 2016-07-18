@@ -41,11 +41,11 @@ namespace PaCode.Raim.Home
 
             _arena.UpdatePositions(DateTime.Now);
             var removedPlayers = _arena.RemoveDestroyedObjects().OfType<Player>();
-            _clients.All.PlayerMoved(_arena.GetGameStateCopy());
+            _clients.Group(_arena.Id).PlayerMoved(_arena.GetGameStateCopy());
 
             foreach (var player in removedPlayers)
             {
-                _clients.All.SignedOff(player);
+                _clients.Group(_arena.Id).SignedOff(player);
             }
         }
 

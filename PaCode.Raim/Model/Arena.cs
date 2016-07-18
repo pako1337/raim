@@ -14,9 +14,11 @@ namespace PaCode.Raim.Model
         private Vector2d _arenaSize;
         private const int MaxTimeBetweenFrames = 1000 / 20;
 
+        public string Id { get; } = Guid.NewGuid().ToString();
         public Vector2d ArenaSize { get { return _arenaSize; } }
         public List<IGameObject> GameObjects = new List<IGameObject>();
         public List<Obstacle> Obstacles = new List<Obstacle>();
+        public List<Player> Players { get; } = new List<Player>();
 
         public Arena()
         {
@@ -33,6 +35,7 @@ namespace PaCode.Raim.Model
             {
                 _lock.Enter(ref lockTaken);
                 GameObjects.Add(player);
+                Players.Add(player);
                 return player;
             }
             finally
@@ -50,6 +53,7 @@ namespace PaCode.Raim.Model
                 _lock.Enter(ref lockTaken);
                 GameObjects.RemoveAll(g => g.Id == player.Id);
                 GameObjects.RemoveAll(b => b is Bullet && ((Bullet)b).Player.Id == player.Id);
+                Players.Remove(player);
             }
             finally
             {
