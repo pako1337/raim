@@ -68,8 +68,8 @@ function mouseMove(e) {
         var yDiff = Math.floor(mouseCoordinates.y - startPoint.y);
         selected.start.x = selectedOrigCoord.start.x + xDiff;
         selected.start.y = selectedOrigCoord.start.y + yDiff;
-        selected.end.x   = selectedOrigCoord.end.x + xDiff;
-        selected.end.y   = selectedOrigCoord.end.y + yDiff;
+        selected.end.x = selectedOrigCoord.end.x + xDiff;
+        selected.end.y = selectedOrigCoord.end.y + yDiff;
         printObjectsList();
     }
 }
@@ -99,16 +99,16 @@ function getMouseCoordinates(e) {
 function draw() {
     ctx.clearRect(0, 0, arena.width, arena.height);
 
+    ctx.beginPath();
     for (var i = 0; i < coordinates.length; i++) {
         var coord = coordinates[i];
-        ctx.beginPath();
         ctx.rect(coord.start.x, coord.start.y, coord.end.x - coord.start.x, coord.end.y - coord.start.y);
-        ctx.strokeStyle = "rgba(0, 0, 0, 1)";
-        ctx.fillStyle = "rgba(200, 200, 200, 1)";
-        ctx.stroke();
-        ctx.fill();
-        ctx.closePath();
     }
+    ctx.strokeStyle = "rgba(0, 0, 0, 1)";
+    ctx.fillStyle = "rgba(200, 200, 200, 1)";
+    ctx.stroke();
+    ctx.fill();
+    ctx.closePath();
 
     if (!selected && startPoint && endPoint) {
         ctx.beginPath();
@@ -157,11 +157,11 @@ function writeMap() {
 
     for (var i = 0; i < coordinates.length; i++) {
         var c = coordinates[i];
-        
-        map += c.start.x + ", " + (height - c.start.y) + ", "
-             + c.end.x + ", " + (height - c.start.y) + ", "
-             + c.end.x + ", " + (height - c.end.y) + ", "
-             + c.start.x + ", " + (height - c.end.y);
+
+        map += c.start.x + ", " + (arena.height - c.start.y) + ", "
+             + c.end.x + ", " + (arena.height - c.start.y) + ", "
+             + c.end.x + ", " + (arena.height - c.end.y) + ", "
+             + c.start.x + ", " + (arena.height - c.end.y);
 
         map += "\n";
     }
