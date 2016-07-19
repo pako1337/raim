@@ -26,7 +26,7 @@ namespace PaCode.Raim.Home
             {
                 _lock.Enter(ref lockTaken);
 
-                arena = arenas.FirstOrDefault(a => a.Item1.Players.Count < 2)?.Item1;
+                arena = arenas.FirstOrDefault(a => a.Item1.Players.Count < a.Item1.MaxPlayers)?.Item1;
                 if (arena == null)
                 {
                     arena = Arena.Create();
