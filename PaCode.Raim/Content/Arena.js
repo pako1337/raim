@@ -25,14 +25,6 @@
         input.startListening();
     };
 
-    var addNewPlayer = function (who) {
-        players.addNewPlayer(who);
-    };
-
-    var removePlayer = function (who) {
-        players.removePlayer(who);
-    };
-
     var setupArena = function (a) {
         arena = a;
     };
@@ -208,8 +200,6 @@
     };
 
     return {
-        addNewPlayer: addNewPlayer,
-        removePlayer: removePlayer,
         playerMoved: playerMoved,
         setPlayer: setPlayer,
         setupArena: setupArena,

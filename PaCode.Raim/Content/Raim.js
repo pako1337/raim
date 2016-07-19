@@ -35,21 +35,9 @@
         gameArena.setupArena(arenaData);
     };
 
-    raim.client.registered = function (player) {
-        gameArena.addNewPlayer(player);
-    };
-
     raim.client.signedOff = function (player) {
         if (player.Id == _playerId) {
             updateHighestScore(player.Score)
-        }
-
-        gameArena.removePlayer(player.Id);
-    };
-
-    raim.client.otherPlayers = function (players) {
-        for (var i = 0; i < players.length; i++) {
-            gameArena.addNewPlayer(players[i]);
         }
     };
 
