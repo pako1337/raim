@@ -45,10 +45,10 @@ namespace PaCode.Raim.Model
 
             obstacles.AddRange(GetBorder(arenaSize));
 
-            return new Arena(arenaSize, obstacles);
+            return new Arena(arenaSize, obstacles, (byte)(Math.Max(arenaSize.X, arenaSize.Y)/100));
         }
 
-        public IEnumerable<Obstacle> Generate(Vector2d arenaSize)
+        public Arena Generate(Vector2d arenaSize)
         {
             var obstacles = new List<Obstacle>(8);
             obstacles.AddRange(GetBorder(arenaSize));
@@ -98,7 +98,7 @@ namespace PaCode.Raim.Model
 
             obstacles.AddRange(rectangles.SelectMany(r => r.Obstacles));
 
-            return obstacles;
+            return new Arena(arenaSize, obstacles, (byte)(Math.Max(arenaSize.X, arenaSize.Y)/100));
         }
 
         private Rectangle GenerateObstacle(Vector2d arenaSize, Vector2d minSize)

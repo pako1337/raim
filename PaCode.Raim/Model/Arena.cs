@@ -16,20 +16,22 @@ namespace PaCode.Raim.Model
 
         public string Id { get; } = Guid.NewGuid().ToString();
         public Vector2d ArenaSize { get { return _arenaSize; } }
-        public List<IGameObject> GameObjects = new List<IGameObject>();
-        public List<Obstacle> Obstacles = new List<Obstacle>();
+        public List<IGameObject> GameObjects { get; } = new List<IGameObject>();
+        public List<Obstacle> Obstacles { get; } = new List<Obstacle>();
         public List<Player> Players { get; } = new List<Player>();
+        public byte MaxPlayers { get; private set; }
 
         public static Arena Create()
         {
             return new MapGenerator().FromFile();
         }
 
-        internal Arena(Vector2d size, IEnumerable<Obstacle> obstacles)
+        internal Arena(Vector2d size, IEnumerable<Obstacle> obstacles, byte maxPlayers = 10)
         {
             _collisionEngine = new CollisionEngine(this);
             _arenaSize = size;
-            Obstacles.AddRange(obstacles);// Generate(ArenaSize));
+            Obstacles.AddRange(obstacles);
+            MaxPlayers = maxPlayers;
         }
 
         public Player RegisterPlayer(string name)
