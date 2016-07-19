@@ -28,10 +28,10 @@ namespace PaCode.Raim.Model
 
         internal Arena(Vector2d size, IEnumerable<Obstacle> obstacles, byte maxPlayers = 10)
         {
-            _collisionEngine = new CollisionEngine(this);
             _arenaSize = size;
             Obstacles.AddRange(obstacles);
             MaxPlayers = maxPlayers;
+            _collisionEngine = new CollisionEngine(this);
         }
 
         public Player RegisterPlayer(string name)

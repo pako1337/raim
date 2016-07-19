@@ -9,15 +9,22 @@ namespace PaCode.Raim.Model
     public class CollisionEngine
     {
         private readonly Arena _arena;
+        private QuadTree _quadTree;
 
         public CollisionEngine(Arena arena)
         {
             _arena = arena;
+            _quadTree = new QuadTree(new BoundingBox(_arena.ArenaSize.Y, _arena.ArenaSize.X, 0, 0));
+            foreach (var obstacle in _arena.Obstacles)
+            {
+                _quadTree.Insert(obstacle);
+            }
         }
 
         public void CalculateCollisions(IGameObject o1)
         {
-            foreach (var obstacle in _arena.Obstacles)
+            var obstacles = _quadTree.GetObjects(o1.BoundingBox);
+            foreach (var obstacle in obstacles)
             {
                 var collisionResult = ObstacleCollide(obstacle, o1);
                 if (collisionResult != null)
