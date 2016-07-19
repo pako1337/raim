@@ -20,11 +20,16 @@ namespace PaCode.Raim.Model
         public List<Obstacle> Obstacles = new List<Obstacle>();
         public List<Player> Players { get; } = new List<Player>();
 
-        public Arena()
+        public static Arena Create()
+        {
+            return new MapGenerator().FromFile();
+        }
+
+        internal Arena(Vector2d size, IEnumerable<Obstacle> obstacles)
         {
             _collisionEngine = new CollisionEngine(this);
-            _arenaSize = new Vector2d(1000, 700);
-            Obstacles.AddRange(new MapGenerator().FromFile());// Generate(ArenaSize));
+            _arenaSize = size;
+            Obstacles.AddRange(obstacles);// Generate(ArenaSize));
         }
 
         public Player RegisterPlayer(string name)

@@ -12,7 +12,7 @@ namespace PaCode.Raim.Model
         private readonly Random rnd = new Random();
         private Regex _commentRegex = new Regex("--.*", RegexOptions.Compiled | RegexOptions.Singleline);
 
-        public IEnumerable<Obstacle> FromFile()
+        public Arena FromFile()
         {
             var obstacles = new List<Obstacle>(10);
             Vector2d arenaSize = null;
@@ -45,7 +45,7 @@ namespace PaCode.Raim.Model
 
             obstacles.AddRange(GetBorder(arenaSize));
 
-            return obstacles;
+            return new Arena(arenaSize, obstacles);
         }
 
         public IEnumerable<Obstacle> Generate(Vector2d arenaSize)

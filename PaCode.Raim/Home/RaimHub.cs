@@ -29,7 +29,7 @@ namespace PaCode.Raim.Home
                 arena = arenas.FirstOrDefault(a => a.Item1.Players.Count < 2)?.Item1;
                 if (arena == null)
                 {
-                    arena = new Arena();
+                    arena = Arena.Create();
                     arenas.Add(Tuple.Create(arena, ArenaTicker.Create(arena)));
                 }
 
