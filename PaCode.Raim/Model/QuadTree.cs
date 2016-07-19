@@ -11,6 +11,7 @@ namespace PaCode.Raim.Model
         private int _level;
         private QuadTree[] _nodes;
         private List<Obstacle> _objects;
+        private List<Obstacle> _allChildren;
 
         public QuadTree(BoundingBox area) : this(area, 0) { }
 
@@ -19,17 +20,19 @@ namespace PaCode.Raim.Model
             _level = level;
             _area = area;
             _nodes = new QuadTree[4];
-            _objects = new List<Obstacle>(10);
+            _objects = new List<Obstacle>(5);
+            _allChildren = new List<Obstacle>(20);
         }
 
         public void Insert(Obstacle obj)
         {
             if (_nodes[0] != null)
             {
-                int index = GetIndex(obj);
+                int index = GetIndex(obj.BoundingBox);
                 if (index != -1)
                 {
                     _nodes[index].Insert(obj);
+                    _allChildren.Add(obj);
                     return;
                 }
             }
@@ -44,12 +47,13 @@ namespace PaCode.Raim.Model
                 int i = 0;
                 while (i < _objects.Count)
                 {
-                    int index = GetIndex(_objects[i]);
+                    int index = GetIndex(_objects[i].BoundingBox);
                     if (index != -1)
                     {
                         Obstacle objToMove = _objects[i];
                         _objects.Remove(objToMove);
                         _nodes[index].Insert(objToMove);
+                        _allChildren.Add(objToMove);
                     }
                     else
                         i++;
@@ -57,41 +61,33 @@ namespace PaCode.Raim.Model
             }
         }
 
-        public IReadOnlyList<Obstacle> GetObjects(Obstacle obj)
+        public IReadOnlyList<Obstacle> GetObjects(BoundingBox box)
         {
             var all = new List<Obstacle>(_objects);
-            all.AddRange(GetChildObjects(obj));
-            all.Remove(obj);
+            all.AddRange(GetChildObjects(box));
             return all;
         }
 
-        private IReadOnlyList<Obstacle> GetChildObjects(Obstacle obj)
+        private IReadOnlyList<Obstacle> GetChildObjects(BoundingBox box)
         {
             if (_nodes[0] == null)
                 return new Obstacle[0];
 
-            int index = GetIndex(obj);
+            int index = GetIndex(box);
             if (index != -1)
             {
-                return _nodes[index].GetObjects(obj);
+                return _nodes[index].GetObjects(box);
             }
             else
             {
-                var all = new List<Obstacle>();
-                for (int i = 0; i < _nodes.Length; i++)
-                    all.AddRange(_nodes[i].GetObjects());
-
-                return all;
+                return _allChildren;
             }
         }
 
         public IReadOnlyList<Obstacle> GetObjects()
         {
             var all = new List<Obstacle>(_objects);
-            if (_nodes[0] != null)
-                for (int i = 0; i < _nodes.Length; i++)
-                    all.AddRange(_nodes[i].GetObjects());
-
+            all.AddRange(_allChildren);
             return all;
         }
 
@@ -109,13 +105,11 @@ namespace PaCode.Raim.Model
             _nodes[3] = new QuadTree(new BoundingBox(_area.Bottom + subHeight, _area.Right, _area.Bottom, _area.Left + subWidth), _level + 1);
         }
 
-        private int GetIndex(Obstacle obj)
+        private int GetIndex(BoundingBox box)
         {
             int index = -1;
             var vMid = _area.Left + (_area.Width / 2);
             var hMid = _area.Bottom + (_area.Height / 2);
-
-            BoundingBox box = obj.BoundingBox;
 
             bool topHalf = box.Bottom > hMid;
             bool bottomHalf = box.Top < hMid;
