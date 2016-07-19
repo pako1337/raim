@@ -12,6 +12,9 @@ namespace PaCode.Raim.Model
         public double Right { get; private set; }
         public double Top { get; private set; }
 
+        public double Width {  get { return Right - Left; } }
+        public double Height {  get { return Top - Bottom; } }
+
         public BoundingBox(double top, double right, double bottom, double left)
         {
             Top = top;
