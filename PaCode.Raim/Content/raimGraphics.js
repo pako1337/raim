@@ -178,20 +178,19 @@ var raimGraphics = function (args) {
     function drawObstacles() {
         if (args.arena() == undefined) return;
 
-        backgroundContext.beginPath();
-
         var obstacles = args.arena().Obstacles;
         for (var i = 0; i < obstacles.length; i++) {
             var obstacle = obstacles[i];
-            if (isColliding(obstacle.BoundingBox, box))
-                drawPolygon(obstacle.Points, backgroundContext);
-        }
+            if (isColliding(obstacle.BoundingBox, box)) {
+                backgroundContext.beginPath();
 
-        backgroundContext.strokeStyle = "rgba(0, 0, 0, 1)";
-        backgroundContext.fillStyle = "rgba(200, 200, 200, 1)";
-        backgroundContext.stroke();
-        backgroundContext.fill();
-        backgroundContext.closePath();
+                drawPolygon(obstacle.Points, backgroundContext);
+
+                backgroundContext.fillStyle = "rgba(200, 200, 200, 1)";
+                backgroundContext.fill();
+                backgroundContext.closePath();
+            }
+        }
     }
 
     function drawPolygon(points, context) {
