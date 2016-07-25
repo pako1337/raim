@@ -8,13 +8,12 @@ var raimGraphics = function (args) {
 
     var resizeCanvas = function () {
         var arenaElement = document.getElementById(args.arenaHandler);
-        var widthDiff = originalSize.x - arenaElement.offsetWidth;
-        var heightDiff = originalSize.y - arenaElement.offsetHeight;
+        var widthRatio = arenaElement.offsetWidth / originalSize.x;
+        var heightRatio = arenaElement.offsetHeight / originalSize.y;
 
         var aspectRatio = originalSize.x / originalSize.y;
         var w, h;
-
-        if (Math.abs(widthDiff) > Math.abs(heightDiff)) {
+        if (widthRatio < heightRatio) {
             w = arenaElement.offsetWidth;
             h = w / aspectRatio;
         } else {
