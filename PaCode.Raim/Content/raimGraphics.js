@@ -44,65 +44,7 @@ var raimGraphics = function (args) {
         backgroundContext = background.getContext("2d");
     })();
 
-    var playerPatternBuilder = function (fillStyle, strokeStyle) {
-        var canvasPattern = document.createElement("canvas");
-        canvasPattern.width = 40;
-        canvasPattern.height = 40;
-        var context = canvasPattern.getContext("2d");
-
-        context.beginPath();
-
-        context.arc(20, 20, 19, 0, 2 * Math.PI);
-
-        context.fillStyle = fillStyle;
-        context.strokeStyle = strokeStyle;
-        context.fill();
-        context.stroke();
-
-        context.closePath();
-
-        return drawingContext.createPattern(canvasPattern, "repeat");
-    };
-
-    var playerPatterns = (function () {
-        var playerStyles = [
-            { name: "orange", style: "rgba(245,85,26,1)" },
-            { name: "green", style: "rgba(125,188,57,1)" },
-            { name: "blue", style: "rgba(7,92,191,1)" },
-            { name: "darkyellow", style: "rgba(174,173,58,1)" },
-            { name: "aqua", style: "rgba(54,201,240,1)" }
-        ];
-
-        patterns = {};
-        for (var i = 0; i < playerStyles.length; i++) {
-            var playerStyle = playerStyles[i];
-            patterns[playerStyle.name] = playerPatternBuilder(playerStyle.style, playerStyle.style);
-        }
-
-        return patterns;
-    })();
-
-    var bulletPattern = (function () {
-        var canvasPattern = document.createElement("canvas");
-        canvasPattern.width = 4;
-        canvasPattern.height = 4;
-        var context = canvasPattern.getContext("2d");
-
-        context.beginPath();
-
-        context.arc(2, 2, 2, 0, 2 * Math.PI);
-
-        context.fillStyle = "rgba(0, 0, 0, 1)";
-        context.fill();
-
-        context.closePath();
-
-        return drawingContext.createPattern(canvasPattern, "repeat");
-    })();
-
     var drawArena = function (gameObjects) {
-        drawingContext.clearRect(0, 0, canvas.width, canvas.height);
-
         viewport = args.viewport();
 
         box.Top = -viewport.y;
@@ -111,9 +53,15 @@ var raimGraphics = function (args) {
         box.Right = originalSize.x - viewport.x;
 
         drawBackground();
+        drawGameObjects(gameObjects);
+    };
 
+    var count = 0;
+    function drawGameObjects(gameObjects) {
+        drawingContext.clearRect(0, 0, canvas.width, canvas.height);
         drawingContext.save();
         drawingContext.scale(scale, -scale);
+
         for (var i = 0; i < gameObjects.length; i++) {
             var gameObject = gameObjects[i];
             if (isColliding(gameObject.BoundingBox, box)) {
@@ -124,8 +72,9 @@ var raimGraphics = function (args) {
                 }
             }
         }
+
         drawingContext.restore();
-    };
+    }
 
     function drawBullet(bullet) {
         drawingContext.beginPath();
@@ -154,6 +103,7 @@ var raimGraphics = function (args) {
         drawingContext.fill();
 
         drawingContext.translate(-translateX, -translateY);
+
         drawingContext.closePath();
     }
 
@@ -217,6 +167,62 @@ var raimGraphics = function (args) {
     function applyYViewport(y) {
         return Math.floor((y + viewport.y));
     }
+
+    var playerPatternBuilder = function (fillStyle, strokeStyle) {
+        var canvasPattern = document.createElement("canvas");
+        canvasPattern.width = 40;
+        canvasPattern.height = 40;
+        var context = canvasPattern.getContext("2d");
+
+        context.beginPath();
+
+        context.arc(20, 20, 20, 0, 2 * Math.PI);
+
+        context.fillStyle = fillStyle;
+        context.strokeStyle = strokeStyle;
+        context.fill();
+        context.stroke();
+
+        context.closePath();
+
+        return drawingContext.createPattern(canvasPattern, "repeat");
+    };
+
+    var playerPatterns = (function () {
+        var playerStyles = [
+            { name: "orange", style: "rgba(245,85,26,1)" },
+            { name: "green", style: "rgba(125,188,57,1)" },
+            { name: "blue", style: "rgba(7,92,191,1)" },
+            { name: "darkyellow", style: "rgba(174,173,58,1)" },
+            { name: "aqua", style: "rgba(54,201,240,1)" }
+        ];
+
+        patterns = {};
+        for (var i = 0; i < playerStyles.length; i++) {
+            var playerStyle = playerStyles[i];
+            patterns[playerStyle.name] = playerPatternBuilder(playerStyle.style, playerStyle.style);
+        }
+
+        return patterns;
+    })();
+
+    var bulletPattern = (function () {
+        var canvasPattern = document.createElement("canvas");
+        canvasPattern.width = 4;
+        canvasPattern.height = 4;
+        var context = canvasPattern.getContext("2d");
+
+        context.beginPath();
+
+        context.arc(2, 2, 2, 0, 2 * Math.PI);
+
+        context.fillStyle = "rgba(0, 0, 0, 1)";
+        context.fill();
+
+        context.closePath();
+
+        return drawingContext.createPattern(canvasPattern, "repeat");
+    })();
 
     return {
         drawArena: drawArena,
