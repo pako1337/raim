@@ -105,10 +105,10 @@ var raimGraphics = function (args) {
 
         viewport = args.viewport();
 
-        box.Top = originalSize.y - viewport.y;
-        box.Right = originalSize.x + viewport.x;
-        box.Bottom = viewport.y;
+        box.Top = -viewport.y;
         box.Left = -viewport.x;
+        box.Bottom = -viewport.y - originalSize.y;
+        box.Right = originalSize.x - viewport.x;
 
         drawBackground();
 
@@ -200,8 +200,6 @@ var raimGraphics = function (args) {
         for (var i = 1; i < points.length; i++) {
             lineTo(points[i].X, points[i].Y, context);
         }
-
-        lineTo(points[0].X, points[0].Y, context);
     }
 
     function moveTo(x, y, context) {
