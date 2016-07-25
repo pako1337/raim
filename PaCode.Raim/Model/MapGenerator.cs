@@ -117,7 +117,7 @@ namespace PaCode.Raim.Model
 
         private static List<Obstacle> GetBorder(Vector2d arenaSize)
         {
-            int borderMargin = 700;
+            int borderMargin = 50;
             return new List<Obstacle>() {
                 new Obstacle( // top
                     new Vector2d(-borderMargin, arenaSize.Y),
