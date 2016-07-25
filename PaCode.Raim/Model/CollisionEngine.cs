@@ -91,6 +91,10 @@ namespace PaCode.Raim.Model
 
         private void HandleCollision(object o1, object o2, Tuple<Vector2d, double> collision)
         {
+            if ((o1 is IDestroyable && ((IDestroyable)o1).IsDestroyed) ||
+                (o2 is IDestroyable && ((IDestroyable)o2).IsDestroyed))
+                return;
+
             if (o1 is Player && o2 is Bullet)
                 HandleCollision(o1 as Player, o2 as Bullet);
             else if (o1 is Bullet && o2 is Player)

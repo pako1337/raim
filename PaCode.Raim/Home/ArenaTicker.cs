@@ -13,7 +13,6 @@ namespace PaCode.Raim.Home
         private const int _updateInterval = 1000 / 30;
 
         private readonly IHubConnectionContext<dynamic> _clients;
-        private static SpinLock _lock = new SpinLock();
         private Timer _timer;
         private Arena _arena;
 
