@@ -11,8 +11,9 @@ namespace PaCode.Raim.Home
 {
     public class RaimHub : Hub
     {
-        private static Dictionary<string, Player> players = new Dictionary<string, Player>();
-        public static List<Tuple<Arena, ArenaTicker>> arenas = new List<Tuple<Arena, ArenaTicker>>(10);
+        private static Dictionary<string, Player> players = new Dictionary<string, Player>(1000);
+        private static Dictionary<string, Arena> connectionToArenas = new Dictionary<string, Arena>(1000);
+        public static List<Tuple<Arena, ArenaTicker>> arenas = new List<Tuple<Arena, ArenaTicker>>(100);
         private static SpinLock _lock = new SpinLock();
 
         public void Register(string name)
@@ -35,6 +36,7 @@ namespace PaCode.Raim.Home
 
                 Groups.Add(Context.ConnectionId, arena.Id);
                 player = arena.RegisterPlayer(name);
+                connectionToArenas[Context.ConnectionId] = arena;
             }
             finally
             {
@@ -58,7 +60,10 @@ namespace PaCode.Raim.Home
                 _lock.Enter(ref gotLock);
 
                 if (!players.ContainsKey(Context.ConnectionId))
+                {
+                    connectionToArenas.Remove(Context.ConnectionId);
                     return;
+                }
 
                 player = players[Context.ConnectionId];
 
@@ -76,6 +81,7 @@ namespace PaCode.Raim.Home
                 }
 
                 players.Remove(Context.ConnectionId);
+                connectionToArenas.Remove(Context.ConnectionId);
                 Groups.Remove(Context.ConnectionId, arena.Id);
                 Clients.Group(arena.Id).SignedOff(player);
             }
@@ -98,9 +104,10 @@ namespace PaCode.Raim.Home
 
         private Arena GetArena()
         {
-            var player = players[Context.ConnectionId];
-            var arenaTuple = arenas.FirstOrDefault(a => a.Item1.Players.Contains(player));
-            return arenaTuple?.Item1;
+            if (connectionToArenas.ContainsKey(Context.ConnectionId))
+                return connectionToArenas[Context.ConnectionId];
+
+            return null;
         }
     }
 }
