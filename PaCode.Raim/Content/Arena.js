@@ -14,6 +14,7 @@
     var playerInput = { keysInput: 0, facingDirection: { X: 0, Y: 0 } },
         previousPlayerInput = { keysInput: 0, facingDirection: { X: 0, Y: 0 } };
     var connected;
+    var communicationDelay = 1000 / 20;
 
     var gameObjects = [];
 
@@ -63,23 +64,24 @@
     }
 
     var lastTimestamp;
+    var lastCommunicationTime;
     var processFrame = function (timestamp) {
         if (!connected)
             return;
 
         if (!lastPlayerListUpdate) {
             lastPlayerListUpdate = timestamp;
+            lastCommunicationTime = timestamp;
         }
 
         lastTimestamp = lastTimestamp || timestamp;
         var currentPlayer = getCurrentPlayer();
         
-        if (playerInput &&
-            (playerInput.keysInput != previousPlayerInput.keysInput ||
-             playerInput.facingDirection.X != previousPlayerInput.facingDirection.X ||
-             playerInput.facingDirection.Y != previousPlayerInput.facingDirection.Y)) {
+        if (playerInputChanged() || timestamp - lastCommunicationTime > communicationDelay) {
             previousPlayerInput.keysInput = playerInput.keysInput;
             previousPlayerInput.facingDirection = playerInput.facingDirection;
+            lastCommunicationTime = timestamp;
+
             playerMoving(playerInput);
 
             //if (currentPlayer)
@@ -106,6 +108,13 @@
         if (connected)
             requestAnimationFrame(processFrame);
     };
+
+    function playerInputChanged() {
+        return playerInput &&
+            (playerInput.keysInput != previousPlayerInput.keysInput ||
+             playerInput.facingDirection.X != previousPlayerInput.facingDirection.X ||
+             playerInput.facingDirection.Y != previousPlayerInput.facingDirection.Y)
+    }
 
     var updatePlayerSpeed = function (player, keys) {
         var speedX = 0,
