@@ -82,8 +82,8 @@
             previousPlayerInput.facingDirection = playerInput.facingDirection;
             playerMoving(playerInput);
 
-            if (currentPlayer)
-                updatePlayerSpeed(currentPlayer, playerInput.keysInput);
+            //if (currentPlayer)
+            //    updatePlayerSpeed(currentPlayer, playerInput.keysInput);
         }
 
         var timeDiff = (timestamp - lastTimestamp) / 1000;
