@@ -23,7 +23,7 @@ namespace PaCode.Raim.Model
 
         public static Arena Create()
         {
-            return new MapGenerator().FromFile();
+            return new MapGenerator().Random();
         }
 
         internal Arena(Vector2d size, IEnumerable<Obstacle> obstacles, byte maxPlayers = 10)

@@ -12,12 +12,29 @@ namespace PaCode.Raim.Model
         private readonly Random rnd = new Random();
         private Regex _commentRegex = new Regex("--.*", RegexOptions.Compiled | RegexOptions.Singleline);
 
-        public Arena FromFile()
+        private string[] SavedArenas()
+        {
+            return Directory.GetFiles("ArenaDefinitions");
+        }
+
+        public Arena Random()
+        {
+            var arenas = SavedArenas();
+
+            var arena = rnd.Next(0, arenas.Length+1);
+
+            if (arena < arenas.Length)
+                return FromFile(arenas[arena]);
+
+            return Generate(new Vector2d(1400, 1000));
+        }
+
+        public Arena FromFile(string file)
         {
             var obstacles = new List<Obstacle>(10);
             Vector2d arenaSize = null;
 
-            using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), "ArenaDefinitions/build1.txt")))
+            using (var reader = new StreamReader(Path.Combine(Directory.GetCurrentDirectory(), file)))
             {
                 var size = reader.ReadLine()
                                  .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
