@@ -51,20 +51,22 @@ body {
 #registration {
     font-size: 3em;
     width: 15em;
-    height: 4em;
-    margin: auto;
+    height: 7em;
+    margin: 0 auto;
     position: absolute;
-    top: 0;
+    top: 5em;
     bottom: 0;
     left: 0;
     right: 0;
 }
     #playerName {
         font-size: 1em;
-        width: 100%;
+        width: 90%;
         border-radius: 0.5em;
         border: solid #c24;
         padding: 0.2em;
+        margin: 0 auto;
+        display:block;
     }
 
     #playButton {
@@ -100,18 +102,20 @@ body {
 
     #help-touch {
         float:right;
+        text-align:right;
     }
 
     #help span {
         display: block;
     }
 
-#registration #highestScore {
+#highestScore {
     font-size: 0.7em;
     font-weight: lighter;
     float: right;
 }
 
-#registration #highestScore #score {
+#highestScore #score {
     font-weight: bold;
+    font-size:1.2em;
 }
