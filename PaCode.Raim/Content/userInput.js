@@ -150,6 +150,11 @@
         }
     }
 
+    function focusOut() {
+        keys.splice(0, keys.length);
+        notifyKeysChanged();
+    }
+
     function copyTouch(touch) {
         return { identifier: touch.identifier, pageX: touch.pageX, pageY: touch.pageY };
     }
@@ -163,6 +168,7 @@
         document.addEventListener("touchend", touchEnd);
         document.addEventListener("touchcancel", touchCancel);
         document.addEventListener("touchmove", touchMove);
+        window.addEventListener("blur", focusOut);
     };
 
     var stopListening = function () {
@@ -174,6 +180,7 @@
         document.removeEventListener("touchend", touchEnd);
         document.removeEventListener("touchcancel", touchCancel);
         document.removeEventListener("touchmove", touchMove);
+        window.removeEventListener("blur", focusOut);
     }
 
     return {
