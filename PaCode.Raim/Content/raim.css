@@ -54,7 +54,7 @@ body {
     height: 7em;
     margin: 0 auto;
     position: absolute;
-    top: 5em;
+    top: 3em;
     bottom: 0;
     left: 0;
     right: 0;
@@ -118,4 +118,10 @@ body {
 #highestScore #score {
     font-weight: bold;
     font-size:1.2em;
+}
+
+@media (max-width:700px){
+    body {
+        font-size: 11px;
+    }
 }
